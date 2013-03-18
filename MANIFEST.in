@@ -1,0 +1,4 @@
+include *.rst
+recursive-include fancypages/templates *.txt *.html
+recursive-include fancypages/static *
+recursive-include fancypages *.json
