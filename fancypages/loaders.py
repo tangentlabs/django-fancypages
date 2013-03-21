@@ -1,8 +1,8 @@
 from django.db import models
 
-from .widgets import Widget
+from .tiles import Tile
 
-__widgets = {}
+__tiles = {}
 
 
 def itersubclasses(cls, _seen=None):
@@ -30,23 +30,22 @@ def itersubclasses(cls, _seen=None):
                 yield sub
 
 
-if not __widgets:
-    for widget_class in itersubclasses(Widget):
-        if not issubclass(widget_class.model, models.Model):
-            raise Exception('you need to specify a model for widget')
-        if widget_class.model in __widgets:
-            raise Exception('widget for model already registered')
-        __widgets[widget_class.model.__name__] = widget_class
+if not __tiles:
+    for tile_class in itersubclasses(Tile):
+        if not issubclass(tile_class.model, models.Model):
+            raise Exception('you need to specify a model for tile')
+        if tile_class.model in __tiles:
+            raise Exception('tile for model already registered')
+        __tiles[tile_class.model.__name__] = tile_class
 
 
-def get_widget_for_model(model):
+def get_tile_for_model(model):
     try:
-        return __widgets[model.__class__.__name__]
+        return __tiles[model.__class__.__name__]
     except KeyError:
         pass
     try:
-        return __widgets[model.__name__]
+        return __tiles[model.__name__]
     except KeyError:
         pass
     return None
-

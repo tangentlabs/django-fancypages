@@ -4,7 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 from fancypages import abstract_models
 
 
-class FancyPage(abstract_models.AbstractFancyPage):
+class FancyPage(abstract_models.AbstractFancyPage,
+                abstract_models.AbstractTreeNode):
     pass
 
 
@@ -12,9 +13,9 @@ class Container(abstract_models.AbstractContainer):
     pass
 
 
-class WidgetModel(abstract_models.AbstractWidgetModel):
+class TileModel(abstract_models.AbstractTileModel):
     pass
 
 
-class TextWidgetModel(WidgetModel):
+class TextTileModel(TileModel):
     text = models.CharField(_("Text"), max_length=255)

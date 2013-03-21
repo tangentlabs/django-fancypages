@@ -1,10 +1,14 @@
 from .. import models
 
-class Widget(object):
+
+class Tile(object):
     model = None
     renderer_class = None
     form_class = None
     template_name = None
+    # specifies if the content of the widget can be rendered
+    # into static html after model is saved to database
+    static_content = False
 
     def get_template_names(self):
         if self.template_name:
@@ -12,5 +16,5 @@ class Widget(object):
         return ["fancypages/widgets/%s" % self.model._meta.module_name]
 
 
-class TextWidget(Widget):
+class TextWidget(Tile):
     model = models.TextWidgetModel
