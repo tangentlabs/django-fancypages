@@ -1,6 +1,6 @@
 from django.db import models
 
-from .tiles import Tile
+from .renderers import BaseTileRenderer
 
 __tiles = {}
 
@@ -31,7 +31,7 @@ def itersubclasses(cls, _seen=None):
 
 
 if not __tiles:
-    for tile_class in itersubclasses(Tile):
+    for tile_class in itersubclasses(BaseTileRenderer):
         if not issubclass(tile_class.model, models.Model):
             raise Exception('you need to specify a model for tile')
         if tile_class.model in __tiles:
@@ -39,7 +39,7 @@ if not __tiles:
         __tiles[tile_class.model.__name__] = tile_class
 
 
-def get_tile_for_model(model):
+def get_renderer_for_model(model):
     try:
         return __tiles[model.__class__.__name__]
     except KeyError:

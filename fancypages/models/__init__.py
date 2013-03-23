@@ -13,9 +13,12 @@ class Container(abstract_models.AbstractContainer):
     pass
 
 
-class TileModel(abstract_models.AbstractTileModel):
+class Tile(abstract_models.AbstractTileModel):
     pass
 
 
-class TextTileModel(TileModel):
+class TextTile(Tile):
     text = models.CharField(_("Text"), max_length=255)
+
+    def __unicode__(self):
+        return "Text tile: %s" % self.text

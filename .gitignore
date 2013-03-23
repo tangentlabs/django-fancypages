@@ -1,4 +1,9 @@
 *.log
 *.pot
-*.pyc
+*.sw[po]
+*.py[co]
+*.sqlite3
+
 local_settings.py
+
+*.egg-info/

@@ -13,5 +13,3 @@ class TestHtmlSerializer(TestCase):
     def test_can_generate_serialization_for_widget(self):
         widget = loaders.get_widget_for_model(self.model)
         self.assertEquals(widget, TextWidget)
-
-        
