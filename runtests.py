@@ -67,9 +67,10 @@ def configure():
                 'django.contrib.messages',
                 'django.contrib.staticfiles',
                 'django.contrib.admin',
-                'fancypages',
                 'model_utils',
                 'compressor',
+                'twitter_tag',
+                'fancypages',
             ],
             AUTHENTICATION_BACKENDS=(
                 'django.contrib.auth.backends.ModelBackend',
@@ -86,7 +87,12 @@ def configure():
                 '-s',
                 '--with-specplugin',
             ],
-            #**FANCYPAGES_SETTINGS
+            # required for django-twitter-tag throws an exception if not
+            # in the settings
+            TWITTER_OAUTH_TOKEN='',
+            TWITTER_OAUTH_SECRET='',
+            TWITTER_CONSUMER_KEY='',
+            TWITTER_CONSUMER_SECRET='',
         )
 
 logging.disable(logging.CRITICAL)

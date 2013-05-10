@@ -22,7 +22,7 @@ class TextBlock(ContentBlock):
     name = _("Text")
     code = 'text'
     group = _("Content")
-    template_name = "fancypages/widgets/textwidget.html"
+    template_name = "fancypages/blocks/textblock.html"
 
     text = models.TextField(_("Text"), default="Your text goes here.")
 
@@ -38,7 +38,7 @@ class TitleTextBlock(ContentBlock):
     name = _("Title and text")
     code = 'title-text'
     group = _("Content")
-    template_name = "fancypages/widgets/titletextwidget.html"
+    template_name = "fancypages/blocks/titletextblock.html"
 
     title = models.CharField(_("Title"), max_length=100,
                              default="Your title goes here.")
@@ -55,10 +55,10 @@ class TitleTextBlock(ContentBlock):
 #    name = _("Image")
 #    code = 'image'
 #    group = _("Content")
-#    template_name = "fancypages/widgets/imagewidget.html"
+#    template_name = "fancypages/blocks/imageblock.html"
 #
 #    image_asset = AssetKey('assets.ImageAsset', verbose_name=_("Image asset"),
-#                           related_name="image_widgets", blank=True, null=True)
+#                           related_name="image_blocks", blank=True, null=True)
 #
 #    def __unicode__(self):
 #        if self.image_asset:
@@ -73,12 +73,12 @@ class TitleTextBlock(ContentBlock):
 #    name = _("Image and text")
 #    code = 'image-text'
 #    group = _("Content")
-#    template_name = "fancypages/widgets/imageandtextwidget.html"
+#    template_name = "fancypages/blocks/imageandtextblock.html"
 #
 #    image_asset = AssetKey(
 #        'assets.ImageAsset',
 #        verbose_name=_("Image asset"),
-#        related_name="image_text_widgets",
+#        related_name="image_text_blocks",
 #        blank=True,
 #        null=True,
 #    )
@@ -106,7 +106,7 @@ class TitleTextBlock(ContentBlock):
 #    num_images = 10
 #    image_field_name = "image_%d"
 #    link_field_name = "link_url_%d"
-#    template_name = "fancypages/widgets/carouselwidget.html"
+#    template_name = "fancypages/blocks/carouselblock.html"
 #
 #    def get_images_and_links(self):
 #        results = {}
@@ -158,7 +158,7 @@ class PageNavigationBlock(ContentBlock):
     name = _("Page Navigation")
     code = 'page-navigation'
     group = _("Content")
-    template_name = "fancypages/widgets/pagenavigationwidget.html"
+    template_name = "fancypages/blocks/pagenavigationblock.html"
 
     def __unicode__(self):
         return u'Page Navigation'
@@ -172,7 +172,7 @@ class PrimaryNavigationBlock(ContentBlock):
     name = _("Primary Navigation")
     code = 'primary-navigation'
     group = _("Content")
-    template_name = "fancypages/widgets/primarynavigationwidget.html"
+    template_name = "fancypages/blocks/primarynavigationblock.html"
 
     def __unicode__(self):
         return u'Primary Navigation'

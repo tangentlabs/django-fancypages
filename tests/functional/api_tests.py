@@ -6,12 +6,12 @@ from webtest import AppError
 
 from fancypages import test
 
-Page = get_model('fancypages', 'Page')
-Widget = get_model('fancypages', 'Widget')
 Category = get_model('catalogue', 'Category')
 PageType = get_model('fancypages', 'PageType')
+FancyPage = get_model('fancypages', 'FancyPage')
 Container = get_model('fancypages', 'Container')
 TextWidget = get_model('fancypages', 'TextWidget')
+ContentBlock = get_model('fancypages', 'ContentBlock')
 
 
 class TestTheWidgetTypeApi(test.FancyPagesWebTest):
@@ -19,7 +19,7 @@ class TestTheWidgetTypeApi(test.FancyPagesWebTest):
 
     def setUp(self):
         super(TestTheWidgetTypeApi, self).setUp()
-        self.container = Container.objects.create(variable_name="test")
+        self.container = Container.objects.create(name="test")
 
     def test_is_not_available_to_anonymous_users(self):
         try:
@@ -78,7 +78,7 @@ class TestTheWidgetApi(test.FancyPagesWebTest):
             "{% fp_object_container page-container %}"
         )
 
-        self.page = Page.add_root(name="A new page", slug='a-new-page')
+        self.page = Fancypage.add_root(name="A new page", slug='a-new-page')
 
         self.text_widget = TextWidget.objects.create(
             container=self.page.get_container_from_name('page-container'),
@@ -157,7 +157,7 @@ class TestTheWidgetMoveApi(test.FancyPagesWebTest):
             name="Example Template",
             template_name=self.template_name,
         )
-        self.page = Page.add_root(
+        self.page = Fancypage.add_root(
             name="A new page",
             slug='a-new-page',
             page_type=page_type,
@@ -230,9 +230,9 @@ class TestThePageMoveApi(test.FancyPagesWebTest):
 
     def setUp(self):
         super(TestThePageMoveApi, self).setUp()
-        self.first_parent = Page.add_root(name="First parent")
-        self.second_parent = Page.add_root(name="Second parent")
-        self.third_parent = Page.add_root(name="Third parent")
+        self.first_parent = Fancypage.add_root(name="First parent")
+        self.second_parent = Fancypage.add_root(name="Second parent")
+        self.third_parent = Fancypage.add_root(name="Third parent")
 
         self.a_child = self.first_parent.add_child(name='One child')
         self.first_parent.add_child(name='Another child')

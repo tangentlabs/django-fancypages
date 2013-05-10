@@ -22,6 +22,7 @@ setup(
         'South>=0.7.6,<0.8',
         'django-treebeard>=1.61,<1.7',
         'django-appconf>=0.6,<0.7',
+        'django-twitter-tag>=1.1,<1.2',
     ],
     # See http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[

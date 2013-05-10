@@ -2,13 +2,13 @@ from django.conf.urls.defaults import patterns, url, include
 
 from . import views
 
-#import fancypages.api.urls
-#from fancypages.app import application as fancypages_app
-#from fancypages.dashboard.app import application as dashboard_app
+from fancypages.api import API_BASE_URL
+from fancypages.api import app as api_app
+from fancypages.dashboard import app as dashboard_app
 
 urlpatterns = patterns('',
-    #url(r'^dashboard/fancypages/', include(dashboard_app.urls)),
-    #url(fancypages.api.API_BASE_URL, include(fancypages.api.urls, 'fp-api')),
+    url(r'^dashboard/fancypages/', include(dashboard_app.urls)),
+    url(API_BASE_URL, include(api_app.urls)),
     url(
         r'^(?P<slug>[\w-]+(/[\w-]+)*)/$',
         views.FancyPageDetailView.as_view(),

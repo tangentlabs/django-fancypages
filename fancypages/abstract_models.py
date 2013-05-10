@@ -172,7 +172,6 @@ class AbstractFancyPage(models.Model):
             template_name = settings.FANCYPAGES_DEFAULT_TEMPLATE
 
         existing_containers = [c.name for c in self.containers.all()]
-        print get_container_names_from_template(template_name)
         for cname in get_container_names_from_template(template_name):
             if cname not in existing_containers:
                 self.containers.create(page_object=self, name=cname)

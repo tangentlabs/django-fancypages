@@ -10,7 +10,7 @@ class VideoBlock(ContentBlock):
     name = _("Video")
     code = 'video'
     group = _("Media")
-    template_name = "fancypages/widgets/video.html"
+    template_name = "fancypages/blocks/video.html"
 
     SOURCE_YOUTUBE = 'youtube'
     SOURCES = (
@@ -34,7 +34,7 @@ class TwitterBlock(ContentBlock):
     name = _("Twitter")
     code = 'twitter'
     group = _("Media")
-    template_name = "fancypages/widgets/twitter.html"
+    template_name = "fancypages/blocks/twitter.html"
 
     username = models.CharField(_('Twitter username'), max_length=50)
     max_tweets = models.PositiveIntegerField(_('Maximum tweets'), default=5)

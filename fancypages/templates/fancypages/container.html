@@ -1,15 +1,20 @@
 {% load i18n %}
-{% load fp_widget_tags %}
+{% load fp_block_tags %}
 {% load fp_container_tags %}
 
 <div class="sortable connectedSortable" data-container-id="{{ container.id }}">
-{% for widget_id,rendered_widget in rendered_widgets %}
-    <div id="widget-{{ widget_id }}" class="widget {{ widget.container.variable_name }}"
-         data-container-name="{{ container.variable_name }}" data-widget-id="{{ widget_id }}">
-        {% if request.user.is_authenticated and request.user.is_staff %}<div class="edit-button btn"><i class="icon-edit"></i></div>{% endif %}
-            {{ rendered_widget }}
+{% for block_id,rendered_block in rendered_blocks %}
+    <div id="block-{{ block_id }}" class="block {{ container.name }}"
+         data-container-name="{{ container.name }}" data-block-id="{{ block_id }}">
+
         {% if request.user.is_authenticated and request.user.is_staff %}
-        <div class="widget-move-delete btn-group">
+            <div class="edit-button btn"><i class="icon-edit"></i></div>
+        {% endif %}
+
+        {{ rendered_block }}
+
+        {% if request.user.is_authenticated and request.user.is_staff %}
+        <div class="block-move-delete btn-group">
             <div class="btn move"><i class="icon-move"></i></div>
             <div class="btn delete"><i class="icon-trash"></i></div>
         </div>
@@ -20,5 +25,5 @@
 </div>
 
 {% if request.fancypage_edit_mode %}
-{% render_widget_selection %}
+    {% render_block_selection %}
 {% endif %}

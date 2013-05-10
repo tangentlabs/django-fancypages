@@ -1,10 +1,10 @@
-{% extends "fancypages/base/widget.html" %}
+{% extends "fancypages/block.html" %}
 {% load i18n %}
-{% load category_tags %}
-{% load fp_widget_tags %}
+{#{% load category_tags %}#}
+{% load fp_block_tags %}
 
-{% block widget %}
-    {% category_tree depth=2 as categories %}
+{% block block_content %}
+    {# {% category_tree depth=2 as categories %} #}
 
     <div class="side_categories" style="padding: 8px 0;">
         {% if categories %}

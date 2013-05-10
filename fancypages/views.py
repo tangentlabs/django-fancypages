@@ -16,6 +16,16 @@ class PageMixin(object):
 class FancyPageDetailView(PageMixin, DetailView):
     model = FancyPage
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        response = super(FancyPageDetailView, self).get(request, *args, **kwargs)
+        if request.user.is_staff:
+            return response
+
+        if not self.object.is_visible:
+            raise Http404
+        return response
+
 
 class HomeView(PageMixin, DetailView):
     model = FancyPage

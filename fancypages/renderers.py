@@ -12,7 +12,8 @@ class ContainerRenderer(object):
     def __init__(self, container, context, extra_context=None):
         if not container and not issubclass(container, Container):
             raise TypeError(
-                "block must be a subclass of 'Widget' not '%s'" % type(container)
+                "block must be a subclass of 'ContentBlock' not "
+                "'%s'" % type(container)
             )
         if not extra_context:
             extra_context = {}
@@ -47,13 +48,13 @@ class ContainerRenderer(object):
 
 
 class BlockRenderer(object):
-    #FIXME: needs to be renamed to 'block' to prevent collision in context
-    context_object_name = 'object'
+    context_object_name = 'fp_block'
 
     def __init__(self, block, context, extra_context=None):
         if not block and not issubclass(block, ContentBlock):
             raise TypeError(
-                "block must be a subclass of 'Widget' not '%s'" % type(block)
+                "block must be a subclass of 'ContentBlock' not "
+                "'%s'" % type(block)
             )
         if not extra_context:
             extra_context = {}

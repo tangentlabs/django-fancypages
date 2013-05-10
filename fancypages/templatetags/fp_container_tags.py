@@ -1,5 +1,3 @@
-import warnings
-
 from django import template
 from django.db.models import get_model
 
@@ -105,13 +103,3 @@ def fp_object_container(parser, token):
     except IndexError:
         object_name = None
     return FancyObjectContainerNode(container_name, object_name)
-
-
-@register.tag
-def fancypages_container(parser, token):
-    warnings.warn(
-        "template tag 'fancypages_container' is deprecated please use"
-        "'fp_object_container' instead",
-        PendingDeprecationWarning
-    )
-    return fp_object_container(parser, token)
