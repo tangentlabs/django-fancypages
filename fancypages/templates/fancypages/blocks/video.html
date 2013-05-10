@@ -1,0 +1,15 @@
+{% extends "fancypages/base/widget.html" %}
+{% load fp_widget_tags %}
+{% load i18n %}
+
+{% block widget %}
+    {% if object.code and object.source == 'youtube' %}
+        <div class="widget-video">
+            <iframe width="560" height="315" src="http://www.youtube.com/embed/{{ object.video_code }}" frameborder="0" allowfullscreen></iframe>
+        </div>
+    {% else %}
+        <div class="thumbnail">
+            <p class="no-asset edit-button"><i class="icon-film"></i> <span class="visible-editor">{% trans "Click to add a video" %}</span></p>
+        </div>
+    {% endif %}
+{% endblock %}

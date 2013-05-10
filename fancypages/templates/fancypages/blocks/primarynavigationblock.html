@@ -1,0 +1,9 @@
+{% extends "fancypages/base/widget.html" %}
+{% load i18n %}
+{% load category_tags %}
+{% load fp_widget_tags %}
+
+{% block widget %}
+    {% category_tree depth=2 as categories %}
+    {% include "partials/nav_primary.html" %}
+{% endblock %}

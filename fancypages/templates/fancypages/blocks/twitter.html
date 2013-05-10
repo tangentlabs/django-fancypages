@@ -1,0 +1,18 @@
+{% extends "fancypages/base/widget.html" %}
+{% load cache %}
+{% load twitter_tag %}
+{% load fp_widget_tags %}
+
+{% block widget %}
+    {% if object.username %}
+        {% cache 500 fancy_tweets object.username object.max_tweets %}
+            {% get_tweets for object.username as tweets limit object.max_tweets %}
+            <h3><i class="icon-twitter"></i> {{ object.username }}</h3>
+            <ul>
+                {% for tweet in tweets %}
+                    <li>{{ tweet.html|safe }}</li>
+                {% endfor %}
+            </ul>
+        {% endcache %}
+    {% endif %}
+{% endblock %}

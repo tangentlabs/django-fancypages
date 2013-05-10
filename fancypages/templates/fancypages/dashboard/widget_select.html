@@ -1,0 +1,60 @@
+{% load i18n %}
+{% load staticfiles %}
+{% load url from future %}
+<div class="widget-add-control">
+    <a data-toggle="modal"
+       {#data-behaviours="load-modal"#}
+       class="btn btn-large"
+       data-target="#{{ container.variable_name }}_modal"
+       data-href="{% url "fp-api:widget-type-list" %}"
+       data-container-id="{{ container.id }}">
+        <i class="icon-plus"></i> {% trans "Add content" %}
+    </a>
+</div>
+
+<div id="{{ container.variable_name }}_modal" class="modal fade hide fullscreen"
+     role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3><i class="icon-plus"></i> Add content</h3>
+    </div>
+
+    <form id="{{ container.variable_name }}_add_widget_form"
+          data-behaviours='submit-widget-form' data-container-id="{{ container.id }}"
+          method="post" action="{% url "fp-api:widget-list" %}" class="add-content">
+        {% csrf_token %}
+        <input name="container" value="{{ container.id }}" type="hidden"/>
+        <div class="modal-body">
+
+            <div class='tabbable'>
+                <ul class="nav nav-tabs">
+                {% for group in grouped_widgets %}
+                    <li {% if forloop.first %}class="active"{% endif %}>
+                        <a href="#{{container.variable_name}}-{{ group|slugify }}" data-toggle="tab">{{ group }}</a>
+                    </li>
+                {% endfor %}
+                </ul>
+                <div class="tab-content">
+                    {% for group,widget_list in grouped_widgets.items %}
+                    <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{container.variable_name}}-{{ group|slugify }}">
+                        <ul>
+                            {% for widget in widget_list %}
+                            <li>
+                                <button type="submit" class="btn" name="code" value="{{ widget.0 }}">
+                                    <div class="image_container">
+                                        <!-- <label id="{{ widget.0 }}"> -->
+                                        <img src="{% static "fancypages/img/widget_icons/" %}{{ widget.0 }}.png" class="{{ widget.0 }}" alt="{{ widget.1 }}" title="{{ widget.1 }}">
+                                        <!-- </label> -->
+                                    </div>
+                                    {{ widget.1 }}
+                                </button>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

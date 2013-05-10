@@ -1,0 +1,53 @@
+{% load form_tags %}
+{% load thumbnail %}
+
+{% for field in form %}
+<div class="control-group">
+    {# Make the field widget type available to templates #}
+    {% annotate_form_field field %}
+
+    <div class="widget-settings">
+        <div data-behaviours="field-live-update">
+        {% if field.is_hidden %}
+            {{ field }}
+        {% else %}
+            <label for="{{ field.auto_id }}"
+                   class="dialog-field-text control-label {% if field.field.required %}required{% endif %}" >
+                {{ field.label }}{% if field.field.required %} <span>*</span>{% endif %}
+            </label>
+
+            {% if field.widget_type == "Textarea" %}
+            <div class="wysihtml5-wrapper">
+                {% include "fancypages/partials/wysihtml5_toolbar.html" %}
+            {% elif field.name == 'link' or 'link_url' in field.name %}
+            <div class="input-append">
+            {% else %}
+            <div class="controls">
+            {% endif %}
+                {{ field }}
+                {% if field.name == 'link' or 'link_url' in field.name %}
+                <a data-behaviours="load-modal"
+                   data-target="#fullscreen-modal .modal-body"
+                   data-href="/api/v1/pages/select-form?field_id={{ field.auto_id }}"
+                   class="btn">
+                    <i class="icon-link"></i>
+                </a>
+                {% endif %}
+            {% for error in field.errors %}
+                <span class="help-block">{{ error }}</span>
+            {% endfor %}
+
+            {% if field.help_text %}
+                <span class='help-block'>
+                    {# We allow HTML within form help fields #}
+                    {{ field.help_text|safe }}
+                </span>
+            {% endif %}
+
+            </div>
+        {% endif %}
+        </div>
+    </div>
+</div>
+{% endfor %}
+

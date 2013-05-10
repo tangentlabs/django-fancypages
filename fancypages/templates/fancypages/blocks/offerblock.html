@@ -1,0 +1,30 @@
+{% extends "fancypages/base/widget.html" %}
+{% load fp_widget_tags %}
+{% load i18n %}
+{% block widget %}
+    {% if object.offer %}
+        <div class="sub-header">
+            <h2>{{ object.offer.name }}</h2>
+        </div>
+        {% if object.offer.description %}
+            <div class="well">
+                {{ object.offer.description|safe }}
+            </div>
+        {% endif %}
+        {% with object.products as products %}
+            {% if products.count %}
+                <section>
+                    <div class="mod-offer mod">
+                        <ol class="products four">
+                            {% for product in products %}
+                                <li>{% include "catalogue/partials/product.html" %}</li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                    </section>
+            {% else %}
+                <p class="nonefound">{% trans "No products found." %}</p>
+            {% endif %}
+        {% endwith %}
+    {% endif %}
+{% endblock %}

@@ -1,63 +1,79 @@
-from django.template import loader, Context
-from django.template.defaultfilters import slugify
-from django.utils.translation import ugettext_lazy as _
+from copy import copy
 
-from . import models
+from django import template
+from django.template import loader
+from django.core.exceptions import ImproperlyConfigured
+
+from .models import ContentBlock, Container
 
 
-class BaseTileRenderer(object):
-    model = None
-    name = None
-    group = None
-    # form used for editing, might be
-    # the wrong place here
-    form_class = None
-    serializer = None
-    template_name = None
-    enable_static_rendering = False
+class ContainerRenderer(object):
 
-    def __init__(self, tile):
-        self.tile = tile
+    def __init__(self, container, context, extra_context=None):
+        if not container and not issubclass(container, Container):
+            raise TypeError(
+                "block must be a subclass of 'Widget' not '%s'" % type(container)
+            )
+        if not extra_context:
+            extra_context = {}
+        self.container = container
+        self.context = copy(context)
+        self.context.update(extra_context)
 
-    def get_serializer(self):
-        return self.serializer(
-            self.get_template_names(),
-            self.enable_static_rendering,
-        )
-
-    def get_model(self):
-        return self.model
-
-    def get_template_names(self):
-        if self.template_name:
-            return [self.template_name]
-        group_folder = u''
-        if self.group:
-            group_folder = "%s/" % str(slugify(self.group))
-        return ["fancypages/tiles/%s%s.html" % (group_folder, self.model._meta.module_name)]
-
-    def __getitem__(self, item):
-        if hasattr(self.tile, item):
-            content = getattr(self.tile, item)
-            tmpl = loader.get_template('fancypages/tiles/attribute.html')
-            return tmpl.render(Context({
-                'attribute_name': item,
-                'attribute_content': content,
-            }))
-        return u''
-
-    def __setitem__(self, item, value):
-        model = self.get_model()
-        if hasattr(model, item):
-            raise AttributeError('cannot set value on model attribute')
-        raise KeyError("%s has no attribute %s" % (self.model.__class__, item))
+    def get_context_data(self, **kwargs):
+        return kwargs
 
     def render(self):
-        return self.get_serializer().render(self)
+        """
+        Render the container and all its contained blocks.
+        """
+        ordered_blocks = self.container.blocks.select_subclasses()
+
+        tmpl = loader.select_template(self.container.get_template_names())
+
+        rendered_blocks = []
+        for block in ordered_blocks:
+            renderer = block.get_renderer_class()(block, self.context)
+            try:
+                rendered_block = renderer.render()
+            except ImproperlyConfigured:
+                continue
+            rendered_blocks.append((block.id, rendered_block))
+
+        self.context['container'] = self.container
+        self.context['rendered_blocks'] = rendered_blocks
+        self.context.update(self.get_context_data())
+        return tmpl.render(self.context)
 
 
-class TextTileRenderer(BaseTileRenderer):
-    model = models.TextTile
-    name = _("Text")
-    code = "text-tile"
-    group = _("Content")
+class BlockRenderer(object):
+    #FIXME: needs to be renamed to 'block' to prevent collision in context
+    context_object_name = 'object'
+
+    def __init__(self, block, context, extra_context=None):
+        if not block and not issubclass(block, ContentBlock):
+            raise TypeError(
+                "block must be a subclass of 'Widget' not '%s'" % type(block)
+            )
+        if not extra_context:
+            extra_context = {}
+        self.block = block
+        self.context = copy(context)
+        self.context.update(extra_context)
+
+    def get_context_data(self, **kwargs):
+        return kwargs
+
+    def render(self):
+        if not self.block.get_template_names():
+            raise ImproperlyConfigured(
+                "a template name is required for a block to be rendered"
+            )
+        try:
+            tmpl = loader.select_template(self.block.get_template_names())
+        except template.TemplateDoesNotExist:
+            return u''
+
+        self.context[self.context_object_name] = self.block
+        self.context.update(self.get_context_data())
+        return tmpl.render(self.context)

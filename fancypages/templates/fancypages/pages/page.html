@@ -1,0 +1,21 @@
+{% extends "fancypages/layout.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% load fp_container_tags %}
+
+{% block body_class %}fp-page editor-hidden{% endblock %}
+
+{% block keywords %}
+{{ page.keywords }}
+{% endblock keywords %}
+
+{% block title %}
+{{ page.title }} | {{ block.super }}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+    {% fp_object_container page-container %}
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "fancypages/assets/base.html" %}
+{% load i18n %}
+{% load compress %}
+{% load thumbnail %}
+{% load staticfiles %}
+
+{% block body_class %}assets{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "fancypages/css/jquery-file-upload/jquery.fileupload-ui.css" %}" />
+{% endblock %}
+
+{% block column_left %}
+<h3 id="fullscreen-modal-label"><i class="icon-picture"></i> <span>{% trans "Image Assets" %}</span></h3>
+<form id="fileupload" action="{% url fp-dashboard:image-upload %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <span class="btn btn-primary btn-block fileinput-button">
+        <i class="icon-upload icon-white"></i>
+        <span>{% trans "Upload new image" %}</span>
+        <input type="file" name="image" style="opacity: 0;">
+    </span>
+</form>
+
+<div id="upload-progress" class="progress progress-striped active hide">
+    <div class="bar" style="width: 0%;"></div>
+</div>
+{% endblock %}
+
+{% block content %}
+<ul id='asset-gallery' class="thumbnails">
+{% for image_asset in image_list %}
+    {% include "fancypages/assets/partials/image_thumbnail.html" %}
+{% endfor %}
+</ul>
+{% endblock %}
+
+{% block extrascripts %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static "fancypages/js/jquery-file-upload/jquery.ui.widget.js" %}"></script>
+    <script type="text/javascript" src="{% static "fancypages/js/jquery-file-upload/jquery.iframe-transport.js" %}"></script>
+    <script type="text/javascript" src="{% static "fancypages/js/jquery-file-upload/jquery.fileupload.js" %}"></script>
+    {% compress js %}
+    <script type="text/javascript" src="{% static "fancypages/js/assets.js" %}"></script>
+    {% endcompress %}
+{% endblock %}
+
+{% block onbodyload %}
+fancypages.assets.init();
+{% endblock %}

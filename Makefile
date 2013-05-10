@@ -1,7 +1,7 @@
 .PHONY: dev sandbox
 
 dev:
-	python setup.py develop
+	pip install -e .
 	pip install -r requirements.txt
 
 sandbox: dev

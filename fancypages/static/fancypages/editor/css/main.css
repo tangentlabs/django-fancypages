@@ -1,0 +1,340 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+div.toolbar {
+    position: absolute;
+    height: 48px;
+    background-color: #ddd;
+    border-top: 1px #fff solid;
+    border-bottom: 1px #222 solid;
+    width: 100%;
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow:    0 0 5px rgba(0, 0, 0, 0.25);
+    box-shadow:         0 0 5px rgba(0, 0, 0, 0.25);
+    z-index: 3;
+}
+
+div.toolbar .btn-group {
+    margin: 10px 0 0 10px;
+}
+
+div.toolbar form {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.editor {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50px;
+    bottom: 0;
+}
+
+.controls {
+    width: 400px;
+    min-width: 400px;
+    height: 100%;
+    background-color: #333;
+    border-right: 1px #222 solid;
+    position: relative;
+    clear: both;
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.125);
+    -moz-box-shadow:    0 0 5px rgba(0, 0, 0, 0.125);
+    box-shadow:         0 0 5px rgba(0, 0, 0, 0.125);
+    z-index: 2;
+}
+
+.controls .scrollpane {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 43px;
+}
+
+.controls .widget-settings {
+    background-color: #eee;
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow:    0 0 5px rgba(0, 0, 0, 0.25);
+    box-shadow:         0 0 5px rgba(0, 0, 0, 0.25);
+}
+
+.controls .widget-settings .widget-heading {
+    padding: 2px 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+    background-color: #ccc;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #aaa;
+}
+
+.controls .field {
+    border-top: 1px #fff solid;
+    border-bottom: 1px #ccc solid;
+    background-color: #eee;
+    padding: 5px 10px 10px;
+}
+
+.controls .field input {
+    width: 355px;
+    margin: 0;
+}
+
+.controls .field select, .controls .field textarea {
+    margin: 0;
+}
+
+.controls .field .input-wrapper {
+    position: relative;
+}
+
+.controls .field .image-container {
+    width: 355px;
+    border: 1px #ccc solid;
+    padding: 4px;
+}
+
+.controls .field img {
+    width: 355px;
+}
+
+.controls .field .btn-group {
+    top: 0;
+    position: absolute;
+}
+
+.controls .field textarea {
+    width: 355px;
+}
+
+.controls .field textarea {
+    height: 300px;
+}
+
+.controls .field .wysihtml5 {
+    border-top-width: 0;
+    -webkit-border-top-right-radius: 0;
+    -moz-border-radius-topright: 0;
+    border-top-right-radius: 0;
+    -webkit-border-top-left-radius: 0;
+    -moz-border-radius-topleft: 0;
+    border-top-left-radius: 0;
+}
+
+.controls .field iframe {
+    height: 308px;
+    width: 363px;
+    background-color: #fff;
+    border: 1px #ccc solid;
+    border-top-width: 0;
+    vertical-align: bottom;
+}
+
+.controls .field label {
+    font-weight: bold;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #777;
+}
+
+.editor .buttons {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #ddd;
+    border-top: 1px #fff solid;
+    padding: 7px 10px;
+}
+
+.editor .buttons .btn-success {
+    float: right;
+}
+
+.preview {
+    position: absolute;
+    top: 0;
+    left: 401px;
+    right: 0;
+    bottom: 0;
+}
+
+.preview iframe {
+    width: 100%;
+    height: 100%;
+}
+
+.preview .loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+.preview .loading-overlay .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.5;
+}
+
+.preview .loading-overlay .loader {
+    position: absolute;
+    height: 20px;
+    width: 100px;
+    left: 50%;
+    top: 50%;
+    margin-left: -50px;
+    margin-top: -10px;
+    color: #fff;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    z-index: 2;
+}
+
+.wysihtml5-wrapper {
+    height: 339px;
+    overflow: hidden;
+}
+
+.wysihtml5-toolbar ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    font-size: 12px;
+    background-color: #fff;
+    overflow: auto;
+    border: 1px #ccc solid;
+    -webkit-border-top-left-radius: 4px;
+    -moz-border-radius-topleft: 4px;
+    border-top-left-radius: 4px;
+    -webkit-border-top-right-radius: 4px;
+    -moz-border-radius-topright: 4px;
+    border-top-right-radius: 4px;
+    width: 363px;
+}
+
+.wysihtml5-toolbar ul li {
+    float: left;
+    margin: 0 0 1px 0;
+    padding: 0;
+}
+
+.wysihtml5-toolbar ul li a {
+    display: block;
+    padding: 5px 10px;
+    border-right: 1px #ccc solid;
+    background-color: #fff;
+    -webkit-box-shadow: 0 1px 0 #DDD;
+    -moz-box-shadow: 0 1px 0 #ddd;
+    box-shadow: 0 1px 0 #DDD;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.wysihtml5-toolbar.wysihtml5-commands-disabled ul {
+    background-color: #eee;
+}
+
+.wysihtml5-toolbar.wysihtml5-commands-disabled ul li a {
+     background-color: #eee;   
+}
+
+.wysihtml5-toolbar.wysihtml5-commands-disabled ul li a.toolbar-html {
+    background-color: #fff;
+}
+
+.wysihtml5-toolbar ul li a:focus, .wysihtml5-toolbar ul li a:hover {
+    background-color: #eee;
+}
+
+.wysihtml5-toolbar ul li .toolbar-bold {
+    font-weight: bold;
+}
+
+.wysihtml5-toolbar ul li .toolbar-italic {
+    font-style: italic;
+}
+
+.wysihtml5-toolbar ul li .toolbar-link {
+    text-decoration: underline;
+}
+
+.wysihtml5-toolbar ul li .wysihtml5-command-active {
+    background-color: #ddd;
+}
+
+.controls .field [data-wysihtml5-dialog] {
+    line-height: 1.5;
+    font-size: 12px;
+    background-color: #f9f9f9;
+    border-left: 1px #ccc solid;
+    border-right: 1px #ccc solid;
+    border-bottom: 1px #ccc solid;
+    padding: 10px;
+    float: left;
+}
+
+.controls .field [data-wysihtml5-dialog] input {
+    width: 345px;
+}
+
+.controls .field [data-wysihtml5-dialog] .btn {
+    margin-top: 5px;
+}
+
+#asset-library-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.5;
+    z-index: 3;
+}
+
+#asset-library {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 200px;
+    z-index: 3;
+    background-color: #fff;
+    border-left: 1px #999 solid;
+    overflow: hidden;
+    -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow:    0 0 30px rgba(0, 0, 0, 0.25);
+    box-shadow:         0 0 30px rgba(0, 0, 0, 0.25);
+}
+
+#asset-library iframe {
+    width: 100%;
+    height: 100%;
+}
+
+/** initial setup **/
+.scrollpane {
+  overflow : hidden;
+}
+.scrollpane .scrollparent {
+  position      : absolute;
+  overflow      : scroll;
+  overflow-x    : hidden;
+  top           : 0;
+  right         : 0;
+  bottom        : 0;
+  left          : 0;
+}

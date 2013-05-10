@@ -1,0 +1,26 @@
+{% extends "fancypages/base/widget.html" %}
+{% load fp_widget_tags %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block widget %}
+<div class="container-fluid">
+    <div class="flexslider">
+        <ul class="slides">
+            {% for image_dict in object.get_images_and_links.values %}
+            <li class="flex-active-slide">
+                <a href="{{ image_dict.link|default:"#" }}">
+                    {% thumbnail image_dict.image.image "870x500" as im %}
+                        <img src="{{ im.url }}" alt="{{ object.title }}" />
+                    {% endthumbnail %}
+                </a>
+            </li>
+            {% empty %}
+            <li class="flex-active-slide">
+                <img src="{% static "fancypages/img/missing-img.png" %}" alt="Upload image" />
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

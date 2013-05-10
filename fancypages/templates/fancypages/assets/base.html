@@ -1,0 +1,34 @@
+{% extends "oscar/base.html" %}
+{% load i18n %}
+{% load compress %}
+{% load staticfiles %}
+
+{% block body_class %}{% endblock %}
+
+{% block title %}Fancy Pages - Asset Manager{% endblock %}
+
+{% block layout %}
+    <div class="container-fluid asset-fluid">
+        <div class="page_inner">
+            {% include "partials/alert_messages.html" %}
+            <div class="row-fluid">
+                <aside class="sidebar span2">
+                    {% block column_left %}
+                    {% endblock %}
+                </aside><!-- /span3 -->
+
+                <div class="span10 modal-body">
+                    {% block content %}
+                    {% endblock %}
+                </div><!-- /span9 -->
+            </div><!-- /row-fluid -->
+        </div><!-- /page_inner -->
+    </div><!-- /container-fluid -->
+{% endblock %}
+
+{% block extrastyles %}
+    {{ block.super }}
+    {% compress css %}
+    <link rel='stylesheet' type='text/less' href="{% static "fancypages/less/assets.less" %}" />
+    {% endcompress %}
+{% endblock %}

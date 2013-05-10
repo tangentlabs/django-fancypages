@@ -94,6 +94,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'fancypages.middleware.EditorMiddleware',
 )
 
 ROOT_URLCONF = 'sandbox.urls'

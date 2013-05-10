@@ -31,6 +31,7 @@ def configure():
             STATICFILES_FINDERS=(
                 'django.contrib.staticfiles.finders.FileSystemFinder',
                 'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+                'compressor.finders.CompressorFinder',
             ),
             TEMPLATE_LOADERS=(
                 'django.template.loaders.filesystem.Loader',
@@ -68,6 +69,7 @@ def configure():
                 'django.contrib.admin',
                 'fancypages',
                 'model_utils',
+                'compressor',
             ],
             AUTHENTICATION_BACKENDS=(
                 'django.contrib.auth.backends.ModelBackend',

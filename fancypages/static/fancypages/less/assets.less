@@ -1,0 +1,61 @@
+@import "bootstrap/variables.less";
+@import "bootstrap/mixins.less";
+
+//Assest Manager
+#asset-modal-label {
+  border-bottom:1px solid @grayLight;
+  margin-bottom:@baseLineHeight;
+  span {
+    font-size:18px;
+  }
+}
+.assets {
+  background:transparent;
+}
+.asset-fluid {
+  margin: 0;
+  padding:0;
+  max-width: none;
+  .page_inner {
+    padding:0;
+  }
+}
+.thumbnails {
+  .thumbnail {
+    height:180px;
+    background:#fff;
+    &:hover {
+      border-color: #08C;
+      -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+      -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+      box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+      cursor:pointer;
+    }
+  }
+  [class*="span"],
+  [class*="span"]:first-child {
+    margin-left:2.564102564102564% / 2.5;
+    margin-right:2.564102564102564% / 2.5;
+  }
+  text-align: center;
+  .caption {
+    h6 {
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      margin:0;
+    }
+  }
+}
+.image_container {
+  background:#fff;
+  border: ;
+  min-height:130px;
+  line-height:130px;
+  margin-bottom: 0;
+  text-align:center;
+  img {
+    max-height:130px;
+    width: 100%;
+  }
+}

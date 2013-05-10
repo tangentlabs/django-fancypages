@@ -1,0 +1,23 @@
+{% load i18n %}
+{% load staticfiles %}
+{% load url from future %}
+<div class="asset-input">
+    <div class="thumbnail">
+        <div class="image_container">
+            {% if asset %}
+                <img src="{{ asset.image.url }}"/>
+            {% else %}
+                <img src="{% static "fancypages/img/missing-img.png" %}" alt="Upload image" />
+            {% endif %}
+        </div>
+    </div>
+
+    {{ rendered_widgets }}
+    <a data-behaviours="load-iframe-modal"
+       data-target="#fullscreen-modal"
+       data-iframe-id="asset-manager"
+       data-iframe-src="{% url "fp-dashboard:image-list" %}"
+       class="btn btn-large btn-danger btn-block">
+        {% trans "Libary" %}
+    </a>
+</div>

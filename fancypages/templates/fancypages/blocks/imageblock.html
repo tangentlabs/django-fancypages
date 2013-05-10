@@ -1,0 +1,13 @@
+{% extends "fancypages/base/widget.html" %}
+{% load fp_widget_tags %}
+
+{% block widget %}
+{% if object.link %}
+<a href="{{ object.link }}">
+    {# FIXME an image currently doesnt work with the render tag #}
+    {% include "fancypages/widgets/partials/image_thumbnail.html" with asset=object.image_asset %}
+</a>
+{% else %}
+    {% include "fancypages/widgets/partials/image_thumbnail.html" with asset=object.image_asset %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,59 @@
+{% load i18n staticfiles %}
+
+<div id="editor-panel">
+    
+    <div class="button-nav">
+        {% if form %}
+        <button data-behaviours="page-settings">
+            <span>
+                <i class="icon-file"></i>
+                <span>{% trans "Settings" %}</span>
+            </span>
+        </button>
+        {% endif %}
+        <button id="editor-close" type="button" class="close">×</button>
+    </div>
+
+    <div class="sidebar-content">
+        <div id="page-settings">
+            {% if form %}
+            <h3><i class="icon-file"></i> <span>{% trans "Page Settings" %}</span></h3>
+            <form method="post" action="." class="form-stacked">
+                {% csrf_token %}
+                {% include "oscar/partials/form_fields.html" %}
+
+                <div class="form-actions fixed">
+                    <div>
+                        <a href="">{% trans "Cancel" %}</a>
+
+                        <button type="submit" class="btn btn-primary pull-right">
+                            {% trans "Save" %}
+                        </button>
+                    </div>
+                </div>
+            </form>
+            {% else %}
+                <p>{% trans "Hover over a widget and click" %} <big>&quot;<i class="icon-edit"></i> edit&quot;</big> {% trans "to see editable properties." %}</p>
+            {% endif %}
+        </div>
+        <div id="widget_input_wrapper"></div>
+    </div>
+</div>
+<div id='editor-handle'><i class="icon-large icon-edit"></i>edit</div>
+<div class="loading" data-behaviours="loading"></div>
+
+<div class="modal hide fullscreen-modal" id="fullscreen-modal" tabindex="-1" role="dialog" aria-labelledby="asset-modal-label" aria-hidden="true">
+    <div class="row-fluid">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    </div>
+    <div class="modal-body"></div>
+</div>
+
+{# include scripts that are only required in edit mode #}
+{% include "fancypages/editor/partials/cdn_scripts.html" %}
+{% include "fancypages/editor/partials/extrascripts.html" %}
+<script>
+    $(document).ready(function(){
+        fancypages.editor.init();
+    });
+</script>

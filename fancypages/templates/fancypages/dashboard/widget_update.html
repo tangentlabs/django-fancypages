@@ -1,0 +1,21 @@
+{% load i18n %}
+{% load fp_widget_tags %}
+<div class="editing-area">
+    <h3><i class="icon-edit"></i> <span>Edit</span></h3>
+
+    <form id="{{ widget.container.variable_name }}_widget_form"
+          data-widget-id='{{ widget.id }}' data-container-name="{{ widget.container.variable_name }}"
+          data-behaviours="submit-widget-form" class="form" method="post"
+          action="{% url fp-dashboard:widget-update widget.id %}">
+        {% csrf_token %}
+        {% render_widget_form form %}
+        <div class="form-actions fixed">
+            <div>
+                <a href="">{% trans "Cancel" %}</a>
+                <button type="submit" class="btn btn-large btn-primary pull-right">{% trans "Save" %}</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+

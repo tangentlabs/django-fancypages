@@ -1,0 +1,67 @@
+{% load i18n %}
+
+<div class="wysihtml5-toolbar" >
+    <div class="navbar navbar-inverse nav-wysiwyg">
+        <div class="navbar-inner">
+            <ul class="nav">
+                <li class='dropdown'>
+                    <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+                        <i class='icon-font'></i>
+                    </a>
+                    <ul class='dropdown-menu'>
+                        <li><a data-wysihtml5-command='formatBlock' data-wysihtml5-command-value='div'>Normal text</a></li>
+                        <li><a data-wysihtml5-command='formatBlock' data-wysihtml5-command-value='h1'>Heading 1</a></li>
+                        <li><a data-wysihtml5-command='formatBlock' data-wysihtml5-command-value='h2'>Heading 2</a></li>
+                        <li><a data-wysihtml5-command='formatBlock' data-wysihtml5-command-value='h3'>Heading 3</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a data-wysihtml5-command="bold" title="CTRL+B" href="javascript:;" unselectable="on">
+                        <i class="icon-bold"></i>
+                    </a>
+                </li>
+                <li>
+                    <a data-wysihtml5-command="italic" title="CTRL+I" href="javascript:;" unselectable="on">
+                        <i class="icon-italic"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#createLinkModal" title="Insert Link" data-wysihtml5-command="createLink" role="button" data-toggle="modal">
+                        <i class="icon-link"></i>
+                    </a>
+                </li>
+                <li>
+                    <a data-wysihtml5-command="insertUnorderedList" href="javascript:;" unselectable="on">
+                        <i class="icon-list-ul"></i>
+                    </a>
+                </li>
+                <li>
+                    <a data-wysihtml5-command="insertOrderedList" href="javascript:;" unselectable="on">
+                        <i class="icon-list-ol"></i>
+                    </a>
+                </li>
+                <li >
+                    <a data-wysihtml5-action="change_view" href="javascript:;" unselectable="on"><i class="icon-text">html</i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div data-wysihtml5-dialog="createLink" style="display: none;" class="modal fade in" id="createLinkModal" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" data-wysihtml5-dialog-action="cancel" data-behaviours="remove-modal" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="createLinkmodal">{% trans "Create link" %}</h3>
+        </div>
+
+        <div class="modal-body">
+            <label>
+                Link: <input data-wysihtml5-dialog-field="href" value="http://">
+            </label>
+        </div>
+
+        <div class="modal-footer">
+            <a data-wysihtml5-dialog-action="cancel" class="btn">Cancel</a>
+            <a class="btn btn-primary" data-wysihtml5-dialog-action="save">Create link</a>
+        </div>
+    </div>
+</div>

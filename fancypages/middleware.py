@@ -1,5 +1,7 @@
 import re
 
+from django.http import Http404
+from django.conf import settings
 from django.template import RequestContext
 from django.utils.encoding import smart_unicode
 from django.template.loader import render_to_string
@@ -40,6 +42,7 @@ class EditorMiddleware(object):
         if not user.is_staff:
             return response
 
+        #TODO change this to something more reliable
         if 'widget-add-control' not in response.content:
             return response
 

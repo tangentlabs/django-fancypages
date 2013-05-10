@@ -1,0 +1,7 @@
+{% extends "fancypages/base/widget.html" %}
+{% load fp_widget_tags %}
+
+{% block widget %}
+<h2>{% render_attribute "title" %}</h2>
+{% render_attribute "text" "safe" %}
+{% endblock %}

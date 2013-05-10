@@ -1,0 +1,13 @@
+{% load staticfiles %}
+{% load compress %}
+<script type="text/javascript" charset="utf-8" src="{% static "fancypages/js/wysihtml5/advanced.js" %}"></script>
+<script type="text/javascript" charset="utf-8" src="{% static "fancypages/js/wysihtml5/wysihtml5-0.3.0.min.js" %}"></script>
+{% compress js %}
+    <script type="text/javascript" charset="utf-8" src="{% static "fancypages/js/scrollpane/jquery.jscrollpane.js" %}"></script>
+    <script type="text/javascript" charset="utf-8" src="{% static "fancypages/js/mousewheel/jquery.mousewheel.min.js" %}"></script>
+    <script type="text/javascript" charset="utf-8" src="{% static "fancypages/js/elastislide/jquery.elastislide.js" %}"></script>
+
+    <script type="text/javascript" charset="utf-8" src="{% static "fancypages/js/fancypages.js" %}"></script>
+    <script type="text/javascript" charset="utf-8" src="{% static "fancypages/js/editor.js" %}"></script>
+    <script type="text/javascript" charset="utf-8" src="{% static "fancypages/js/event-handlers.js" %}"></script>
+{% endcompress %}

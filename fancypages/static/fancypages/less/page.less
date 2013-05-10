@@ -1,0 +1,74 @@
+@import "bootstrap/variables.less";
+@import "bootstrap/mixins.less";
+
+//Utilities
+.visible-editor {
+  display:none;
+}
+//Widgets
+.widget-wrapper {
+  margin-bottom:@baseLineHeight;
+}
+//No Assest default
+.no-asset {
+  text-align:center;
+  padding:60px 0;
+  margin:0;
+  #gradient .vertical(#fff, #efefef);
+  i {
+    font-size:50px;
+    line-height:40px;
+    display:block;
+  }
+}
+//Change content layout dependent on container width
+.span1,.span2, .span3, .span4 {
+  .widget-wrapper {
+    [class*="span"],
+    .row-fluid [class*="span"],
+    .mod-offer .products li {
+      float: none;
+      display: block;
+      width: 100%;
+      margin-left: 0;
+      .box-sizing(border-box);
+      margin-bottom:@baseLineHeight;
+    }
+  }
+  .es-carousel {
+    .products {
+      overflow:hidden;
+    }
+  }
+}
+
+.fullscreen-modal {
+  position: fixed;
+  top: 5%;
+  right: 5%;
+  bottom: 100%;
+  left: 5%;
+  margin: 0;
+  width: 90%;
+  height: 90%;
+  > .modal-body {
+    overflow:hidden;
+  }
+}
+//Moving content into smaller containers
+/**** TO ADD IN  LATER ONCE WIDGET NAMES AR KNOWN ****/
+/*.span4 {
+  .widget-wrapper {
+    height:30px;
+    overflow:hidden;
+    &:before {
+      content: "Too large to fit here!";
+      padding:5px;
+      background:#efefef;
+      display:block;
+      text-align:center;
+      text-transform:uppercase;
+      font-size:11px;
+    }
+  }
+}*/

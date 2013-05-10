@@ -1,0 +1,33 @@
+{% load i18n %}
+{% load fp_widget_tags %}
+{% load fp_container_tags %}
+
+<div class="tabbable">
+    <ul class="nav nav-tabs">
+        {% for tab in object.tabs.all %}
+        <li {% if forloop.first %}class="active"{% endif %}>
+            <a href="#tab-{{ object.id }}-{{ forloop.counter }}" data-toggle="tab">{{ tab.title }}</a>
+        </li>
+        {% endfor %}
+
+        {% if request.fancypage_edit_mode %}
+        <li>
+            {% get_content_type object as content_type %}
+            <a data-action="{% url fp-api:ordered-container-list %}"
+               data-behaviours="add-tab"
+               data-content-type-id="{{ content_type.id }}">
+                <i class="icon-plus"></i>{% trans "Add tab" %}
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+
+    <div class="tab-content">
+    {% for tab in object.tabs.all %}
+        <div class="tab-pane {% if forloop.first %}active{% endif %}"
+             id="tab-{{ object.id }}-{{ forloop.counter }}">
+            {% fp_object_container tab %}
+        </div>
+    {% endfor %}
+    </div>
+</div>
