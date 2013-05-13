@@ -4,7 +4,7 @@
 
 {% block block_content %}
     {% if object.code and object.source == 'youtube' %}
-        <div class="widget-video">
+        <div class="block-video">
             <iframe width="560" height="315" src="http://www.youtube.com/embed/{{ object.video_code }}" frameborder="0" allowfullscreen></iframe>
         </div>
     {% else %}

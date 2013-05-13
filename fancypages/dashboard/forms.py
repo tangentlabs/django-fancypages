@@ -120,16 +120,16 @@ class PageCreateForm(PageFormMixin, forms.ModelForm):
 
 
 class BlockUpdateSelectForm(forms.Form):
-    widget_code = forms.ChoiceField(label=_("Edit widget:"))
+    block_code = forms.ChoiceField(label=_("Edit block:"))
 
     def __init__(self, container, *args, **kwargs):
         super(BlockUpdateSelectForm, self).__init__(*args, **kwargs)
 
-        widget_choices = []
-        for widget in container.widgets.select_subclasses():
-            widget_choices.append((widget.id, unicode(widget)))
+        block_choices = []
+        for block in container.blocks.select_subclasses():
+            block_choices.append((block.id, unicode(block)))
 
-        self.fields['widget_code'].choices = widget_choices
+        self.fields['block_code'].choices = block_choices
 
 
 class BlockForm(forms.ModelForm):

@@ -21,7 +21,7 @@ fancypages.eventHandlers = {
                 parent.fancypages.editor.reloadPreview();
             },
             error: function () {
-                parent.oscar.messages.error(
+                parent.fancypages.utils.messages.error(
                     "An error occured trying to add a new tab. Please try it again."
                 );
             }
@@ -72,7 +72,7 @@ fancypages.eventHandlers = {
                 });
             },
             error: function () {
-                oscar.messages.error("Unable to load list of available blocks.");
+                fancypages.utils.messages.error("Unable to load list of available blocks.");
             }
         });
     },
@@ -93,7 +93,7 @@ fancypages.eventHandlers = {
                 });
             })
             .error(function () {
-                oscar.messages.error(
+                fancypages.utils.messages.error(
                     "An error occured trying to delete a block. Please try it again."
                 );
             });

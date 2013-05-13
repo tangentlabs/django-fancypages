@@ -39,7 +39,7 @@ fancypages.dashboard = {
                             window.location.reload();
                         },
                         error: function () {
-                            oscar.messages.error(
+                            fancypages.utils.messages.error(
                                 "An error occured moving the page, please try again."
                             );
                         }

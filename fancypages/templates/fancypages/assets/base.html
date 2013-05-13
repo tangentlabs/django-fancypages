@@ -1,16 +1,15 @@
-{% extends "oscar/base.html" %}
+{% extends "fancypages/base.html" %}
 {% load i18n %}
 {% load compress %}
 {% load staticfiles %}
 
 {% block body_class %}{% endblock %}
 
-{% block title %}Fancy Pages - Asset Manager{% endblock %}
+{% block page_title %}Fancy Pages - Asset Manager{% endblock %}
 
 {% block layout %}
     <div class="container-fluid asset-fluid">
         <div class="page_inner">
-            {% include "partials/alert_messages.html" %}
             <div class="row-fluid">
                 <aside class="sidebar span2">
                     {% block column_left %}

@@ -59,7 +59,7 @@ def configure():
             TEMPLATE_DIRS=(
                 sandbox('templates'),
             ),
-            INSTALLED_APPS=[
+            INSTALLED_APPS=(
                 'django.contrib.auth',
                 'django.contrib.contenttypes',
                 'django.contrib.sessions',
@@ -70,8 +70,13 @@ def configure():
                 'model_utils',
                 'compressor',
                 'twitter_tag',
+                'sorl.thumbnail',
+                'rest_framework',
                 'fancypages',
-            ],
+                'fancypages.api',
+                'fancypages.dashboard',
+                'fancypages.assets',
+            ),
             AUTHENTICATION_BACKENDS=(
                 'django.contrib.auth.backends.ModelBackend',
             ),

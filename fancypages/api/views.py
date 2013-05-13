@@ -24,7 +24,7 @@ class ApiV2View(APIView):
 
     def get(self, request):
         return Response({
-            'widgets': reverse('fp-api:widget-list', request=request),
+            'blocks': reverse('fp-api:block-list', request=request),
         })
 
 
@@ -65,11 +65,11 @@ class BlockMoveView(generics.UpdateAPIView):
     permission_classes = (IsAdminUser,)
 
     def get_object(self):
-        widget = self.model.objects.get_subclass(
+        block = self.model.objects.get_subclass(
             id=self.kwargs.get(self.pk_url_kwarg)
         )
-        widget.prev_container = widget.container
-        return widget
+        block.prev_container = block.container
+        return block
 
 
 class OrderedContainerListView(generics.ListCreateAPIView):
@@ -98,7 +98,7 @@ class PageSelectFormView(APIView):
 
 
 class BlockTypesView(APIView):
-    form_template_name = "fancypages/dashboard/widget_select.html"
+    form_template_name = "fancypages/dashboard/block_select.html"
 
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAdminUser,)
@@ -107,7 +107,7 @@ class BlockTypesView(APIView):
         container_id = request.QUERY_PARAMS.get('container')
         if container_id is None:
             return Response({
-                    'detail': u'container ID is required for widget list',
+                    'detail': u'container ID is required for block list',
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )

@@ -106,7 +106,7 @@ TEMPLATE_DIRS = [
     location('templates'),
 ]
 
-INSTALLED_APPS = [
+DJANGO_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -117,42 +117,20 @@ INSTALLED_APPS = [
     'django.contrib.admin',
 
     'django_extensions',
-    'rest_framework',
     'debug_toolbar',
-    'model_utils',
-    'south',
-    'compressor',
-    'twitter_tag',
-
-    'fancypages',
-]
+)
+from fancypages.default import *
+INSTALLED_APPS = DJANGO_APPS + FANCYPAGES_REQUIRED_APPS + FANCYPAGES_APPS
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-LOGIN_REDIRECT_URL = '/accounts/'
-APPEND_SLASH = True
+LOGIN_URL = '/admin/login/'
 
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False
 }
-
-########## COMPRESSOR SETTINGS
-# Compressor and pre-compiler settings for django-compressor
-COMPRESS_ENABLED = DEBUG
-COMPRESS_OUTPUT_DIR = 'cache'
-COMPRESS_OFFLINE = False
-
-COMPRESS_PRECOMPILERS = (
-    ('text/less', 'lessc {infile} {outfile}'),
-)
-########## END COMPRESSOR SETTINGS
-
-TWITTER_OAUTH_TOKEN=''
-TWITTER_OAUTH_SECRET=''
-TWITTER_CONSUMER_KEY=''
-TWITTER_CONSUMER_SECRET=''
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

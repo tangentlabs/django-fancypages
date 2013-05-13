@@ -1,5 +1,5 @@
 var fancypages = {
-    apiBaseUrl: "/api/v1/",
+    apiBaseUrl: "/api/v2/",
     /**
      * Get the CSRF token from the session to submit POST data.
      */

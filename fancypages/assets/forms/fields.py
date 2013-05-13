@@ -14,7 +14,7 @@ class AssetField(MultiValueField):
     }
 
     def __init__(self, *args, **kwargs):
-        queryset = kwargs.pop('queryset', None)
+        kwargs.pop('queryset', None)
         self.pk_field_name = kwargs.pop('to_field_name')
         fields = (
             self.default_fields['asset_pk'](),

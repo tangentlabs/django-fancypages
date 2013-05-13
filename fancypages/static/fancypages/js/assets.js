@@ -10,7 +10,7 @@ fancypages.assets = {
                     $("#asset-gallery").append(data.result.images[0].thumbnailMarkup);
                     uploadProgress.addClass("hide");
                 } else {
-                    parent.oscar.messages.error(data.reason);
+                    parent.fancypages.partials.messages.error(data.reason);
                 }
             },
             progressall: function (e, data) {

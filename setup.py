@@ -24,6 +24,7 @@ setup(
         'django-appconf>=0.6,<0.7',
         'django-twitter-tag>=1.1,<1.2',
         'pillow>=2.0.0,<2.1',
+        'sorl-thumbnail>=11.12,<12',
     ],
     # See http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[

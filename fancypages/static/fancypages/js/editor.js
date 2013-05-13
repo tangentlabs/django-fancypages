@@ -9,6 +9,25 @@ fancypages.utils = {
             var allArguments = args.concat(Array.prototype.slice.call(arguments));
             return func.apply(this, allArguments);
         };
+    },
+    messages: {
+        addMessage: function(tag, msg) {
+            var msgHTML = '<div class="alert fade in alert-' + tag + '">' +
+                          '<a href="#" class="close" data-dismiss="alert">x</a>' + msg +
+                          '</div>';
+            $('#messages').append($(msgHTML));
+        },
+        debug: function(msg) { o.messages.addMessage('debug', msg); },
+        info: function(msg) { o.messages.addMessage('info', msg); },
+        success: function(msg) { o.messages.addMessage('success', msg); },
+        warning: function(msg) { o.messages.addMessage('warning', msg); },
+        error: function(msg) { o.messages.addMessage('error:', msg); },
+        clear: function() {
+            $('#messages').html('');
+        },
+        scrollTo: function() {
+            $('html').animate({scrollTop: $('#messages').offset().top});
+        }
     }
 };
 
@@ -98,7 +117,7 @@ fancypages.editor = {
                         fancypages.editor.reloadPage();
                     },
                     error: function () {
-                        oscar.messages.error(
+                        fancypages.utils.messages.error(
                             "An error occured trying to move the block. Please try it again."
                         );
                     }
@@ -202,7 +221,7 @@ fancypages.editor = {
                     fancypages.editor.reloadPage();
                 },
                 error: function () {
-                    oscar.messages.error(
+                    fancypages.utils.messages.error(
                         "An error occured trying to add a new block. Please try it again."
                     );
                 }
@@ -331,7 +350,7 @@ fancypages.editor = {
                 $('.editor').animate({backgroundColor: "#444"}, 500);
             },
             error: function () {
-                oscar.messages.error(
+                fancypages.utils.messages.error(
                     "An error occured trying to delete a block. Please try it again."
                 );
             }

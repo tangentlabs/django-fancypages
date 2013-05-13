@@ -4,8 +4,10 @@ from django.utils.translation import ugettext as _
 
 class AbstractAsset(models.Model):
     name = models.CharField(_("Name"), max_length=255)
+
     date_created = models.DateTimeField(_("Date created"), auto_now_add=True)
     date_modified = models.DateTimeField(_("Date modified"), auto_now=True)
+
     description = models.TextField(_("Description"), default="")
     creator = models.ForeignKey('auth.User', verbose_name=_("Creator"))
 

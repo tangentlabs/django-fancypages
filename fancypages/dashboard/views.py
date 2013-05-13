@@ -78,18 +78,18 @@ class PageDeleteView(generic.DeleteView):
 
 class FancypagesMixin(object):
 
-    def get_widget_class(self):
+    def get_block_class(self):
         model = None
-        for widget_class in ContentBlock.itersubclasses():
-            if widget_class._meta.abstract:
+        for block_class in ContentBlock.itersubclasses():
+            if block_class._meta.abstract:
                 continue
 
-            if widget_class.code == self.kwargs.get('code'):
-                model = widget_class
+            if block_class.code == self.kwargs.get('code'):
+                model = block_class
                 break
         return model
 
-    def get_widget_object(self):
+    def get_block_object(self):
         try:
             return self.model.objects.select_subclasses().get(
                 id=self.kwargs.get('pk')
@@ -100,11 +100,11 @@ class FancypagesMixin(object):
 
 class BlockUpdateView(generic.UpdateView, FancypagesMixin):
     model = ContentBlock
-    context_object_name = 'widget'
-    template_name = "fancypages/dashboard/widget_update.html"
+    context_object_name = 'block'
+    template_name = "fancypages/dashboard/block_update.html"
 
     def get_object(self, queryset=None):
-        return self.get_widget_object()
+        return self.get_block_object()
 
     def get_form_kwargs(self):
         kwargs = super(BlockUpdateView, self).get_form_kwargs()
@@ -130,23 +130,23 @@ class BlockUpdateView(generic.UpdateView, FancypagesMixin):
         return super(BlockUpdateView, self).form_invalid(form)
 
     def get_success_url(self):
-        return reverse('fp-dashboard:widget-update',
+        return reverse('fp-dashboard:block-update',
                        args=(self.object.id,))
 
 
 class BlockDeleteView(generic.DeleteView, FancypagesMixin):
     model = ContentBlock
-    context_object_name = 'widget'
-    template_name = "fancypages/dashboard/widget_delete.html"
+    context_object_name = 'block'
+    template_name = "fancypages/dashboard/block_delete.html"
 
     def get_object(self, queryset=None):
-        return self.get_widget_object()
+        return self.get_block_object()
 
     def delete(self, request, *args, **kwargs):
         response = super(BlockDeleteView, self).delete(request, *args, **kwargs)
-        for idx, widget in enumerate(self.object.container.widgets.all().select_subclasses()):
-            widget.display_order = idx
-            widget.save()
+        for idx, block in enumerate(self.object.container.blocks.all().select_subclasses()):
+            block.display_order = idx
+            block.save()
         return response
 
     def get_success_url(self):
