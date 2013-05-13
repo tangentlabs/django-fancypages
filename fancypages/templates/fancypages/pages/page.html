@@ -3,15 +3,18 @@
 {% load staticfiles %}
 {% load fp_container_tags %}
 
-{% block body_class %}fp-page editor-hidden{% endblock %}
-
-{% block keywords %}
-{{ page.keywords }}
-{% endblock keywords %}
 
 {% block title %}
-{{ page.title }} | {{ block.super }}
+    {{ fancypage.name }} | {{ block.super }}
 {% endblock %}
+{% if fancypage.description %}
+    {% block description %}{{ fancypage.description }}{% endblock %}
+{% endif %}
+{% if fancypage.keywords %}
+    {% block keywords %}{{ fancypage.keywords }}{% endblock %}
+{% endif %}
+
+{% block body_class %}fp-page editor-hidden{% endblock %}
 
 {% block content %}
     {% fp_object_container page-container %}
