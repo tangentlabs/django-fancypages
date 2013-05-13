@@ -9,16 +9,16 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework.authentication import SessionAuthentication
 
-from fancypages.api import serialisers
+from . import serialisers
+from ..library import get_grouped_content_blocks
 
-Page = get_model('fancypages', 'Page')
-Widget = get_model('fancypages', 'Widget')
-Category = get_model('catalogue', 'Category')
+FancyPage = get_model('fancypages', 'FancyPage')
 Container = get_model('fancypages', 'Container')
+ContentBlock = get_model('fancypages', 'ContentBlock')
 OrderedContainer = get_model('fancypages', 'OrderedContainer')
 
 
-class ApiV1View(APIView):
+class ApiV2View(APIView):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAdminUser,)
 
@@ -28,9 +28,9 @@ class ApiV1View(APIView):
         })
 
 
-class WidgetListView(generics.ListCreateAPIView):
-    model = Widget
-    serializer_class = serialisers.WidgetSerializer
+class BlockListView(generics.ListCreateAPIView):
+    model = ContentBlock
+    serializer_class = serialisers.BlockSerializer
 
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAdminUser,)
@@ -41,12 +41,12 @@ class WidgetListView(generics.ListCreateAPIView):
         return obj
 
     def get_queryset(self):
-        return super(WidgetListView, self).get_queryset().select_subclasses()
+        return super(BlockListView, self).get_queryset().select_subclasses()
 
 
-class WidgetRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    model = Widget
-    serializer_class = serialisers.WidgetSerializer
+class BlockRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    model = ContentBlock
+    serializer_class = serialisers.BlockSerializer
 
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAdminUser,)
@@ -57,9 +57,9 @@ class WidgetRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
         )
 
 
-class WidgetMoveView(generics.UpdateAPIView):
-    model = Widget
-    serializer_class = serialisers.WidgetMoveSerializer
+class BlockMoveView(generics.UpdateAPIView):
+    model = ContentBlock
+    serializer_class = serialisers.BlockMoveSerializer
 
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAdminUser,)
@@ -97,7 +97,7 @@ class PageSelectFormView(APIView):
         return Response({'rendered_form': self.get_rendered_form()})
 
 
-class WidgetTypesView(APIView):
+class BlockTypesView(APIView):
     form_template_name = "fancypages/dashboard/widget_select.html"
 
     authentication_classes = (SessionAuthentication,)
@@ -113,7 +113,7 @@ class WidgetTypesView(APIView):
             )
 
         try:
-            container = Container.objects.get(pk=container_id)
+            Container.objects.get(pk=container_id)
         except Container.DoesNotExist:
             return Response({
                     'detail': u'container ID is invalid',
@@ -121,49 +121,13 @@ class WidgetTypesView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         return Response({
-            'groupedWidgets': Widget.get_available_widgets()
+            'groupedBlocks': get_grouped_content_blocks(),
         })
 
 
 class PageMoveView(generics.UpdateAPIView):
-    model = Page
+    model = FancyPage
     serializer_class = serialisers.PageMoveSerializer
 
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAdminUser,)
-
-    def pre_save(self, obj):
-        if obj.new_index <= obj.old_index:
-            position = 'left'
-        else:
-            position = 'right'
-
-        # if the parent ID is '0' the page will be moved to the
-        # root level. That means we have to lookup the root node
-        # that we use to relate the move to. This is the root node
-        # at the position of the new_index. If it is the last node
-        # the index will cause a IndexError so we insert the page
-        # after the last node.
-        if not obj.parent:
-            try:
-                category = Category.get_root_nodes()[obj.new_index]
-            except IndexError:
-                category = Category.get_last_root_node()
-                position = 'right'
-
-        # in this case the page is moved relative to a parent node.
-        # we have to handle the same special case for the last node
-        # as above and also have to insert as 'first-child' if no
-        # other children are present due to different relative node
-        else:
-            category = Page.objects.get(id=obj.parent).category
-            if not category.numchild:
-                position = 'first-child'
-            else:
-                try:
-                    category = category.get_children()[obj.new_index]
-                except IndexError:
-                    position = 'last-child'
-
-        obj.category.move(category, position)
-        return obj

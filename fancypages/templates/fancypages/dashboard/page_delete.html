@@ -1,4 +1,4 @@
-{% extends 'dashboard/layout.html' %}
+{% extends "fancypages/dashboard/layout.html" %}
 {% load i18n %}
 
 {% block title %}
@@ -30,7 +30,7 @@
 </div>
 {% endblock header%}
 
-{% block dashboard_content %}
+{% block content %}
 <form id="page-delete-form" action="." method="post">
     {% csrf_token %}
     {{ form }}

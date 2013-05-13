@@ -4,17 +4,17 @@ from fancypages.api import views
 
 
 urlpatterns = patterns('',
-    url(r'^$', views.ApiV1View.as_view(), name="api-root"),
-    url(r'^widgets$', views.WidgetListView.as_view(), name='widget-list'),
+    url(r'^$', views.ApiV2View.as_view(), name="api-root"),
+    url(r'^blocks$', views.BlockListView.as_view(), name='block-list'),
     url(
-        r'^widget/(?P<pk>\d+)$',
-        views.WidgetRetrieveUpdateDestroyView.as_view(),
-        name='widget-retrieve-update-destroy'
+        r'^block/(?P<pk>\d+)$',
+        views.BlockRetrieveUpdateDestroyView.as_view(),
+        name='block-retrieve-update-destroy'
     ),
     url(
-        r'^widget/(?P<pk>\d+)/move$',
-        views.WidgetMoveView.as_view(),
-        name='widget-move'
+        r'^block/(?P<pk>\d+)/move$',
+        views.BlockMoveView.as_view(),
+        name='block-move'
     ),
     url(
         r'^ordered-containers$',
@@ -22,9 +22,9 @@ urlpatterns = patterns('',
         name='ordered-container-list'
     ),
     url(
-        r'^widget-types$',
-        views.WidgetTypesView.as_view(),
-        name='widget-type-list'
+        r'^block-types$',
+        views.BlockTypesView.as_view(),
+        name='block-type-list'
     ),
     url(
         r'^pages/select-form$',

@@ -21,6 +21,9 @@ class AbstractTreeNode(MP_Node):
     """
     name = models.CharField(_("Name"), max_length=255, db_index=True)
     slug = models.SlugField(_("Slug"), max_length=255, db_index=True)
+    image = models.ImageField(_('Image'), upload_to='fancypages/pages',
+                              blank=True, null=True)
+    description = models.TextField(_("Description"), blank=True)
 
     _slug_separator = u'/'
 
@@ -56,7 +59,6 @@ class AbstractTreeNode(MP_Node):
         See https://tabo.pe/projects/django-treebeard/docs/1.61/api.html#treebeard.models.Node.move
         """
         super(AbstractTreeNode, self).move(target, pos)
-
         # Update the slugs and full names of all nodes in the new subtree.
         # We need to reload self as 'move' doesn't update the current instance,
         # then we iterate over the subtree and call save which automatically
@@ -159,7 +161,7 @@ class AbstractFancyPage(models.Model):
         return ('fancypages:page-detail', (self.slug,), {})
 
     def __unicode__(self):
-        return u"FancyPage '%s'" % self.name
+        return u"FancyPage '{0}'".format(self.name)
 
     def save(self, update_slugs=True, *args, **kwargs):
         if not self.slug:

@@ -5,10 +5,11 @@ from django.template import loader, RequestContext
 
 from rest_framework import serializers
 
-from fancypages.dashboard import forms
+from .. import library
+from ..dashboard import forms
 
-Page = get_model('fancypages', 'Page')
-Widget = get_model('fancypages', 'Widget')
+FancyPage = get_model('fancypages', 'FancyPage')
+ContentBlock = get_model('fancypages', 'ContentBlock')
 OrderedContainer = get_model('fancypages', 'OrderedContainer')
 
 
@@ -40,15 +41,15 @@ class RenderFormFieldMixin(object):
         }
 
     def get_form_class(self, obj):
-        # check if the widget has a class-level attribute that
+        # check if the block has a class-level attribute that
         # defines a specific form class to be used
         form_class = getattr(obj.__class__, 'form_class', None)
         return modelform_factory(obj.__class__, form=form_class)
 
 
-class WidgetSerializer(RenderFormFieldMixin, serializers.ModelSerializer):
-    form_template_name = "fancypages/dashboard/widget_update.html"
-    context_object_name = 'widget'
+class BlockSerializer(RenderFormFieldMixin, serializers.ModelSerializer):
+    form_template_name = "fancypages/dashboard/block_update.html"
+    context_object_name = 'block'
 
     display_order = serializers.IntegerField(required=False, default=-1)
     code = serializers.CharField(required=True)
@@ -58,22 +59,11 @@ class WidgetSerializer(RenderFormFieldMixin, serializers.ModelSerializer):
         code = attrs.pop('code')
 
         if instance is None:
-            widget_class = self.get_widget_class(code)
-            if widget_class:
-                self.opts.model = widget_class
+            block_class = library.get_content_block(code)
+            if block_class:
+                self.opts.model = block_class
 
-        return super(WidgetSerializer, self).restore_object(attrs, instance)
-
-    def get_widget_class(self, code):
-        model = None
-        for widget_class in Widget.itersubclasses():
-            if widget_class._meta.abstract:
-                continue
-
-            if widget_class.code == code:
-                model = widget_class
-                break
-        return model
+        return super(BlockSerializer, self).restore_object(attrs, instance)
 
     def get_form_class(self, obj):
         model = self.object.__class__
@@ -82,20 +72,20 @@ class WidgetSerializer(RenderFormFieldMixin, serializers.ModelSerializer):
             form_class = getattr(
                 forms,
                 "%sForm" % model.__name__,
-                forms.WidgetForm
+                forms.BlockForm
             )
         return modelform_factory(model, form=form_class)
 
     class Meta:
-        model = Widget
+        model = ContentBlock
 
 
-class WidgetMoveSerializer(serializers.ModelSerializer):
+class BlockMoveSerializer(serializers.ModelSerializer):
     container = serializers.PrimaryKeyRelatedField()
     index = serializers.IntegerField(source='display_order')
 
     class Meta:
-        model = Widget
+        model = ContentBlock
         read_only_fields = ['display_order']
 
 
@@ -104,11 +94,12 @@ class OrderedContainerSerializer(serializers.ModelSerializer):
     title = serializers.CharField(required=False, default=_("New Tab"))
 
     def restore_object(self, attrs, instance=None):
-        instance = super(OrderedContainerSerializer, self).restore_object(attrs, instance)
-
+        instance = super(OrderedContainerSerializer, self).restore_object(
+            attrs,
+            instance
+        )
         if instance is not None:
             instance.display_order = instance.page_object.tabs.count()
-
         return instance
 
     class Meta:
@@ -130,7 +121,43 @@ class PageMoveSerializer(serializers.ModelSerializer):
     def get_visibility(self):
         return self.object.is_visible
 
+    def save(self, *args, **kwargs):
+        obj = super(PageMoveSerializer, self).save(*args, **kwargs)
+        if obj.new_index <= obj.old_index:
+            position = 'left'
+        else:
+            position = 'right'
+
+        # if the parent ID is '0' the page will be moved to the
+        # root level. That means we have to lookup the root node
+        # that we use to relate the move to. This is the root node
+        # at the position of the new_index. If it is the last node
+        # the index will cause a IndexError so we insert the page
+        # after the last node.
+        if not obj.parent:
+            try:
+                page = FancyPage.get_root_nodes()[obj.new_index]
+            except IndexError:
+                page = FancyPage.get_last_root_node()
+                position = 'right'
+
+        # in this case the page is moved relative to a parent node.
+        # we have to handle the same special case for the last node
+        # as above and also have to insert as 'first-child' if no
+        # other children are present due to different relative node
+        else:
+            page = FancyPage.objects.get(id=obj.parent)
+            if not page.numchild:
+                position = 'first-child'
+            else:
+                try:
+                    page = page.get_children()[obj.new_index]
+                except IndexError:
+                    position = 'last-child'
+        obj.move(page, position)
+        return obj
+
     class Meta:
-        model = Page
+        model = FancyPage
         fields = ['parent', 'new_index', 'old_index']
         read_only_fields = ['status',]

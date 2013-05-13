@@ -1,13 +1,13 @@
+from copy import copy
+
 from django import forms
 from django.db.models import get_model
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 
-Page = get_model('fancypages', 'Page')
-Category = get_model('catalogue', 'Category')
+FancyPage = get_model('fancypages', 'FancyPage')
 PageType = get_model('fancypages', 'PageType')
 VisibilityType = get_model('fancypages', 'VisibilityType')
-
 
 DATE_FORMAT = '%d-%m-%Y'
 
@@ -36,18 +36,10 @@ class PageFormMixin(object):
         if 'visibility_types' in self.fields:
             self.fields['visibility_types'].queryset = VisibilityType.objects.all()
 
-    def save_category_data(self, category):
-        category.name = self.cleaned_data['name']
-        category.description = self.cleaned_data['description']
-        category.image = self.cleaned_data['image']
-        category.save()
-
 
 class PageForm(PageFormMixin, forms.ModelForm):
-    name = forms.CharField(max_length=128)
-    description = forms.CharField(widget=forms.Textarea, required=False)
     image = forms.ImageField(required=False)
-    page_type = forms.ModelChoiceField(PageType.objects.none(), required=True)
+    page_type = forms.ModelChoiceField(PageType.objects.none(), required=False)
     date_visible_start = forms.DateTimeField(
         widget=forms.DateInput(format=DATE_FORMAT),
         input_formats=[DATE_FORMAT],
@@ -66,29 +58,18 @@ class PageForm(PageFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PageForm, self).__init__(*args, **kwargs)
-        instance = kwargs.get('instance')
-        if instance is not None:
-            self.fields['description'].value = instance.category.description
-            self.fields['image'].value = instance.category.image
-
         self.set_field_choices()
         self.update_field_order()
 
-    def save(self, commit=True):
-        self.save_category_data(self.instance.category)
-        return super(PageForm, self).save(commit=True)
-
     class Meta:
-        model = Page
-        fields = ['name', 'keywords', 'page_type', 'status',
+        model = FancyPage
+        fields = ['name', 'keywords', 'page_type', 'status', 'description',
                   'date_visible_start', 'date_visible_end', 'visibility_types']
 
 
 class PageCreateForm(PageFormMixin, forms.ModelForm):
-    name = forms.CharField(max_length=128)
-    description = forms.CharField(widget=forms.Textarea, required=False)
     image = forms.ImageField(required=False)
-    page_type = forms.ModelChoiceField(PageType.objects.none(), required=True)
+    page_type = forms.ModelChoiceField(PageType.objects.none(), required=False)
     date_visible_start = forms.DateTimeField(
         widget=forms.DateInput(format=DATE_FORMAT),
         input_formats=[DATE_FORMAT],
@@ -109,8 +90,8 @@ class PageCreateForm(PageFormMixin, forms.ModelForm):
         parent_id = kwargs.pop('parent_pk', None)
         super(PageCreateForm, self).__init__(*args, **kwargs)
         try:
-            self.parent = Category.objects.get(id=parent_id)
-        except Category.DoesNotExist:
+            self.parent = FancyPage.objects.get(id=parent_id)
+        except FancyPage.DoesNotExist:
             self.parent = None
         self.set_field_choices()
         self.update_field_order()
@@ -118,8 +99,8 @@ class PageCreateForm(PageFormMixin, forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data.get('name')
         try:
-            Page.objects.get(category__slug=slugify(name))
-        except Page.DoesNotExist:
+            FancyPage.objects.get(slug=slugify(name))
+        except FancyPage.DoesNotExist:
             pass
         else:
             raise forms.ValidationError(
@@ -127,34 +108,22 @@ class PageCreateForm(PageFormMixin, forms.ModelForm):
             )
         return name
 
-    def save(self, commit=True):
-        page_name = self.cleaned_data['name']
-        if self.parent:
-            category = self.parent.add_child(name=page_name)
-        else:
-            category = Category.add_root(name=page_name)
-        self.save_category_data(category)
-
-        instance = super(PageCreateForm, self).save(commit=False)
-        # this is a bit of a hack but we cannot create a new
-        # instance here because it has already been created using
-        # a post_save signal on the category.
-        instance.id = category.page.id
-        instance.category = category
-        instance.save()
-        return instance
+    def save(self, *args, **kwargs):
+        page_kwargs = copy(self.cleaned_data)
+        page_kwargs.pop('visibility_types')
+        return FancyPage.add_root(**page_kwargs)
 
     class Meta:
-        model = Page
-        fields = ['name', 'keywords', 'page_type', 'status',
+        model = FancyPage
+        fields = ['name', 'keywords', 'page_type', 'status', 'description',
                   'date_visible_start', 'date_visible_end', 'visibility_types']
 
 
-class WidgetUpdateSelectForm(forms.Form):
+class BlockUpdateSelectForm(forms.Form):
     widget_code = forms.ChoiceField(label=_("Edit widget:"))
 
     def __init__(self, container, *args, **kwargs):
-        super(WidgetUpdateSelectForm, self).__init__(*args, **kwargs)
+        super(BlockUpdateSelectForm, self).__init__(*args, **kwargs)
 
         widget_choices = []
         for widget in container.widgets.select_subclasses():
@@ -163,7 +132,7 @@ class WidgetUpdateSelectForm(forms.Form):
         self.fields['widget_code'].choices = widget_choices
 
 
-class WidgetForm(forms.ModelForm):
+class BlockForm(forms.ModelForm):
     template_name = "fancypages/partials/editor_form_fields.html"
 
     class Meta:
@@ -173,7 +142,7 @@ class WidgetForm(forms.ModelForm):
         }
 
 
-class TextWidgetForm(WidgetForm):
+class TextBlockForm(BlockForm):
     class Meta:
         exclude = ('container',)
         widgets = {
@@ -182,7 +151,7 @@ class TextWidgetForm(WidgetForm):
         }
 
 
-class TitleTextWidgetForm(WidgetForm):
+class TitleTextBlockForm(BlockForm):
     class Meta:
         exclude = ('container',)
         widgets = {
@@ -191,7 +160,7 @@ class TitleTextWidgetForm(WidgetForm):
         }
 
 
-class TwoColumnLayoutWidgetForm(WidgetForm):
+class TwoColumnLayoutBlockForm(BlockForm):
     left_width = forms.IntegerField(
         widget=forms.TextInput(attrs={
             'data-min': 1,
@@ -203,10 +172,10 @@ class TwoColumnLayoutWidgetForm(WidgetForm):
     )
 
 
-class TabWidgetForm(WidgetForm):
+class TabBlockForm(BlockForm):
 
     def __init__(self, *args, **kwargs):
-        super(TabWidgetForm, self).__init__(*args, **kwargs)
+        super(TabBlockForm, self).__init__(*args, **kwargs)
         instance = kwargs['instance']
         if instance:
             for tab in instance.tabs.all():
@@ -216,7 +185,7 @@ class TabWidgetForm(WidgetForm):
                 self.fields[field_name].label = _("Tab title")
 
     def save(self):
-        instance = super(TabWidgetForm, self).save()
+        instance = super(TabBlockForm, self).save()
 
         for tab in instance.tabs.all():
             field_name = "tab_title_%d" % tab.id

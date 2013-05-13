@@ -1,5 +1,5 @@
 {% load i18n %}
-{% load fp_widget_tags %}
+{% load fp_block_tags %}
 
 {% for page in page_list %}
 <li id="page-{{ page.id }}" class="sortable" data-page-id="{{ page.id }}">
@@ -8,7 +8,7 @@
             {% if page.numchild %}
             <a href="#" data-toggle="collapse" data-target="#{{ page.id }}-tree" class="collapsed"><i class="icon-caret-down"></i></a>
             {% endif %}
-            <a href="#" data-toggle="collapse" data-target="#{{ page.id }}-actions"><i class="icon-file icon-large"></i> {{ page.title }}</a>            
+            <a href="#" data-toggle="collapse" data-target="#{{ page.id }}-actions"><i class="icon-file icon-large"></i> {{ page.name }}</a>
         </h5>
 
         <div class="span2">

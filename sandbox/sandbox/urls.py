@@ -8,7 +8,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'', include(fancypages.urls, namespace="fancypages")),
+    url(r'^', include(fancypages.urls)),
 )
 
 if settings.DEBUG:

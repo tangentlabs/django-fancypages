@@ -37,8 +37,8 @@ class VisibilityType(abstract_models.AbstractVisibilityType):
         app_label = 'fancypages'
 
 
-class FancyPage(abstract_models.AbstractFancyPage,
-                abstract_models.AbstractTreeNode):
+class FancyPage(abstract_models.AbstractTreeNode,
+                abstract_models.AbstractFancyPage):
     objects = PageManager()
 
     class Meta:

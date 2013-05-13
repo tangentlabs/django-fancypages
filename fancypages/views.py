@@ -15,6 +15,7 @@ class PageMixin(object):
 
 class FancyPageDetailView(PageMixin, DetailView):
     model = FancyPage
+    content_object_name = 'fancypage'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -29,6 +30,7 @@ class FancyPageDetailView(PageMixin, DetailView):
 
 class HomeView(PageMixin, DetailView):
     model = FancyPage
+    content_object_name = 'fancypage'
 
     def get(self, request, *args, **kwargs):
         self.kwargs.setdefault('slug', 'home')

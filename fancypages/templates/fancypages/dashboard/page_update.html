@@ -1,4 +1,4 @@
-{% extends 'fancypages/dashboard/layout.html' %}
+{% extends "fancypages/dashboard/layout.html" %}
 {% load i18n %}
 
 {% block title %}
@@ -29,7 +29,7 @@
 </div>
 {% endblock header %}
 
-{% block dashboard_content %}
+{% block content %}
 <form class="form" action="." method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="well well-blank">
@@ -49,4 +49,4 @@
         </div>
     </div>
 </form>
-{% endblock dashboard_content %}
+{% endblock content %}

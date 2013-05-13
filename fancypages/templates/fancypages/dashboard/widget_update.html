@@ -1,14 +1,14 @@
 {% load i18n %}
-{% load fp_widget_tags %}
+{% load fp_block_tags %}
 <div class="editing-area">
     <h3><i class="icon-edit"></i> <span>Edit</span></h3>
 
-    <form id="{{ widget.container.variable_name }}_widget_form"
-          data-widget-id='{{ widget.id }}' data-container-name="{{ widget.container.variable_name }}"
-          data-behaviours="submit-widget-form" class="form" method="post"
-          action="{% url fp-dashboard:widget-update widget.id %}">
+    <form id="{{ block.container.variable_name }}_block_form"
+          data-block-id='{{ block.id }}' data-container-name="{{ block.container.variable_name }}"
+          data-behaviours="submit-block-form" class="form" method="post"
+          action="{% url fp-dashboard:block-update block.id %}">
         {% csrf_token %}
-        {% render_widget_form form %}
+        {% render_block_form form %}
         <div class="form-actions fixed">
             <div>
                 <a href="">{% trans "Cancel" %}</a>

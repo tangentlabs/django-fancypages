@@ -37,9 +37,13 @@ def get_content_blocks():
     return _content_blocks
 
 
+def get_content_block(code):
+    return _content_blocks.get(code, None)
+
+
 def get_grouped_content_blocks():
     registered_blocks = {}
-    for block in _content_blocks:
+    for block in _content_blocks.values():
         if not block._meta.abstract:
             if not block.name:
                 raise ImproperlyConfigured(

@@ -1,2 +1,2 @@
-API_VERSION = 'v1'
+API_VERSION = 'v2'
 API_BASE_URL = r'api/%s/' % API_VERSION

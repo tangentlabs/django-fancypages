@@ -8,27 +8,27 @@ from django.utils.translation import ugettext_lazy as _
 from fancypages.dashboard import forms
 
 
-Page = get_model('fancypages', 'Page')
-Widget = get_model('fancypages', 'Widget')
+FancyPage = get_model('fancypages', 'FancyPage')
+ContentBlock = get_model('fancypages', 'ContentBlock')
 Category = get_model('catalogue', 'Category')
 Container = get_model('fancypages', 'Container')
-TabWidget = get_model('fancypages', 'TabWidget')
+TabBlock = get_model('fancypages', 'TabBlock')
 OrderedContainer = get_model('fancypages', 'OrderedContainer')
 
 
 class PageListView(generic.ListView):
-    model = Page
+    model = FancyPage
     context_object_name = 'page_list'
     template_name = "fancypages/dashboard/page_list.html"
 
     def get_queryset(self, queryset=None):
-        return self.model.objects.filter(category__depth=1)
+        return self.model.objects.filter(depth=1)
 
 
 class PageCreateView(generic.CreateView):
     template_name = "fancypages/dashboard/page_update.html"
     form_class = forms.PageCreateForm
-    model = Page
+    model = FancyPage
 
     def get_form_kwargs(self):
         kwargs = super(PageCreateView, self).get_form_kwargs()
@@ -48,20 +48,16 @@ class PageUpdateView(generic.UpdateView):
     template_name = "fancypages/dashboard/page_update.html"
     form_class = forms.PageForm
     context_object_name = 'page'
-    model = Page
+    model = FancyPage
 
-    def get_initial(self):
-        initial = super(PageUpdateView, self).get_initial()
-        try:
-            category = self.object.category
-        except Category.DoesNotExist:
-            return initial
-        # add exposed category attributes to initial values
-        # to make sure that they are displayed in the edit form
-        initial['name'] = category.name
-        initial['description'] = category.description
-        initial['image'] = category.image
-        return initial
+    #def get_initial(self):
+    #    initial = super(PageUpdateView, self).get_initial()
+    #    # add exposed category attributes to initial values
+    #    # to make sure that they are displayed in the edit form
+    #    initial['name'] = self.object.name
+    #    initial['description'] = self.objec.description
+    #    initial['image'] = category.image
+    #    return initial
 
     def get_context_data(self, **kwargs):
         ctx = super(PageUpdateView, self).get_context_data(**kwargs)
@@ -73,7 +69,7 @@ class PageUpdateView(generic.UpdateView):
 
 
 class PageDeleteView(generic.DeleteView):
-    model = Page
+    model = FancyPage
     template_name = "fancypages/dashboard/page_delete.html"
 
     def get_success_url(self):
@@ -84,7 +80,7 @@ class FancypagesMixin(object):
 
     def get_widget_class(self):
         model = None
-        for widget_class in Widget.itersubclasses():
+        for widget_class in ContentBlock.itersubclasses():
             if widget_class._meta.abstract:
                 continue
 
@@ -102,8 +98,8 @@ class FancypagesMixin(object):
             raise http.Http404
 
 
-class WidgetUpdateView(generic.UpdateView, FancypagesMixin):
-    model = Widget
+class BlockUpdateView(generic.UpdateView, FancypagesMixin):
+    model = ContentBlock
     context_object_name = 'widget'
     template_name = "fancypages/dashboard/widget_update.html"
 
@@ -111,7 +107,7 @@ class WidgetUpdateView(generic.UpdateView, FancypagesMixin):
         return self.get_widget_object()
 
     def get_form_kwargs(self):
-        kwargs = super(WidgetUpdateView, self).get_form_kwargs()
+        kwargs = super(BlockUpdateView, self).get_form_kwargs()
         kwargs['instance'] = self.get_object()
         return kwargs
 
@@ -122,7 +118,7 @@ class WidgetUpdateView(generic.UpdateView, FancypagesMixin):
             form_class = getattr(
                 forms,
                 "%sForm" % model.__name__,
-                forms.WidgetForm
+                forms.BlockForm
             )
         return modelform_factory(model, form=form_class)
 
@@ -131,15 +127,15 @@ class WidgetUpdateView(generic.UpdateView, FancypagesMixin):
             # FIXME this should actually return a rendered response
             # with the invalid form data init.
             return http.HttpResponseBadRequest()
-        return super(WidgetUpdateView, self).form_invalid(form)
+        return super(BlockUpdateView, self).form_invalid(form)
 
     def get_success_url(self):
         return reverse('fp-dashboard:widget-update',
                        args=(self.object.id,))
 
 
-class WidgetDeleteView(generic.DeleteView, FancypagesMixin):
-    model = Widget
+class BlockDeleteView(generic.DeleteView, FancypagesMixin):
+    model = ContentBlock
     context_object_name = 'widget'
     template_name = "fancypages/dashboard/widget_delete.html"
 
@@ -147,7 +143,7 @@ class WidgetDeleteView(generic.DeleteView, FancypagesMixin):
         return self.get_widget_object()
 
     def delete(self, request, *args, **kwargs):
-        response = super(WidgetDeleteView, self).delete(request, *args, **kwargs)
+        response = super(BlockDeleteView, self).delete(request, *args, **kwargs)
         for idx, widget in enumerate(self.object.container.widgets.all().select_subclasses()):
             widget.display_order = idx
             widget.save()

@@ -1,10 +1,10 @@
 from django.conf.urls.defaults import patterns, url, include
 
-from ..application import Application
-from ..decorators import staff_member_required
+from ..utils.application import Application
+from ..utils.decorators import staff_member_required
 
-from fancypages.dashboard import views
-from fancypages.assets.app import application as assets_app
+from . import views
+from ..assets.app import application as assets_app
 
 
 class FancypagesDashboardApplication(Application):
@@ -16,8 +16,8 @@ class FancypagesDashboardApplication(Application):
     page_update_view = views.PageUpdateView
     page_delete_view = views.PageDeleteView
 
-    widget_update_view = views.WidgetUpdateView
-    widget_delete_view = views.WidgetDeleteView
+    block_update_view = views.BlockUpdateView
+    block_delete_view = views.BlockDeleteView
 
     def get_urls(self):
         urlpatterns = patterns('',
@@ -50,14 +50,14 @@ class FancypagesDashboardApplication(Application):
             ),
 
             url(
-                r'^widget/update/(?P<pk>\d+)/$',
-                self.widget_update_view.as_view(),
-                name='widget-update'
+                r'^block/update/(?P<pk>\d+)/$',
+                self.block_update_view.as_view(),
+                name='block-update'
             ),
             url(
-                r'^widget/delete/(?P<pk>\d+)/$',
-                self.widget_delete_view.as_view(),
-                name='widget-delete'
+                r'^block/delete/(?P<pk>\d+)/$',
+                self.block_delete_view.as_view(),
+                name='block-delete'
             ),
         )
         return self.post_process_urls(urlpatterns)
