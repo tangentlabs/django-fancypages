@@ -50,13 +50,13 @@ class Container(abstract_models.AbstractContainer):
         app_label = 'fancypages'
 
 
-class OrderedContainer(abstract_models.AbstractContainer):
+class OrderedContainer(Container):
     display_order = models.PositiveIntegerField()
 
     def __unicode__(self):
         return u"Container #%d '%s' in '%s'" % (
             self.display_order,
-            self.variable_name,
+            self.name,
             self.content_type
         )
 

@@ -5,21 +5,21 @@
     <a data-toggle="modal"
        {#data-behaviours="load-modal"#}
        class="btn btn-large"
-       data-target="#{{ container.variable_name }}_modal"
+       data-target="#{{ container.name }}_modal"
        data-href="{% url "fp-api:block-type-list" %}"
        data-container-id="{{ container.id }}">
         <i class="icon-plus"></i> {% trans "Add content" %}
     </a>
 </div>
 
-<div id="{{ container.variable_name }}_modal" class="modal fade hide fullscreen"
+<div id="{{ container.name }}_modal" class="modal fade hide fullscreen"
      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-header">
         <button class="close" data-dismiss="modal">×</button>
         <h3><i class="icon-plus"></i> Add content</h3>
     </div>
 
-    <form id="{{ container.variable_name }}_add_block_form"
+    <form id="{{ container.name }}_add_block_form"
           data-behaviours='submit-block-form' data-container-id="{{ container.id }}"
           method="post" action="{% url "fp-api:block-list" %}" class="add-content">
         {% csrf_token %}
@@ -30,13 +30,13 @@
                 <ul class="nav nav-tabs">
                 {% for group in grouped_blocks %}
                     <li {% if forloop.first %}class="active"{% endif %}>
-                        <a href="#{{container.variable_name}}-{{ group|slugify }}" data-toggle="tab">{{ group }}</a>
+                        <a href="#{{ container.name }}-{{ group|slugify }}" data-toggle="tab">{{ group }}</a>
                     </li>
                 {% endfor %}
                 </ul>
                 <div class="tab-content">
                     {% for group,block_list in grouped_blocks.items %}
-                    <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{container.variable_name}}-{{ group|slugify }}">
+                    <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{container.name}}-{{ group|slugify }}">
                         <ul>
                             {% for fp_block in block_list %}
                             <li>

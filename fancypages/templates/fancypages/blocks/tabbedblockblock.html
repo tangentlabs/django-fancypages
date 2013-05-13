@@ -4,15 +4,15 @@
 
 <div class="tabbable">
     <ul class="nav nav-tabs">
-        {% for tab in object.tabs.all %}
+        {% for tab in fp_block.tabs.all %}
         <li {% if forloop.first %}class="active"{% endif %}>
-            <a href="#tab-{{ object.id }}-{{ forloop.counter }}" data-toggle="tab">{{ tab.title }}</a>
+            <a href="#tab-{{ fp_block.id }}-{{ forloop.counter }}" data-toggle="tab">{{ tab.title }}</a>
         </li>
         {% endfor %}
 
-        {% if request.fancypage_edit_mode %}
+        {% if request.fancypages_edit_mode %}
         <li>
-            {% get_content_type object as content_type %}
+            {% get_content_type fp_block as content_type %}
             <a data-action="{% url fp-api:ordered-container-list %}"
                data-behaviours="add-tab"
                data-content-type-id="{{ content_type.id }}">
@@ -23,9 +23,9 @@
     </ul>
 
     <div class="tab-content">
-    {% for tab in object.tabs.all %}
+    {% for tab in fp_block.tabs.all %}
         <div class="tab-pane {% if forloop.first %}active{% endif %}"
-             id="tab-{{ object.id }}-{{ forloop.counter }}">
+             id="tab-{{ fp_block.id }}-{{ forloop.counter }}">
             {% fp_object_container tab %}
         </div>
     {% endfor %}
