@@ -4,6 +4,7 @@ from django.db.models import get_model
 from django.template import defaultfilters, loader
 
 from .. import forms
+from .. import library
 from .. import renderers
 
 ContentType = get_model('contenttypes', 'ContentType')
@@ -84,10 +85,9 @@ def get_content_type(obj):
 @register.inclusion_tag('fancypages/dashboard/block_select.html', takes_context=True)
 def render_block_selection(context):
     request = context.get('request')
-    if not request or not request.fancypage_edit_mode:
+    if not request or not request.fancypages_edit_mode:
         return u''
-    ContentBlock = get_model('fancypages', 'ContentBlock')
-    grouped_blocks = ContentBlock.get_available_blocks()
+    grouped_blocks = library.get_grouped_content_blocks()
     return {
         'container': context['container'],
         'grouped_blocks': grouped_blocks,

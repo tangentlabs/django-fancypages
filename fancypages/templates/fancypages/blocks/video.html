@@ -2,7 +2,7 @@
 {% load fp_block_tags %}
 {% load i18n %}
 
-{% block widget %}
+{% block block_content %}
     {% if object.code and object.source == 'youtube' %}
         <div class="widget-video">
             <iframe width="560" height="315" src="http://www.youtube.com/embed/{{ object.video_code }}" frameborder="0" allowfullscreen></iframe>

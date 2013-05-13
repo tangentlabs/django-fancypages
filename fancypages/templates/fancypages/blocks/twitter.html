@@ -3,7 +3,7 @@
 {% load twitter_tag %}
 {% load fp_block_tags %}
 
-{% block widget %}
+{% block block_content %}
     {% if object.username %}
         {% cache 500 fancy_tweets object.username object.max_tweets %}
             {% get_tweets for object.username as tweets limit object.max_tweets %}

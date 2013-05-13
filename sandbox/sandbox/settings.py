@@ -121,6 +121,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'model_utils',
     'south',
+    'compressor',
+    'twitter_tag',
 
     'fancypages',
 ]
@@ -135,6 +137,22 @@ APPEND_SLASH = True
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False
 }
+
+########## COMPRESSOR SETTINGS
+# Compressor and pre-compiler settings for django-compressor
+COMPRESS_ENABLED = DEBUG
+COMPRESS_OUTPUT_DIR = 'cache'
+COMPRESS_OFFLINE = False
+
+COMPRESS_PRECOMPILERS = (
+    ('text/less', 'lessc {infile} {outfile}'),
+)
+########## END COMPRESSOR SETTINGS
+
+TWITTER_OAUTH_TOKEN=''
+TWITTER_OAUTH_SECRET=''
+TWITTER_CONSUMER_KEY=''
+TWITTER_CONSUMER_SECRET=''
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

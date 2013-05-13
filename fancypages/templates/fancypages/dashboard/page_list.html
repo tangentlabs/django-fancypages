@@ -24,18 +24,13 @@
     {% if page_list|length %}
     <form action="." method="post">
         {% csrf_token %}
-        <div class="table-header">
-            <i class="icon-shopping-cart icon-large"></i>{% trans "Page Management" %}
-            <a href="{% url fp-dashboard:page-create %}" class="btn pull-right"><i class="icon-shopping-cart icon-large"></i>{% trans "Create new top-level page" %}</a>
-        </div>
+
         {% if page_list|length %}
-        <ol id="pages-sortable" class="tree">
-
-            {% include "fancypages/dashboard/partials/page_list_item.html" with page_list=page_list %}
-
-        </ol>
+            <ol id="pages-sortable" class="tree">
+                {% include "fancypages/dashboard/partials/page_list_item.html" with page_list=page_list %}
+            </ol>
         {% else %}
-        <p>{% trans "No pages found." %}</p>
+            <p>{% trans "No pages found." %}</p>
         {% endif %}
     </form>
     {% else %}
@@ -46,6 +41,7 @@
 {% block extrascripts %}
     {{ block.super }}
     {% compress js %}
+        <script type="text/javascript" src="{% static "fancypages/js/jquery-ui-1.10.1.custom.min.js" %}"></script>
         <script type="text/javascript" src="{% static "fancypages/js/jquery.mjs.nestedSortable.js" %}"></script>
     {% endcompress %}
 {% endblock %}

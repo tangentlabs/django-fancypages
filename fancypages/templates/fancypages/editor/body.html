@@ -1,7 +1,7 @@
 {% load i18n staticfiles %}
 
 <div id="editor-panel">
-    
+
     <div class="button-nav">
         {% if form %}
         <button data-behaviours="page-settings">
@@ -20,7 +20,7 @@
             <h3><i class="icon-file"></i> <span>{% trans "Page Settings" %}</span></h3>
             <form method="post" action="." class="form-stacked">
                 {% csrf_token %}
-                {% include "oscar/partials/form_fields.html" %}
+                {% include "fancypages/partials/form_fields.html" %}
 
                 <div class="form-actions fixed">
                     <div>
@@ -33,10 +33,16 @@
                 </div>
             </form>
             {% else %}
-                <p>{% trans "Hover over a widget and click" %} <big>&quot;<i class="icon-edit"></i> edit&quot;</big> {% trans "to see editable properties." %}</p>
+                <p>
+                    {% blocktrans %}
+                        Hover over a widget and click
+                        <big>&quot;<i class="icon-edit"></i> edit&quot;</big>
+                        to see editable properties.
+                    {% endblocktrans %}
+                </p>
             {% endif %}
         </div>
-        <div id="widget_input_wrapper"></div>
+        <div id="block_input_wrapper"></div>
     </div>
 </div>
 <div id='editor-handle'><i class="icon-large icon-edit"></i>edit</div>

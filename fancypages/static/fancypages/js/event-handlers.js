@@ -2,7 +2,7 @@ var fancypages = fancypages || {};
 
 fancypages.eventHandlers = {
     /**
-     * Add a new tab to an existing tab widget.
+     * Add a new tab to an existing tab block.
      */
     addNewTab: function (ev) {
         ev.preventDefault();
@@ -12,7 +12,7 @@ fancypages.eventHandlers = {
             type: 'POST',
             data: {
                 content_type: $(this).data('content-type-id'),
-                object_id: $(this).parents('.widget').data('widget-id')
+                object_id: $(this).parents('.block').data('block-id')
             },
             beforeSend: function (xhr, settings) {
                 xhr.setRequestHeader("X-CSRFToken", fancypages.getCsrfToken());
@@ -63,7 +63,7 @@ fancypages.eventHandlers = {
                 var target = $($(elem).data('target'));
                 target.parents('.modal').modal('show');
                 target.html(data.rendered_form);
-                
+
                 // prevent collapse events within the modal from closing the modal
                 target.find('#pages-sortable [id*="tree"]').on({
                     hide: function (event) {
@@ -72,21 +72,21 @@ fancypages.eventHandlers = {
                 });
             },
             error: function () {
-                oscar.messages.error("Unable to load list of available widgets.");
+                oscar.messages.error("Unable to load list of available blocks.");
             }
         });
     },
     /**
-     * Delete a widget
+     * Delete a block
      */
     deleteWidget: function (ev) {
-        var widget = $(this).parents('.widget');
-        var deleteUrl = '/dashboard/fancypages/widget/delete/' + $(widget).data('widget-id') + "/";
+        var block = $(this).parents('.block');
+        var deleteUrl = '/dashboard/fancypages/block/delete/' + $(block).data('block-id') + "/";
 
         $.ajax(deleteUrl)
             .done(function (data) {
-                var widgetWrapper = $('div[id=widget_input_wrapper]');
-                widgetWrapper.after(data);
+                var blockWrapper = $('div[id=block_input_wrapper]');
+                blockWrapper.after(data);
 
                 $(data).load(function () {
                     $(this).modal('show');
@@ -94,26 +94,26 @@ fancypages.eventHandlers = {
             })
             .error(function () {
                 oscar.messages.error(
-                    "An error occured trying to delete a widget. Please try it again."
+                    "An error occured trying to delete a block. Please try it again."
                 );
             });
     },
     /**
-     * Load widget form when edit button is clicked, add slider if a range
-     * value is available for the widget and scroll to the right position on
+     * Load block form when edit button is clicked, add slider if a range
+     * value is available for the block and scroll to the right position on
      * the page.
      */
     editWidget: function (ev) {
-        var widget = $(this).closest('.widget');
-        fancypages.editor.scrollToWidget(widget);
+        var block = $(this).closest('.block');
+        fancypages.editor.scrollToWidget(block);
 
-        // Add Class to widget editing
-        $('.widget').removeClass('editing');
-        widget.addClass('editing');
+        // Add Class to block editing
+        $('.block').removeClass('editing');
+        block.addClass('editing');
 
         fancypages.panels.showEditPanel();
 
-        fancypages.editor.loadWidgetForm($(widget).data('widget-id'), $(widget).data('container-name'), {
+        fancypages.editor.loadWidgetForm($(block).data('block-id'), $(block).data('container-name'), {
             success: function () {
                 // attach slider to column width slider
                 var sliderSelection = $('#id_left_width');
@@ -130,8 +130,8 @@ fancypages.eventHandlers = {
                     min: minValue,
                     max: (maxValue - 1),
                     slide: function (ev, ui) {
-                        var widgetId = $(this).parents('form').data('widget-id');
-                        var previewField = $('#widget-' + widgetId);
+                        var blockId = $(this).parents('form').data('block-id');
+                        var previewField = $('#block-' + blockId);
                         var leftColumn = $('.column-left', previewField);
 
                         leftColumn[0].className = leftColumn[0].className.replace(/span\d+/g, '');
@@ -148,19 +148,19 @@ fancypages.eventHandlers = {
         });
     },
     /**
-     * Display form containing widget settings in editor panel.
+     * Display form containing block settings in editor panel.
      */
     displayWidgetForm: function (options, data) {
-        var widgetWrapper = $('div[id=widget_input_wrapper]');
-        widgetWrapper.html(data.rendered_form);
+        var blockWrapper = $('div[id=block_input_wrapper]');
+        blockWrapper.html(data.rendered_form);
         $('#page-settings').hide();
 
         fancypages.editor.wysiwyg.init();
-        
+
         //Init the Select2 plugin for selects in the editor
         $('#editor-panel select').css('width', '100%');
         $('#editor-panel select').select2();
-        
+
         $('.editor').animate({backgroundColor: "#555"}, 500)
                     .delay(500)
                     .animate({backgroundColor: "#444"}, 500);

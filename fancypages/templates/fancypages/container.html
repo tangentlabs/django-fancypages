@@ -2,18 +2,19 @@
 {% load fp_block_tags %}
 {% load fp_container_tags %}
 
-<div class="sortable connectedSortable" data-container-id="{{ container.id }}">
+<div class="sortable connectedSortable {% if request.fancypages_edit_mode %}editable-container{% endif %}"
+     data-container-id="{{ container.id }}">
 {% for block_id,rendered_block in rendered_blocks %}
     <div id="block-{{ block_id }}" class="block {{ container.name }}"
          data-container-name="{{ container.name }}" data-block-id="{{ block_id }}">
 
-        {% if request.user.is_authenticated and request.user.is_staff %}
+        {% if request.fancypages_edit_mode %}
             <div class="edit-button btn"><i class="icon-edit"></i></div>
         {% endif %}
 
         {{ rendered_block }}
 
-        {% if request.user.is_authenticated and request.user.is_staff %}
+        {% if request.fancypages_edit_mode %}
         <div class="block-move-delete btn-group">
             <div class="btn move"><i class="icon-move"></i></div>
             <div class="btn delete"><i class="icon-trash"></i></div>
@@ -24,6 +25,6 @@
 
 </div>
 
-{% if request.fancypage_edit_mode %}
+{% if request.fancypages_edit_mode %}
     {% render_block_selection %}
 {% endif %}

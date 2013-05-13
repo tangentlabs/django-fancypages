@@ -5,6 +5,6 @@ dev:
 	pip install -r requirements.txt
 
 sandbox: dev
-	- rm sandbox/sandbox/sandbox.sqlite3
+	- rm sandbox/sandbox/db.sqlite3
 	./sandbox/manage.py syncdb --noinput
 	./sandbox/manage.py migrate

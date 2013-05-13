@@ -21,10 +21,10 @@ fancypages.editor = {
         fancypages.editor.initialiseEventsOnLoadedContent();
         fancypages.editor.initialiseSortable();
 
-        // initialise all update widgets
-        $('form[id$=update_widget_form]').each(function (idx, form) {
+        // initialise all update blocks
+        $('form[id$=update_block_form]').each(function (idx, form) {
             var selection = $("select", form);
-            var containerName = $(form).attr('id').replace('_update_widget_form', '');
+            var containerName = $(form).attr('id').replace('_update_block_form', '');
             fancypages.editor.loadWidgetForm(selection.val(), containerName);
 
             selection.change(function (ev) {
@@ -45,7 +45,7 @@ fancypages.editor = {
 
         // Show Page previews
         $('button[data-behaviours~=page-settings]').click(function () {
-            $('div[id=widget_input_wrapper]').html("");
+            $('div[id=block_input_wrapper]').html("");
             $('#page-settings').show();
             $('.editor').animate({backgroundColor: "#444"}, 500);
             fancypages.editor.updateSize();
@@ -72,17 +72,17 @@ fancypages.editor = {
                 left: 0
             },
             activate: function (event, ui) {
-                $('body').addClass('widget-move');
+                $('body').addClass('block-move');
                 $('.ui-sortable-placeholder').prepend(tooltip);
             },
             deactivate: function (event, ui) {
-                $('body').removeClass('widget-move');
+                $('body').removeClass('block-move');
             },
             update: function (ev, ui) {
                 var dropIndex = ui.item.index();
-                var widgetId = ui.item.data('widget-id');
+                var blockId = ui.item.data('block-id');
                 var containerId = ui.item.parents('.sortable').data('container-id');
-                var moveUrl = fancypages.apiBaseUrl + 'widget/' + widgetId + '/move';
+                var moveUrl = fancypages.apiBaseUrl + 'block/' + blockId + '/move';
 
                 $.ajax({
                     url: moveUrl,
@@ -99,7 +99,7 @@ fancypages.editor = {
                     },
                     error: function () {
                         oscar.messages.error(
-                            "An error occured trying to move the widget. Please try it again."
+                            "An error occured trying to move the block. Please try it again."
                         );
                     }
                 });
@@ -125,9 +125,9 @@ fancypages.editor = {
     },
 
     initialiseEventsOnPageContent: function () {
-        // Add a new tab to the selected tabbed block widget
+        // Add a new tab to the selected tabbed block block
         $(document).on('click', 'a[data-behaviours~=add-tab]', fancypages.eventHandlers.addNewTag);
-        //load the form to select a new widget to add to the container
+        //load the form to select a new block to add to the container
         //and display it in a modal
         $("a[data-behaviours~=load-modal]").click(fancypages.eventHandlers.loadModal);
 
@@ -143,8 +143,8 @@ fancypages.editor = {
             fancypages.removeModal(this);
             $(this).parents('div[id$=_modal]').remove();
         });
-        // Attach handler to dynamically loaded widget form for 'submit' event.
-        $(document).on('click', 'form[data-behaviours~=submit-widget-form] button[type=submit]', function (ev) {
+        // Attach handler to dynamically loaded block form for 'submit' event.
+        $(document).on('click', 'form[data-behaviours~=submit-block-form] button[type=submit]', function (ev) {
             ev.preventDefault();
             fancypages.editor.submitWidgetForm($(this));
         });
@@ -154,7 +154,7 @@ fancypages.editor = {
             ev.preventDefault();
             fancypages.removeModal(this);
         });
-        // Listen on widget form for content changes in text fields and text
+        // Listen on block form for content changes in text fields and text
         // areas
         $(document).on('click', "a[data-behaviours~=update-editor-field]", function (ev) {
             ev.preventDefault();
@@ -170,21 +170,21 @@ fancypages.editor = {
             if (!fieldElem) {
                 return false;
             }
-            var widgetId = $(this).parents('form').data('widget-id');
+            var blockId = $(this).parents('form').data('block-id');
             var fieldName = $(fieldElem).attr('id').replace('id_', '');
 
-            var previewField = $('#widget-' + widgetId + '-' + fieldName);
+            var previewField = $('#block-' + blockId + '-' + fieldName);
             previewField.html($(fieldElem).val());
         });
     },
 
     initialiseAddWidgetModal: function () {
-        // initialise modal for adding widget
-        $(document).on('click', 'form[id$=add_widget_form] input[type=radio]', function (ev) {
+        // initialise modal for adding block
+        $(document).on('click', 'form[id$=add_block_form] input[type=radio]', function (ev) {
             ev.preventDefault();
 
             var form = $(this).parents('form');
-            var containerName = $(form).attr('id').replace('_add_widget_form', '');
+            var containerName = $(form).attr('id').replace('_add_block_form', '');
 
             $.ajax({
                 url: $(form).attr('action'),
@@ -203,7 +203,7 @@ fancypages.editor = {
                 },
                 error: function () {
                     oscar.messages.error(
-                        "An error occured trying to add a new widget. Please try it again."
+                        "An error occured trying to add a new block. Please try it again."
                     );
                 }
             });
@@ -211,22 +211,22 @@ fancypages.editor = {
         });
     },
 
-    scrollToWidget: function (widget) {
+    scrollToWidget: function (block) {
         // Scrolls IFrame to the top of editing areas
-        if (widget.offset()) {
-            var destination = widget.offset().top - 20;
+        if (block.offset()) {
+            var destination = block.offset().top - 20;
             $('html:not(:animated),body:not(:animated)').animate({scrollTop: destination}, 500, 'swing');
         }
     },
 
     /**
-     * Load the the widget form for the specified url
+     * Load the the block form for the specified url
      */
-    loadWidgetForm: function (widgetId, containerName, options) {
-        var widgetUrl = fancypages.apiBaseUrl + 'widget/' + widgetId;
+    loadWidgetForm: function (blockId, containerName, options) {
+        var blockUrl = fancypages.apiBaseUrl + 'block/' + blockId;
         var func =
         $.getJSON(
-            widgetUrl,
+            blockUrl,
             {includeForm: true},
             fancypages.utils.partial(fancypages.eventHandlers.displayWidgetForm, options)
         );
@@ -245,13 +245,13 @@ fancypages.editor = {
     },
 
     mouseWidgetHover: function () {
-        var widgetHover = $('.widget');
-        widgetHover.on('mouseenter', function (e) {
-            $(e.target).parents('.widget').removeClass('widget-hover');
-            $(this).addClass('widget-hover');
+        var blockHover = $('.block');
+        blockHover.on('mouseenter', function (e) {
+            $(e.target).parents('.block').removeClass('block-hover');
+            $(this).addClass('block-hover');
         });
-        widgetHover.on('mouseleave', function () {
-            $(this).removeClass('widget-hover');
+        blockHover.on('mouseleave', function () {
+            $(this).removeClass('block-hover');
         });
     },
 
@@ -283,7 +283,7 @@ fancypages.editor = {
     carouselPosition: function () {
         $('.es-carousel-wrapper').each(function () {
             var es_carouselHeight = $(this).find('.products li:first').height(),
-                es_carouselWidth = $(this).closest('.widget-wrapper').width();
+                es_carouselWidth = $(this).closest('.block-wrapper').width();
 
             $(this).find('.products').css('height', es_carouselHeight);
 
@@ -302,8 +302,8 @@ fancypages.editor = {
     },
 
     /**
-     * Submit the widget form using an AJAX call and create or update the
-     * corresponding widget. The form is submitted to the URL specified in
+     * Submit the block form using an AJAX call and create or update the
+     * corresponding block. The form is submitted to the URL specified in
      * the action attribute and is removed from the editor panel right after
      * submission was successful.
      */
@@ -325,14 +325,14 @@ fancypages.editor = {
             type: "POST",
             data: formData,
             success: function (data) {
-                $('div[id=widget_input_wrapper]').html("");
+                $('div[id=block_input_wrapper]').html("");
                 fancypages.editor.reloadPage();
                 $('#page-settings').show();
                 $('.editor').animate({backgroundColor: "#444"}, 500);
             },
             error: function () {
                 oscar.messages.error(
-                    "An error occured trying to delete a widget. Please try it again."
+                    "An error occured trying to delete a block. Please try it again."
                 );
             }
         }).complete(function () {
@@ -344,7 +344,7 @@ fancypages.editor = {
 
     wysiwyg: {
         init: function () {
-            var wrapperElement = $('div[id=widget_input_wrapper]') || document;
+            var wrapperElement = $('div[id=block_input_wrapper]') || document;
 
             // initialise wysihtml5 rich-text for editor
             $('.wysihtml5-wrapper', wrapperElement).each(function (elem) {
@@ -391,7 +391,7 @@ fancypages.editor = {
             });
         },
         /*
-         * Update the content of a widget field whenever it is edited in the 
+         * Update the content of a block field whenever it is edited in the 
          * editor panel. The editor instance provides the details for referencing
          * the corresponding field in the preview.
          *
@@ -401,10 +401,10 @@ fancypages.editor = {
         updateWidgetContent: function (editor) {
             var fieldElem = $(editor.textarea.element);
 
-            var widgetId = $(fieldElem).parents('form').data('widget-id');
+            var blockId = $(fieldElem).parents('form').data('block-id');
             var fieldName = $(fieldElem).attr('id').replace('id_', '');
 
-            var previewField = $('#widget-' + widgetId + '-' + fieldName);
+            var previewField = $('#block-' + blockId + '-' + fieldName);
             $(previewField).html($(editor.composer.element).html());
         }
     }

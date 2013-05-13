@@ -8,4 +8,4 @@ local_settings.py
 
 *.egg-info/
 
-sandbox/public/CACHE
+sandbox/public/

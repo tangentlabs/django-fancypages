@@ -33,26 +33,23 @@
                 executable is available and you have COMPRESS_PRECOMPILERES specified
                 correctly.
                 {% endcomment %}
-                {% if use_less %}
-                    {% compress css %}
-                        {% comment %}
-                        <link rel="stylesheet" type="text/less" href="{% static "oscar/less/styles.less" %}" />
-                        <link rel="stylesheet" type="text/less" href="{% static "oscar/less/responsive.less" %}" />
-                        {% endcomment %}
-                    {% endcompress %}
-                {% else %}
-                    {% compress css %}
-                        {% comment %}
-                        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/styles.css" %}" />
-                        <link rel="stylesheet" type="text/css" href="{% static "oscar/css/responsive.css" %}" />
-                        {% endcomment %}
-                    {% endcompress %}
-                {% endif %}
+                <link rel="stylesheet" type="text/css" href="{% static "fancypages/css/bootstrap.min.css" %}" />
+
+                {% compress css %}
+                    {% comment %}
+                    <link rel="stylesheet" type="text/less" href="{% static "oscar/less/styles.less" %}" />
+                    <link rel="stylesheet" type="text/less" href="{% static "oscar/less/responsive.less" %}" />
+                    {% endcomment %}
+                {% endcompress %}
             {% endblock %}
         {% endblock %}
 
         {# Additional CSS - specific to certain pages #}
-        {% block extrastyles %}{% endblock %}
+        {% block extrastyles %}
+            {% compress css %}
+                {% include "fancypages/partials/extrastyles.html" %}
+            {% endcompress %}
+        {% endblock %}
 
         {% block extrahead %}{% endblock %}
     </head>
@@ -63,9 +60,6 @@
 
         {% block tracking %}
             {# Default to using Google analytics #}
-            {% if google_analytics_id %}
-                {% include 'partials/google_analytics.html' %}
-            {% endif %}
         {% endblock %}
 
         {% comment %}
@@ -75,28 +69,28 @@
         {% block cdn_scripts %}
             <!-- jQuery -->
             <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-            <script>window.jQuery || document.write('<script src="{% static "oscar/js/jquery/jquery-1.9.1.min.js" %}"><\/script>')</script>
+            <script>window.jQuery || document.write('<script src="{% static "fancypages/js/jquery/jquery-1.9.1.min.js" %}"><\/script>')</script>
+
+            <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+            <script>window.jQuery || document.write('<script src="{% static "fancypages/js/jquery-ui-1.10.1.custom.min.js" %}"><\/script>')</script>
         {% endblock %}
 
-            {# Local scripts #}
-            {% block scripts %}
-                {% comment %}
-                {% compress js %}
+        {# Local scripts #}
+        {% block scripts %}
+            {% compress js %}
                 <!-- Twitter Bootstrap -->
-                <script type="text/javascript" src="{% static "oscar/js/bootstrap/bootstrap.min.js" %}"></script>
-                <!-- Oscar -->
-                <script src="{% static "oscar/js/oscar/ui.js" %}" type="text/javascript" charset="utf-8"></script>
-                {% endcompress %}
-                {% endcomment %}
-            {% endblock %}
+                <script type="text/javascript" src="{% static "fancypages/js/bootstrap.min.js" %}"></script>
 
-            {# Additional JS scripts #}
-            {% block extrascripts %}{% endblock %}
+                {% include "fancypages/partials/extrascripts.html" %}
+            {% endcompress %}
+        {% endblock %}
+
+        {# Additional JS scripts #}
+        {% block extrascripts %}{% endblock %}
 
         {# Block for body onload functions #}
         <script type="text/javascript">
             $(function() {
-                oscar.init();
                 {% block onbodyload %}{% endblock %}
             });
         </script>

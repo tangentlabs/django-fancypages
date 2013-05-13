@@ -1,13 +1,13 @@
 import urlparse
 from functools import wraps
 
-from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.shortcuts import render
+from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.views import redirect_to_login
+from django.shortcuts import render
+from django.contrib.auth import REDIRECT_FIELD_NAME
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.views import redirect_to_login
 
 
 def staff_member_required(view_func, login_url=None):
@@ -22,7 +22,7 @@ def staff_member_required(view_func, login_url=None):
     redirect URL to be specified.
     """
     if login_url is None:
-        login_url = reverse_lazy('customer:login')
+        login_url = getattr(settings, 'LOGIN_URL')
 
     @wraps(view_func)
     def _checklogin(request, *args, **kwargs):

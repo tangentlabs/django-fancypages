@@ -1,5 +1,5 @@
 <div class="modal" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <form data-behaviours="submit-widget-form" action="{% url fp-dashboard:widget-delete widget.id %}" method="post">
+    <form data-behaviours="submit-block-form" action="{% url fp-dashboard:block-delete fp_block.id %}" method="post">
         <div class="modal-header">
             <button type="button" data-behaviours="remove-modal" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalHeader">Delete </h3>
@@ -7,7 +7,7 @@
         <div class="modal-body">
                 {% csrf_token %}
                 {{ form }}
-                <p>Are you sure you want to delete '{{ widget }}'?</p>
+                <p>Are you sure you want to delete '{{ fp_block }}'?</p>
         </div>
         <div class="modal-footer">
             <button type="button" data-behaviours="remove-modal" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
