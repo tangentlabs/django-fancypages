@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load fp_block_tags %}
 {% load fp_container_tags %}
+{% load url from future %}
 
 <div class="tabbable">
     <ul class="nav nav-tabs">
@@ -13,7 +14,7 @@
         {% if request.fancypages_edit_mode %}
         <li>
             {% get_content_type fp_block as content_type %}
-            <a data-action="{% url fp-api:ordered-container-list %}"
+            <a data-action="{% url "fp-api:ordered-container-list" %}"
                data-behaviours="add-tab"
                data-content-type-id="{{ content_type.id }}">
                 <i class="icon-plus"></i>{% trans "Add tab" %}

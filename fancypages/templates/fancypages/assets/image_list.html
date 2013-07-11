@@ -3,6 +3,7 @@
 {% load compress %}
 {% load thumbnail %}
 {% load staticfiles %}
+{% load url from future %}
 
 {% block body_class %}assets{% endblock %}
 
@@ -13,7 +14,7 @@
 
 {% block column_left %}
 <h3 id="fullscreen-modal-label"><i class="icon-picture"></i> <span>{% trans "Image Assets" %}</span></h3>
-<form id="fileupload" action="{% url fp-dashboard:image-upload %}" method="POST" enctype="multipart/form-data">
+<form id="fileupload" action="{% url "fp-dashboard:image-upload" %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <span class="btn btn-primary btn-block fileinput-button">
         <i class="icon-upload icon-white"></i>

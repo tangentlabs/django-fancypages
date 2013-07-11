@@ -1,5 +1,6 @@
 {% extends "fancypages/dashboard/layout.html" %}
 {% load i18n %}
+{% load url from future %}
 
 {% block title %}
 {{ title }} | {{ block.super }}
@@ -8,11 +9,11 @@
 {% block breadcrumbs %}
 <ul class="breadcrumb">
     <li>
-        <a href="{% url dashboard:index %}">{% trans "Dashboard" %}</a>
+        <a href="{% url "dashboard:index" %}">{% trans "Dashboard" %}</a>
         <span class="divider">/</span>
     </li>
     <li>
-        <a href="{% url fp-dashboard:page-list %}">
+        <a href="{% url "fp-dashboard:page-list" %}">
             {% trans "Pages" %}
         </a>
         <span class="divider">/</span>
@@ -45,7 +46,7 @@
         <div class="controls">
             <button type='submit' class="btn btn-primary btn-large">{% trans "Save" %}</button>
             {% trans "or" %}
-            <a href="{% url fp-dashboard:page-list %}" class="btn btn-large">{% trans "Cancel" %}</a>
+            <a href="{% url "fp-dashboard:page-list" %}" class="btn btn-large">{% trans "Cancel" %}</a>
         </div>
     </div>
 </form>

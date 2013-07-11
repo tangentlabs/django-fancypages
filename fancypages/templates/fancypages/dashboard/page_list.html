@@ -2,11 +2,12 @@
 {% load i18n %}
 {% load compress %}
 {% load staticfiles %}
+{% load url from future %}
 
 {% block breadcrumbs %}
 <ul class="breadcrumb">
     <li>
-        <a href="{% url dashboard:index %}">{% trans "Dashboard" %}</a>
+        <a href="{% url "dashboard:index" %}">{% trans "Dashboard" %}</a>
         <span class="divider">/</span>
     </li>
     <li class="active">{% trans "Pages" %}</li>
@@ -15,7 +16,7 @@
 
 {% block header %}
 <div class="page-header">
-    <a href="{% url fp-dashboard:page-create %}" class="btn btn-primary btn-large pull-right">{% trans "Create new top-level page" %}</a>
+    <a href="{% url "fp-dashboard:page-create" %}" class="btn btn-primary btn-large pull-right">{% trans "Create new top-level page" %}</a>
     <h1>{% trans "Page Management" %}</h1>
 </div>
 {% endblock header %}

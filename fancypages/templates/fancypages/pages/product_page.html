@@ -4,6 +4,7 @@
 {% load history_tags %}
 {% load staticfiles %}
 {% load i18n %}
+{% load url from future %}
 
 {% block body_class %}fp-page editor-hidden{% endblock %}
 
@@ -14,7 +15,7 @@
 {% block breadcrumbs %}
 <ul class="breadcrumb">
 	<li>
-		<a href="{% url promotions:home %}">{% trans "Home" %}</a>
+		<a href="{% url "promotions:home" %}">{% trans "Home" %}</a>
         <span class="divider">/</span>
     </li>
 	{% with category=product.categories.all.0 %}
@@ -38,7 +39,7 @@
     {% if user.is_authenticated and user.is_staff and not edit_mode %}
     <div class="row-fluid">
         <div class="well">
-            <a href="{% url dashboard:catalogue-product product.id %}">
+            <a href="{% url "dashboard:catalogue-product" product.id %}">
                 <button class="btn btn-success btn-full">{% trans "Edit this product" %}</button>
             </a>
         </div>
@@ -68,7 +69,7 @@
             </ul>
             {% else %}
             <p class="star">
-                <a id="write_review" href="{% url catalogue:reviews-add product.slug product.id %}#addreview"
+                <a id="write_review" href="{% url "catalogue:reviews-add" product.slug product.id %}#addreview"
                    class="btn btn-success btn-small">
                     {% trans "Write a review" %}
                 </a>
@@ -161,7 +162,7 @@
 		<p>{% trans "Be the first to review this product." %}</p>
 		{% endif %}
        <div class="review_read">
-		   <a href="{% url catalogue:reviews-add product.slug product.id %}#addreview" class="btn btn-success btn-full">{% trans "Write a review" %}</a>
+		   <a href="{% url "catalogue:reviews-add" product.slug product.id %}#addreview" class="btn btn-success btn-full">{% trans "Write a review" %}</a>
        </div>
 
         {% if reviews %}
@@ -190,7 +191,7 @@
                     </article>
                 {% endfor %}
                 <div class="review_all">
-					<a href="{% url catalogue:reviews-list product.slug product.id %}" class="btn">{% trans "See all reviews" %}</a>
+					<a href="{% url "catalogue:reviews-list" product.slug product.id %}" class="btn">{% trans "See all reviews" %}</a>
                 </div>
             </div>
         {% endif %}

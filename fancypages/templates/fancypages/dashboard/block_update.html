@@ -1,12 +1,14 @@
 {% load i18n %}
 {% load fp_block_tags %}
+{% load url from future %}
+
 <div class="editing-area">
     <h3><i class="icon-edit"></i> <span>Edit</span></h3>
 
     <form id="{{ block.container.variable_name }}_block_form"
           data-block-id='{{ block.id }}' data-container-name="{{ block.container.variable_name }}"
           data-behaviours="submit-block-form" class="form" method="post"
-          action="{% url fp-dashboard:block-update block.id %}">
+          action="{% url "fp-dashboard:block-update" block.id %}">
         {% csrf_token %}
         {% render_block_form form %}
         <div class="form-actions fixed">
