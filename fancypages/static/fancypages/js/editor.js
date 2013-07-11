@@ -1,4 +1,5 @@
 var fancypages = fancypages || {};
+
 fancypages.utils = {
     /**
      * Borrowed from http://stackoverflow.com/a/321527
@@ -17,11 +18,21 @@ fancypages.utils = {
                           '</div>';
             $('#messages').append($(msgHTML));
         },
-        debug: function(msg) { o.messages.addMessage('debug', msg); },
-        info: function(msg) { o.messages.addMessage('info', msg); },
-        success: function(msg) { o.messages.addMessage('success', msg); },
-        warning: function(msg) { o.messages.addMessage('warning', msg); },
-        error: function(msg) { o.messages.addMessage('error:', msg); },
+        debug: function(msg) {
+            fancypages.utils.messages.addMessage('debug', msg);
+        },
+        info: function(msg) {
+            fancypages.utils.messages.addMessage('info', msg);
+        },
+        success: function(msg) {
+            fancypages.utils.messages.addMessage('success', msg);
+        },
+        warning: function(msg) {
+            fancypages.utils.messages.addMessage('warning', msg);
+        },
+        error: function(msg) {
+            fancypages.utils.messages.addMessage('error:', msg);
+        },
         clear: function() {
             $('#messages').html('');
         },
