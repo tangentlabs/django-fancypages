@@ -17,14 +17,15 @@ setup(
     install_requires=[
         'versiontools>=1.9.1,<1.10',
         'Django>=1.4.5,<1.5',
-        'django-model-utils>=1.1.0,<1.2',
+        'django-model-utils>=1.1.0,<1.5',
         'djangorestframework>=2.1.12,<2.2',
-        'South>=0.7.6,<0.8',
+        'South>=0.7.6,<0.9',
         'django-treebeard>=1.61,<1.7',
         'django-appconf>=0.6,<0.7',
         'django-twitter-tag>=1.1,<1.2',
         'pillow>=2.0.0,<2.1',
         'sorl-thumbnail>=11.12,<12',
+        'django-compressor>=1.2,<1.4',
     ],
     # See http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
