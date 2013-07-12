@@ -119,7 +119,7 @@ DJANGO_APPS = (
     'django_extensions',
     'debug_toolbar',
 )
-from fancypages.default import *
+from fancypages.defaults import *
 INSTALLED_APPS = DJANGO_APPS + FANCYPAGES_REQUIRED_APPS + FANCYPAGES_APPS
 
 AUTHENTICATION_BACKENDS = (
