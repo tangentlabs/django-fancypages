@@ -81,6 +81,6 @@ Projects Using Fancypages
 License
 -------
 
-Oscar is released under the permissive `New BSD license`_.
+``django-fancypages`` is released under the permissive `New BSD license`_.
 
-.. _`New BSD license`: https://github.com/tangentlabs/django-oscar-fancypages/blob/master/LICENSE
+.. _`New BSD license`: https://github.com/tangentlabs/django-fancypages/blob/master/LICENSE
