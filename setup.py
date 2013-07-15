@@ -8,7 +8,10 @@ setup(
     author="Sebastian Vetter",
     author_email="sebastian.vetter@tangentsnowball.com.au",
     description="Make content editing in Django fancier",
-    long_description=open('README.rst').read(),
+    long_description='\n\n'.join([
+        open('README.rst').read(),
+        open('CHANGELOG.rst').read(),
+    ]),
     keywords="django, cms, pages, flatpages",
     license='BSD',
     platforms=['linux'],
