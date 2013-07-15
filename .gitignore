@@ -9,4 +9,5 @@ local_settings.py
 
 *.egg-info/
 
+docs/build/
 sandbox/public/
