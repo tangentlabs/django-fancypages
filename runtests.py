@@ -2,7 +2,8 @@
 import os
 import sys
 import logging
-import tempfile
+import fancypages as fp
+
 
 from argparse import ArgumentParser
 
@@ -67,16 +68,7 @@ def configure():
                 'django.contrib.messages',
                 'django.contrib.staticfiles',
                 'django.contrib.admin',
-                'model_utils',
-                'compressor',
-                'twitter_tag',
-                'sorl.thumbnail',
-                'rest_framework',
-                'fancypages',
-                'fancypages.api',
-                'fancypages.dashboard',
-                'fancypages.assets',
-            ),
+            ) + fp.get_required_apps() + fp.get_fancypages_apps(),
             AUTHENTICATION_BACKENDS=(
                 'django.contrib.auth.backends.ModelBackend',
             ),

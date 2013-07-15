@@ -8,7 +8,7 @@ def get_fancypages_paths(path):
     return [os.path.join(os.path.dirname(os.path.abspath(__file__)), path)]
 
 
-def get_apps():
+def get_required_apps():
     return (
         'django_extensions',
         # used for image thumbnailing
@@ -25,7 +25,11 @@ def get_apps():
         'south',
         # package used for twitter block
         'twitter_tag',
-        # actual apps provided by fancypages
+    )
+
+
+def get_fancypages_apps():
+    return (
         'fancypages.assets',
         'fancypages',
     )

@@ -1,5 +1,7 @@
 # Django settings for sandbox project.
 import os
+import fancypages as fp
+
 PROJECT_DIR = os.path.dirname(__file__)
 location = lambda x: os.path.join(os.path.dirname(os.path.realpath(__file__)), "../%s" % x)
 
@@ -119,9 +121,8 @@ DJANGO_APPS = (
     'debug_toolbar',
 )
 
-from fancypages import get_apps
 from fancypages.defaults import *
-INSTALLED_APPS = DJANGO_APPS + get_apps()
+INSTALLED_APPS = DJANGO_APPS + fp.get_required_apps() + fp.get_fancypages_apps()
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
