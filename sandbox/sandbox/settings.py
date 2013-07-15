@@ -116,11 +116,12 @@ DJANGO_APPS = (
     'django.contrib.flatpages',
     'django.contrib.admin',
 
-    'django_extensions',
     'debug_toolbar',
 )
+
+from fancypages import get_apps
 from fancypages.defaults import *
-INSTALLED_APPS = DJANGO_APPS + FANCYPAGES_REQUIRED_APPS + FANCYPAGES_APPS
+INSTALLED_APPS = DJANGO_APPS + get_apps()
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',

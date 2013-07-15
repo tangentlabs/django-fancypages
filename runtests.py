@@ -82,12 +82,6 @@ def configure():
             ),
             LOGIN_REDIRECT_URL='/accounts/',
             APPEND_SLASH=True,
-            HAYSTACK_CONNECTIONS={
-                'default': {
-                    'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-                    'PATH': tempfile.mkdtemp()+'/whoosh_index/',
-                },
-            },
             NOSE_ARGS=[
                 '-s',
                 '--with-specplugin',

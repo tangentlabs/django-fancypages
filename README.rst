@@ -11,12 +11,57 @@ enhancement system (CEnS) because it provides a user with the controlled
 ability to edit content on a page.
 
 The way this Django app works is inspired by `django-frontend-admin`_,
-`django-content-blocks` and other similar apps. Especially, the use of
+`django-content-blocks`_ and other similar apps. Especially, the use of
 template tags to define customisable sections in a Django template is
 based on the ideas in the two apps mentioned above.
 
-.. _`django-frontend-admin`: 
-.. _`django-content-blocks`:
+.. _`django-frontend-admin`: https://github.com/bartTC/django-frontendadmin
+.. _`django-content-blocks`: https://github.com/KevinBrolly/django-content-blocks
+
+
+Installation
+------------
+
+Using ``django-fancypages`` in your own project follows these steps to get
+everything up and running:
+
+    1. install via pip into you virtualenv (for now you have to install from
+       the github repo because we haven't released it to PyPI yet)::
+
+        $ pip install git+https://github.com/tangentlabs/django-fancypages.git
+
+    2. add the required apps to your ``INSTALLED_APPS`` by simply using the
+       convenience function ``get_apps`` in the ``fancypages`` module::
+
+        YOUR_OTHER_APPS = (
+            ...
+        )
+        INSTALLED_APPS = YOUR_OTHER_APPS + get_apps()
+
+    3. Add the editor middleware that provides the editting panel to every
+       fancypage or page that contains an FP container::
+
+        MIDDLEWARE_CLASSES = (
+            ...
+            'fancypages.middleware.EditorMiddleware',
+        )
+
+    4. Add the urls for ``django-fancypages`` to your project's main
+       ``urls.py``. Make sure that it is at the end of you definitions
+       otherwise the it will prevent your other URLs from working because it
+       defines a rather generic URL pattern for its pages::
+
+        urlpatterns = patterns('',
+            ...
+            url(r'^', include(fancypages.urls)),
+        )
+
+That's been a bit of work, hasn't it? Well done! Your should now be able to 
+access the fancypages dashboard after staring the Django server by running 
+``./manage.py runserver`` or whatever else you do for that. A very basic
+dashboard should now be available at:
+
+    http://localhost:8000/dashboard/fancypages
 
 
 Projects Using Fancypages
