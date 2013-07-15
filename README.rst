@@ -76,7 +76,7 @@ Projects Using Fancypages
 
 * The Chocolate Box: https://www.chocolatebox.com.au
 * Which Right Choice: https://www.whichrightchoice.com
-* Freetix: https://www.freetix.com
+* Freetix: https://www.freetix.com.au
 
 License
 -------
