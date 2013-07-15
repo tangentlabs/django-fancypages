@@ -1,0 +1,18 @@
+language: python
+python:
+  - "2.7"
+env:
+  - DJANGO_VERSION=1.4.5
+  - DJANGO_VERSION=1.5.1
+  - DRF_VERSRION=">=2.0,<2.1"
+  - DRF_VERSRION=">=2.1,<2.2"
+  - DRF_VERSRION=">=2.2,<2.3"
+  - DRF_VERSRION=">=2.3,<2.4"
+install: 
+  - pip install Django==$DJANGO_VERSION djangorestframework==$DRF_VERSION
+  - pip install . --use-mirrors
+  - pip install -r requirements.txt --use-mirrors
+script:
+  - coverage run ./runtests.py --with-xunit
+after_success:
+  - coveralls
