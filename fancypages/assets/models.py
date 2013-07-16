@@ -1,6 +1,12 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
+
 
 class AbstractAsset(models.Model):
     name = models.CharField(_("Name"), max_length=255)
@@ -9,7 +15,7 @@ class AbstractAsset(models.Model):
     date_modified = models.DateTimeField(_("Date modified"), auto_now=True)
 
     description = models.TextField(_("Description"), default="")
-    creator = models.ForeignKey('auth.User', verbose_name=_("Creator"))
+    creator = models.ForeignKey(User, verbose_name=_("Creator"))
 
     def __unicode__(self):
         return self.name
