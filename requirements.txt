@@ -10,7 +10,7 @@ bpython>=0.12
 # Testing dependencies
 mock>=1.0.1
 WebTest>=1.3.4
-django-nose>=0.1.3
+django-nose>=1.0
 django-webtest>=1.5.3
 spec>=0.10.0
 tox>=1.4.2
