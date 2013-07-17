@@ -86,6 +86,7 @@ class AbstractPageType(models.Model):
         return self.name
 
     class Meta:
+        abstract = True
         app_label = 'fancypages'
 
 
@@ -102,6 +103,7 @@ class AbstractVisibilityType(models.Model):
         return self.name
 
     class Meta:
+        abstract = True
         app_label = 'fancypages'
 
 
@@ -270,6 +272,7 @@ class AbstractContainer(models.Model):
         return u"Container '%s' in '%s'" % (self.name, self.content_type)
 
     class Meta:
+        abstract = True
         app_label = 'fancypages'
         unique_together = (('name', 'content_type', 'object_id'),)
 
