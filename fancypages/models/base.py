@@ -48,6 +48,7 @@ class FancyPage(abstract_models.AbstractTreeNode,
 class Container(abstract_models.AbstractContainer):
     class Meta:
         app_label = 'fancypages'
+        unique_together = (('name', 'content_type', 'object_id'),)
 
 
 class OrderedContainer(Container):

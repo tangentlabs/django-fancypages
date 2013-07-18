@@ -212,7 +212,7 @@ class AbstractContainer(models.Model):
             return
 
         # Don't allow draft entries to have a pub_date.
-        container_exists = AbstractContainer.objects.filter(
+        container_exists = self.__class__.objects.filter(
             name=self.name,
             object_id=None,
             content_type=None,
@@ -264,7 +264,7 @@ class AbstractContainer(models.Model):
         if not self.name:
             self.name = "%s-%s" % (
                 self._meta.module_name,
-                AbstractContainer.objects.count(),
+                self.__class__.objects.count(),
             )
         return super(AbstractContainer, self).save(*args, **kwargs)
 
@@ -274,7 +274,6 @@ class AbstractContainer(models.Model):
     class Meta:
         abstract = True
         app_label = 'fancypages'
-        unique_together = (('name', 'content_type', 'object_id'),)
 
 
 class AbstractContentBlock(models.Model):
