@@ -1,0 +1,11 @@
+[
+    {
+        "pk": 1,
+        "model": "fancypages.pagetype",
+        "fields": {
+            "template_name": "fancypages/pages/page.html",
+            "name": "Fancy Page",
+            "slug": "fancypage"
+        }
+    }
+]
