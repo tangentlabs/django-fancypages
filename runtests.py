@@ -2,14 +2,13 @@
 import os
 import sys
 import logging
-import fancypages as fp
-
 
 from argparse import ArgumentParser
 
 from django.conf import settings
 
-#from fancypages.defaults import FANCYPAGES_SETTINGS
+import fancypages as fp
+
 
 location = lambda x: os.path.join(os.path.dirname(os.path.realpath(__file__)), x)
 sandbox = lambda x: location("sandbox/%s" % x)
@@ -68,7 +67,13 @@ def configure():
                 'django.contrib.messages',
                 'django.contrib.staticfiles',
                 'django.contrib.admin',
-            ) + fp.get_required_apps() + fp.get_fancypages_apps(),
+
+                'model_utils',
+                'compressor',
+                'twitter_tag',
+                'sorl.thumbnail',
+                'rest_framework',
+            ) + fp.get_fancypages_apps(),
             AUTHENTICATION_BACKENDS=(
                 'django.contrib.auth.backends.ModelBackend',
             ),
