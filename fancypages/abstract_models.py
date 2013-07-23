@@ -10,6 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from treebeard.mp_tree import MP_Node
 
+from .manager import PageManager
 from .utils import get_container_names_from_template
 
 
@@ -132,6 +133,10 @@ class AbstractFancyPage(models.Model):
 
     visibility_types = models.ManyToManyField('fancypages.VisibilityType',
                                               verbose_name=_("Visible in"))
+
+    # this is the default manager that should is
+    # passed into subclasses when inheriting
+    objects = PageManager()
 
     @property
     def is_visible(self):

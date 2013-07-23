@@ -1,30 +1,7 @@
 from django.db import models
-from django.utils import timezone
-from django.db.models.query import QuerySet
 
 from .. import abstract_models
-
-
-class PageQuerySet(QuerySet):
-
-    def visible(self):
-        now = timezone.now()
-        return self.filter(
-            status=FancyPage.PUBLISHED
-        ).filter(
-            models.Q(date_visible_start=None) |
-            models.Q(date_visible_start__lt=now),
-            models.Q(date_visible_end=None) |
-            models.Q(date_visible_end__gt=now)
-        )
-
-    def visible_in(self, visibility_type):
-        return self.visible().filter(visibility_types=visibility_type)
-
-
-class PageManager(models.Manager):
-    def get_query_set(self):
-        return PageQuerySet(self.model).order_by('path')
+from ..manager import PageManager
 
 
 class PageType(abstract_models.AbstractPageType):

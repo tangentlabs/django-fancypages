@@ -1,6 +1,4 @@
 from .base import (
-    PageQuerySet,
-    PageManager,
     FancyPage,
     VisibilityType,
     PageType,
