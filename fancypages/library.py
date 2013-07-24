@@ -6,6 +6,8 @@ _content_blocks = {}
 
 
 def register_content_block(klass):
+    global _content_blocks
+
     if not klass.code:
         raise ImproperlyConfigured(
             _("you have to specify a unique code for this content_block")
@@ -19,7 +21,6 @@ def register_content_block(klass):
             _("a content_block with code {0} is already "
               "registered").format(klass.code)
         )
-    global _content_blocks
     _content_blocks[klass.code] = klass
     return klass
 
@@ -28,8 +29,8 @@ def unregister_content_block(klass):
     """
     Unregister the content_block *klass* if it has been registered before.
     """
+    global _content_blocks
     if klass.code in _content_blocks:
-        global _content_blocks
         del _content_blocks[klass.code]
 
 
