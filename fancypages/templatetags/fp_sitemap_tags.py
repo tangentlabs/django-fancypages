@@ -68,8 +68,3 @@ def get_site_tree(visibility_type=None, depth=1, instance_type=INSTANCE_TYPE_PAG
     build_tree(category_subtree, None, category_buckets, 0, instance_type)
 
     return category_subtree
-
-
-@register.assignment_tag
-def category_tree(depth=1):
-    return get_site_tree(depth=depth, instance_type=INSTANCE_TYPE_CATEGORY)
