@@ -18,7 +18,7 @@ fancypages.eventHandlers = {
                 xhr.setRequestHeader("X-CSRFToken", fancypages.getCsrfToken());
             },
             success: function (data) {
-                parent.fancypages.editor.reloadPreview();
+                parent.fancypages.editor.reloadPage();
             },
             error: function () {
                 parent.fancypages.utils.messages.error(

@@ -156,7 +156,7 @@ fancypages.editor = {
 
     initialiseEventsOnPageContent: function () {
         // Add a new tab to the selected tabbed block block
-        $(document).on('click', 'a[data-behaviours~=add-tab]', fancypages.eventHandlers.addNewTag);
+        $(document).on('click', 'a[data-behaviours~=add-tab]', fancypages.eventHandlers.addNewTab);
         //load the form to select a new block to add to the container
         //and display it in a modal
         $("a[data-behaviours~=load-modal]").click(fancypages.eventHandlers.loadModal);
