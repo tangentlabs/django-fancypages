@@ -7,11 +7,11 @@
 <div class="container-fluid">
     <div class="flexslider">
         <ul class="slides">
-            {% for image_dict in object.get_images_and_links.values %}
+            {% for image_dict in fp_block.get_images_and_links.values %}
             <li class="flex-active-slide">
                 <a href="{{ image_dict.link|default:"#" }}">
                     {% thumbnail image_dict.image.image "870x500" as im %}
-                        <img src="{{ im.url }}" alt="{{ object.title }}" />
+                        <img src="{{ im.url }}" alt="{{ fp_block.title }}" />
                     {% endthumbnail %}
                 </a>
             </li>

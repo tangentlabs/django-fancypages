@@ -3,9 +3,9 @@
 {% load i18n %}
 
 {% block block_content %}
-    {% if object.code and object.source == 'youtube' %}
+    {% if fp_block.code and fp_block.source == 'youtube' %}
         <div class="block-video">
-            <iframe width="560" height="315" src="http://www.youtube.com/embed/{{ object.video_code }}" frameborder="0" allowfullscreen></iframe>
+            <iframe width="560" height="315" src="http://www.youtube.com/embed/{{ fp_block.video_code }}" frameborder="0" allowfullscreen></iframe>
         </div>
     {% else %}
         <div class="thumbnail">

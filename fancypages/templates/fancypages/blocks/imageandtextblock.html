@@ -4,13 +4,13 @@
 {% block block_content %}
 <div class="row-fluid">
     <div class="span5">
-        {% if object.link %}
-        <a href="{{ object.link }}">
+        {% if fp_block.link %}
+        <a href="{{ fp_block.link }}">
             {# FIXME an image currently doesnt work with the render tag #}
-            {% include "fancypages/blocks/partials/image_thumbnail.html" with asset=object.image_asset %}
+            {% include "fancypages/blocks/partials/image_thumbnail.html" with asset=fp_block.image_asset %}
         </a>
         {% else %}
-            {% include "fancypages/blocks/partials/image_thumbnail.html" with asset=object.image_asset %}
+            {% include "fancypages/blocks/partials/image_thumbnail.html" with asset=fp_block.image_asset %}
         {% endif %}
     </div>
     <div class="span7">

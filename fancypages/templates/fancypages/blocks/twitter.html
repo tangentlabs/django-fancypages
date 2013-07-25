@@ -4,10 +4,10 @@
 {% load fp_block_tags %}
 
 {% block block_content %}
-    {% if object.username %}
-        {% cache 500 fancy_tweets object.username object.max_tweets %}
-            {% get_tweets for object.username as tweets limit object.max_tweets %}
-            <h3><i class="icon-twitter"></i> {{ object.username }}</h3>
+    {% if fp_block.username %}
+        {% cache 500 fancy_tweets fp_block.username fp_block.max_tweets %}
+            {% get_tweets for fp_block.username as tweets limit fp_block.max_tweets %}
+            <h3><i class="icon-twitter"></i> {{ fp_block.username }}</h3>
             <ul>
                 {% for tweet in tweets %}
                     <li>{{ tweet.html|safe }}</li>
