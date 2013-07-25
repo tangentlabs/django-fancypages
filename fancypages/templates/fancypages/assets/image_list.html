@@ -9,7 +9,7 @@
 
 {% block extrahead %}
     {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static "fancypages/css/jquery-file-upload/jquery.fileupload-ui.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "fancypages/libs/jquery-file-upload/jquery.fileupload-ui.css" %}" />
 {% endblock %}
 
 {% block column_left %}
@@ -38,9 +38,9 @@
 
 {% block extrascripts %}
     {{ block.super }}
-    <script type="text/javascript" src="{% static "fancypages/js/jquery-file-upload/jquery.ui.widget.js" %}"></script>
-    <script type="text/javascript" src="{% static "fancypages/js/jquery-file-upload/jquery.iframe-transport.js" %}"></script>
-    <script type="text/javascript" src="{% static "fancypages/js/jquery-file-upload/jquery.fileupload.js" %}"></script>
+    <script type="text/javascript" src="{% static "fancypages/libs/jquery-file-upload/jquery.ui.widget.js" %}"></script>
+    <script type="text/javascript" src="{% static "fancypages/libs/jquery-file-upload/jquery.iframe-transport.js" %}"></script>
+    <script type="text/javascript" src="{% static "fancypages/libs/jquery-file-upload/jquery.fileupload.js" %}"></script>
     {% compress js %}
     <script type="text/javascript" src="{% static "fancypages/js/assets.js" %}"></script>
     {% endcompress %}
