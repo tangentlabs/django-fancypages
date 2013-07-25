@@ -32,7 +32,7 @@ class OrderedContainer(Container):
     display_order = models.PositiveIntegerField()
 
     def __unicode__(self):
-        return u"Container #%d '%s' in '%s'" % (
+        return u"Container #{0} '{1}' in '{2}'".format(
             self.display_order,
             self.name,
             self.content_type
