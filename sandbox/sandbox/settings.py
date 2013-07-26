@@ -119,6 +119,7 @@ DJANGO_APPS = (
     'django.contrib.admin',
 
     'debug_toolbar',
+    'django_extensions',
 )
 
 from fancypages.defaults import *
