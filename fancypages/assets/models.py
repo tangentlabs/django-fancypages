@@ -1,11 +1,9 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
+from ..compat import get_user_model
+
+User = get_user_model()
 
 
 class AbstractAsset(models.Model):
