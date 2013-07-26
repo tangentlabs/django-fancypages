@@ -23,4 +23,4 @@ class TestOfflineCompression(TestCase):
             shutil.rmtree(TMP_STATIC_DIR)
 
     def test_(self):
-        call_command('compress')
+        call_command('compress', verbosity=0)
