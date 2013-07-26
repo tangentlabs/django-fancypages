@@ -34,19 +34,24 @@ def build_tree(root, parent, data, depth, instance_type):
 @register.assignment_tag
 def get_pages(visibility_type):
     try:
-        visibility_type_instance = VisibilityType.objects.get(slug=visibility_type)
+        visibility_type_instance = VisibilityType.objects.get(
+            slug=visibility_type
+        )
     except VisibilityType.DoesNotExist:
         return Page.objects.none()
     return Page.object.visible_in(visibility_type_instance)
 
 
 @register.assignment_tag
-def get_site_tree(visibility_type=None, depth=1, instance_type=INSTANCE_TYPE_PAGE):
+def get_site_tree(visibility_type=None, depth=1,
+                  instance_type=INSTANCE_TYPE_PAGE):
     if instance_type not in INSTANCE_TYPES:
         return []
 
     try:
-        visibility_type_instance = VisibilityType.objects.get(slug=visibility_type)
+        visibility_type_instance = VisibilityType.objects.get(
+            slug=visibility_type
+        )
     except VisibilityType.DoesNotExist:
         visibility_type_instance = None
         if visibility_type:

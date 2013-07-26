@@ -76,8 +76,9 @@ def fp_container(parser, token):
 
     if len(args) != 2:
         raise template.TemplateSyntaxError(
-            "%r tag expects a single argument container" \
-            % token.contents.split()[0]
+            "{0} tag expects a single argument container".format(
+                token.contents.split()[0]
+            )
         )
 
     tag_name, args = args[:1], args[1:]

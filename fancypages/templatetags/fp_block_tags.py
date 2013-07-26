@@ -82,7 +82,8 @@ def get_content_type(obj):
 
 
 ##TODO need re-write due to new registered blocks
-@register.inclusion_tag('fancypages/dashboard/block_select.html', takes_context=True)
+@register.inclusion_tag('fancypages/dashboard/block_select.html',
+                        takes_context=True)
 def render_block_selection(context):
     request = context.get('request')
     if not request or not request.fancypages_edit_mode:

@@ -17,7 +17,7 @@ def replace_insensitive(string, target, replacement):
     index = no_case.rfind(target.lower())
     if index >= 0:
         return string[:index] + replacement + string[index + len(target):]
-    else: # no results so return the original string
+    else:  # no results so return the original string
         return string
 
 
