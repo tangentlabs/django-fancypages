@@ -32,10 +32,10 @@ setup(
     ],
     # See http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
-      'Environment :: Web Environment',
-      'Intended Audience :: Developers',
-      'License :: OSI Approved :: BSD License',
-      'Operating System :: Unix',
-      'Programming Language :: Python',
+        'Environment :: Web Environment',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: BSD License',
+        'Operating System :: Unix',
+        'Programming Language :: Python',
     ]
 )

@@ -16,8 +16,7 @@ class TestTextBlock(TestCase):
         self.request_context['user'] = self.user
 
     def test_can_be_rendered_in_template(self):
-        block = factories.TextBlockFactory.build()
-        block.id = 666
+        block = factories.TextBlockFactory.build(id=6)
         renderer = block.get_renderer_class()(block, self.request_context)
         block_html = renderer.render()
 

@@ -11,7 +11,8 @@ class FancypagesApplication(Application):
     page_view = views.FancyPageDetailView
 
     def get_urls(self):
-        urlpatterns = patterns('',
+        urlpatterns = patterns(
+            '',
             url(
                 r'^(?P<slug>[\w-]+(/[\w-]+)*)/$',
                 self.page_view.as_view(),
