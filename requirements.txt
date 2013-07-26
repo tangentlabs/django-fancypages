@@ -10,11 +10,14 @@ bpython>=0.12
 # Testing dependencies
 mock>=1.0.1
 WebTest>=1.3.4
-django-nose>=1.0
 django-webtest>=1.5.3
-spec>=0.10.0
 tox>=1.4.2
 factory-boy==2.1.1
+pytest==2.3.5
+pytest-cache==1.0
+pytest-cov==1.6
+pytest-django==2.3.0
+pytest-pep8==1.0.4
 
 # Code style and coverage
 flake8>=0.8
