@@ -3,9 +3,12 @@ import tempfile
 
 from django.conf import settings
 from django.test import TestCase
-from django.contrib.auth.models import User
 
 from django_webtest import WebTest
+
+from ..compat import get_user_model
+
+User = get_user_model()
 
 
 class MockTemplateMixin(object):
