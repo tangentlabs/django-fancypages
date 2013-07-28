@@ -143,8 +143,10 @@ class BlockDeleteView(generic.DeleteView, FancypagesMixin):
         return self.get_block_object()
 
     def delete(self, request, *args, **kwargs):
-        response = super(BlockDeleteView, self).delete(request, *args, **kwargs)
-        for idx, block in enumerate(self.object.container.blocks.all().select_subclasses()):
+        response = super(BlockDeleteView, self).delete(request, *args,
+                                                       **kwargs)
+        blocks = self.object.container.blocks.all().select_subclasses()
+        for idx, block in enumerate(blocks):
             block.display_order = idx
             block.save()
         return response

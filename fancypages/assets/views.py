@@ -45,7 +45,9 @@ class ImageAssetCreateView(JSONResponseMixin, generic.CreateView):
                 'name': f.name,
                 'url': self.object.get_absolute_url(),
                 'thumbnailMarkup': thumbnail_markup,
-                'deleteUrl': '', #reverse('upload-delete', args=[self.object.id]),
+                #TODO add the delete URL back in again
+                # reverse('upload-delete', args=[self.object.id]),
+                'deleteUrl': '',
                 'deleteType': 'DELETE',
             }]
         }

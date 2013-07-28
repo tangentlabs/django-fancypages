@@ -20,7 +20,8 @@ class FancypagesDashboardApplication(Application):
     block_delete_view = views.BlockDeleteView
 
     def get_urls(self):
-        urlpatterns = patterns('',
+        urlpatterns = patterns(
+            '',
             url(r'^assets/', include(self.assets_app.urls)),
 
             url(

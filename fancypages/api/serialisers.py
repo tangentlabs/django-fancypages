@@ -160,4 +160,4 @@ class PageMoveSerializer(serializers.ModelSerializer):
     class Meta:
         model = FancyPage
         fields = ['parent', 'new_index', 'old_index']
-        read_only_fields = ['status',]
+        read_only_fields = ['status']

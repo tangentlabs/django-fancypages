@@ -95,8 +95,10 @@ class ImageAndTextBlock(ImageMetadataMixin, ContentBlock):
 
     def __unicode__(self):
         if self.image_asset:
-            return u"Image with text '%s'" % os.path.basename(self.image_asset.image.path)
-        return u"Image with text #%s" % self.id
+            return u"Image with text '{0}'".format(
+                os.path.basename(self.image_asset.image.path)
+            )
+        return u"Image with text #{0}".format(self.id)
 
     class Meta:
         app_label = 'fancypages'
@@ -119,7 +121,9 @@ class CarouselBlock(ContentBlock):
             image_id = getattr(self, "%s_id" % (self.image_field_name % idx))
             link_field_name = self.link_field_name % idx
             if image_id:
-                results[image_id] = {'link': getattr(self, link_field_name, None)}
+                results[image_id] = {
+                    'link': getattr(self, link_field_name, None)
+                }
                 query.add(models.Q(id=image_id), models.Q.OR)
         if not query:
             return {}

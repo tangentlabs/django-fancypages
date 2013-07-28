@@ -34,7 +34,8 @@ class PageFormMixin(object):
         if 'page_type' in self.fields:
             self.fields['page_type'].queryset = PageType.objects.all()
         if 'visibility_types' in self.fields:
-            self.fields['visibility_types'].queryset = VisibilityType.objects.all()
+            self.fields['visibility_types'].queryset = \
+                VisibilityType.objects.all()
 
 
 class PageForm(PageFormMixin, forms.ModelForm):
