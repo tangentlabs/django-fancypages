@@ -106,18 +106,16 @@ class BlockTypesView(APIView):
     def get(self, request):
         container_id = request.QUERY_PARAMS.get('container')
         if container_id is None:
-            return Response({
-                    'detail': u'container ID is required for block list',
-                },
+            return Response(
+                {'detail': u'container ID is required for block list'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         try:
             Container.objects.get(pk=container_id)
         except Container.DoesNotExist:
-            return Response({
-                    'detail': u'container ID is invalid',
-                },
+            return Response(
+                {'detail': u'container ID is invalid'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         return Response({

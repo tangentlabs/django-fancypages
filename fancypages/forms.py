@@ -34,7 +34,8 @@ class PageFormMixin(object):
         if 'page_type' in self.fields:
             self.fields['page_type'].queryset = PageType.objects.all()
         if 'visibility_types' in self.fields:
-            self.fields['visibility_types'].queryset = VisibilityType.objects.all()
+            self.fields['visibility_types'].queryset = \
+                VisibilityType.objects.all()
 
     def save_category_data(self, category):
         category.name = self.cleaned_data['name']

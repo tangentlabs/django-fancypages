@@ -31,7 +31,13 @@ class AssetWidget(MultiWidget):
                 widget_value = None
             if id_:
                 final_attrs = dict(final_attrs, id='%s_%s' % (id_, i))
-            output.append(widget.render(self.get_widget_id(name, i), widget_value, final_attrs))
+            output.append(
+                widget.render(
+                    self.get_widget_id(name, i),
+                    widget_value,
+                    final_attrs
+                )
+            )
         rendered_widgets = mark_safe(self.format_output(output))
         tmpl = loader.get_template(self.template_name)
         return tmpl.render(Context({
@@ -39,7 +45,7 @@ class AssetWidget(MultiWidget):
             'asset': self.get_asset(*value),
         }))
 
-    def get_widget_id (self, name, idx):
+    def get_widget_id(self, name, idx):
         return "%s_%s" % (name, self.widget_id_suffixes[idx])
 
     def value_from_datadict(self, data, files, name):

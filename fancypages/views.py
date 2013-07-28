@@ -19,7 +19,8 @@ class FancyPageDetailView(PageMixin, DetailView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        response = super(FancyPageDetailView, self).get(request, *args, **kwargs)
+        response = super(FancyPageDetailView, self).get(request, *args,
+                                                        **kwargs)
         if request.user.is_staff:
             return response
 

@@ -15,7 +15,8 @@ class AssetApplication(Application):
     def get_urls(self):
         urlpatterns = super(AssetApplication, self).get_urls()
 
-        urlpatterns += patterns('',
+        urlpatterns += patterns(
+            '',
             url(
                 r'^images/$',
                 self.image_list_view.as_view(),

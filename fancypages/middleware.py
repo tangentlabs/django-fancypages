@@ -11,7 +11,8 @@ def replace_insensitive(string, target, replacement):
     """
     Similar to string.replace() but is case insensitive
     Code borrowed from:
-    http://forums.devshed.com/python-programming-11/case-insensitive-string-replace-490921.html
+    http://forums.devshed.com/python-programming-11/
+            case-insensitive-string-replace-490921.html
     """
     no_case = string.lower()
     index = no_case.rfind(target.lower())
@@ -53,10 +54,10 @@ class EditorMiddleware(object):
             smart_unicode(editor_head) + self.head_tag,
         )
 
-	response.content = BODY_STARTTAG.sub(
-	    r'\g<body_tag><div class="editable-page-wrapper">',
-	    response.content
-	)
+        response.content = BODY_STARTTAG.sub(
+            r'\g<body_tag><div class="editable-page-wrapper">',
+            response.content
+        )
 
         editor_body = render_to_string(
             self.body_template_name,

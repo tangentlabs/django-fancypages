@@ -53,12 +53,14 @@ class AbstractTreeNode(MP_Node):
         super(AbstractTreeNode, self).save(*args, **kwargs)
 
     def move(self, target, pos=None):
+        #:PEP8 -E501
         """
         Moves the current node and all its descendants to a new position
         relative to another node.
 
-        See https://tabo.pe/projects/django-treebeard/docs/1.61/api.html#treebeard.models.Node.move
+        See https://tabo.pe/projects/django-treebeard/docs/1.61/api.html
         """
+        #:PEP8 +E501
         super(AbstractTreeNode, self).move(target, pos)
         # Update the slugs and full names of all nodes in the new subtree.
         # We need to reload self as 'move' doesn't update the current instance,

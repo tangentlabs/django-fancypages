@@ -33,7 +33,9 @@ class JSONResponseMixin(object):
             content_type=self.get_content_type(),
             **httpresponse_kwargs
         )
-        response['Content-Disposition'] = 'inline; filename=%s' % self.json_filename
+        response['Content-Disposition'] = 'inline; filename={0}'.format(
+            self.json_filename
+        )
         return response
 
     def convert_context_to_json(self, context):

@@ -31,7 +31,7 @@ class ImageAsset(AbstractAsset):
     )
     width = models.IntegerField(_("Width"), blank=True)
     height = models.IntegerField(_("Height"), blank=True)
-    size = models.IntegerField(_("Size"), blank=True, null=True) # Bytes
+    size = models.IntegerField(_("Size"), blank=True, null=True)  # Bytes
 
     @property
     def asset_type(self):
