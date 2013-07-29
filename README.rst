@@ -40,10 +40,12 @@ everything up and running:
     2. add the required apps to your ``INSTALLED_APPS`` by simply using the
        convenience function ``get_apps`` in the ``fancypages`` module::
 
+        from fancyages import get_required_apps, get_fancypages_apps
+
         YOUR_OTHER_APPS = (
             ...
         )
-        INSTALLED_APPS = YOUR_OTHER_APPS + get_apps()
+        INSTALLED_APPS = YOUR_OTHER_APPS + get_required_apps() + get_fancypages_apps()
 
     3. Add the editor middleware that provides the editting panel to every
        fancypage or page that contains an FP container::
@@ -62,6 +64,18 @@ everything up and running:
             ...
             url(r'^', include(fancypages.urls)),
         )
+
+    5. Fancypages requires several default settings to be added. To make sure
+        that you have all the default settings in your settings, you can use
+        the defaults provided by fancypages itself. Add the following in your
+        settings file **before** you overwrite specific settings::
+
+            ...
+
+            from fancypages.defaults import *
+
+            ...
+
 
 That's been a bit of work, hasn't it? Well done! Your should now be able to 
 access the fancypages dashboard after staring the Django server by running 
