@@ -9,6 +9,8 @@ sandbox = lambda x: location("sandbox/%s" % x)
 
 
 def pytest_configure():
+    from fancypages.defaults import FANCYPAGES_SETTINGS
+
     settings.configure(
         DATABASES={
             'default': {
@@ -76,10 +78,5 @@ def pytest_configure():
             '-s',
             '--with-specplugin',
         ],
-        # required for django-twitter-tag throws an exception if not
-        # in the settings
-        TWITTER_OAUTH_TOKEN='',
-        TWITTER_OAUTH_SECRET='',
-        TWITTER_CONSUMER_KEY='',
-        TWITTER_CONSUMER_SECRET='',
+        **FANCYPAGES_SETTINGS
     )

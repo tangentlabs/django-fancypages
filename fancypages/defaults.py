@@ -9,3 +9,5 @@ TWITTER_OAUTH_SECRET = ''
 TWITTER_CONSUMER_KEY = ''
 TWITTER_CONSUMER_SECRET = ''
 ########## END TWITTER TAG SETTINGS
+
+FANCYPAGES_SETTINGS = dict([(k, v) for k, v in locals().items()])
