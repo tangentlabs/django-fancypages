@@ -9,11 +9,13 @@ FancyPage = get_model('fancypages', 'FancyPage')
 
 
 class FancyPageMixin(object):
+    object_attr_name = 'object'
 
     def get_template_names(self):
-        if not self.object.page_type:
+        instance = getattr(self, self.object_attr_name)
+        if not instance.page_type:
             return [settings.FANCYPAGES_DEFAULT_TEMPLATE]
-        return [self.object.page_type.template_name]
+        return [instance.page_type.template_name]
 
 
 class FancyHomeMixin(FancyPageMixin):
