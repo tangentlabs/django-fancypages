@@ -3,7 +3,7 @@ from django.db.models import get_model
 
 
 VisibilityType = get_model('fancypages', 'VisibilityType')
-Page = get_model('fancypages', 'Page')
+FancyPage = get_model('fancypages', 'FancyPage')
 Category = get_model('catalogue', 'Category')
 
 
@@ -38,8 +38,8 @@ def get_pages(visibility_type):
             slug=visibility_type
         )
     except VisibilityType.DoesNotExist:
-        return Page.objects.none()
-    return Page.object.visible_in(visibility_type_instance)
+        return FancyPage.objects.none()
+    return FancyPage.objects.visible_in(visibility_type_instance)
 
 
 @register.assignment_tag
