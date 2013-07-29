@@ -85,3 +85,14 @@ class FourColumnLayoutBlock(LayoutBlock):
 
     class Meta:
         app_label = 'fancypages'
+
+
+@register_content_block
+class HorizontalSeparatorBlock(ContentBlock):
+    name = _("Horizontal separator")
+    code = 'horizontal-separator'
+    group = _("Layout")
+    template_name = "fancypages/blocks/horizontal_separator_block.html"
+
+    class Meta:
+        app_label = 'fancypages'
