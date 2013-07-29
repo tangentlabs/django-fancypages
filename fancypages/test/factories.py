@@ -1,5 +1,6 @@
 from factory.django import DjangoModelFactory
 
+from django.conf import settings
 from django.db.models import get_model
 
 from fancypages.compat import get_user_model
@@ -10,6 +11,14 @@ class UserFactory(DjangoModelFactory):
 
     username = 'peter.griffin'
     email = 'peter@griffin.com'
+
+
+class PageTypeFactory(DjangoModelFactory):
+    FACTORY_FOR = get_model('fancypages', 'PageType')
+
+    name = 'Sample page type'
+    slug = 'sample-page-type'
+    template_name = settings.FP_DEFAULT_TEMPLATE
 
 
 class TextBlockFactory(DjangoModelFactory):

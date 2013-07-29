@@ -1,8 +1,11 @@
 from webtest import AppError
 
+from django.conf import settings
 from django.db.models import get_model
 from django.core.urlresolvers import reverse
+from django.template.defaultfilters import slugify
 
+from fancypages.test import factories
 from fancypages.test import FancyPagesWebTest
 
 
@@ -105,3 +108,36 @@ class TestAStaffUser(FancyPagesWebTest):
             ("You can only see this because you are logged in as "
              "a user with access rights to the dashboard")
         )
+
+
+class TestTheDefaultHomepage(FancyPagesWebTest):
+    is_anonymous = True
+
+    def setUp(self):
+        super(TestTheDefaultHomepage, self).setUp()
+        self.home_slug = slugify(settings.FP_HOMEPAGE_NAME)
+
+    def test_is_created_if_it_doesnt_exist(self):
+        self.assertEquals(FancyPage.objects.count(), 0)
+        self.get(reverse('home'))
+
+        self.assertEquals(FancyPage.objects.count(), 1)
+        page = FancyPage.objects.all()[0]
+        self.assertEquals(page.slug, self.home_slug)
+        self.assertEquals(page.name, settings.FP_HOMEPAGE_NAME)
+
+    def test_is_displaying_the_existing_home_page(self):
+        page_type = factories.PageTypeFactory()
+        page = FancyPage.add_root(
+            name=settings.FP_HOMEPAGE_NAME,
+            page_type=page_type
+        )
+
+        home_page = self.get(reverse('home'))
+
+        self.assertEquals(FancyPage.objects.count(), 1)
+        page_in_context = home_page.context[0].get('fancypage')
+
+        self.assertEquals(page_in_context.id, page.id)
+        self.assertEquals(page_in_context.slug, page.slug)
+        self.assertEquals(page_in_context.name, page.name)

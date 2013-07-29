@@ -1,6 +1,35 @@
 from django import http
+from django.conf import settings
+from django.db.models import get_model
 from django.utils import simplejson as json
 from django.utils.encoding import force_unicode
+from django.template.defaultfilters import slugify
+
+FancyPage = get_model('fancypages', 'FancyPage')
+
+
+class FancyPageMixin(object):
+
+    def get_template_names(self):
+        if not self.object.page_type:
+            return [settings.FANCYPAGES_DEFAULT_TEMPLATE]
+        return [self.object.page_type.template_name]
+
+
+class FancyHomeMixin(FancyPageMixin):
+    HOMEPAGE_NAME = getattr(settings, 'FP_HOMEPAGE_NAME', 'Home')
+
+    def get_object(self):
+        slug = slugify(self.HOMEPAGE_NAME)
+        try:
+            page = FancyPage.objects.get(slug=slug)
+        except FancyPage.DoesNotExist:
+            page = FancyPage.add_root(
+                name=self.HOMEPAGE_NAME,
+                slug=slug,
+                status=FancyPage.PUBLISHED,
+            )
+        return page
 
 
 class JSONResponseMixin(object):
