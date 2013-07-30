@@ -8,10 +8,8 @@ location = lambda x: os.path.join(os.path.dirname(os.path.realpath(__file__)), "
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-USE_LESS = True
-
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Your Name', 'your_email@example.com'),
 )
 
 MANAGERS = ADMINS
@@ -131,9 +129,14 @@ AUTHENTICATION_BACKENDS = (
 
 LOGIN_URL = '/admin/login/'
 
-DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': False
-}
+########## COMPRESSOR SETTINGS
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = False
+
+COMPRESS_PRECOMPILERS = (
+    ('text/less', 'lessc {infile} {outfile}'),
+)
+########## END COMPRESSOR SETTINGS
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -164,4 +167,10 @@ LOGGING = {
     }
 }
 
+########## DEBUG TOOLBAR
 INTERNAL_IPS = ('127.0.0.1',)
+
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False
+}
+########## END DEBUG TOOLBAR
