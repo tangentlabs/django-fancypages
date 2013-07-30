@@ -30,6 +30,9 @@ setup(
         'sorl-thumbnail>=11.12,<12',
         'django-compressor>=1.2,<1.4',
     ],
+    setup_requires = [
+        'versiontools >= 1.8',
+    ],
     # See http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
         'Environment :: Web Environment',
