@@ -20,13 +20,7 @@
         <![endif]-->
 
         {% block mainstyles %}
-            <link rel="stylesheet" type="text/css" href="{% static "fancypages/libs/bootstrap/bootstrap.min.css" %}" />
             <link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-
-            {# Font awesome pulled in through CDN #}
-            <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-            <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-
             {% block styles %}
             {% endblock %}
         {% endblock %}

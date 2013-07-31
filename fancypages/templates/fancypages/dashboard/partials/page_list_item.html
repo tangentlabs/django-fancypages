@@ -3,7 +3,7 @@
 {% load url from future %}
 
 {% for page in page_list %}
-<li id="page-{{ page.id }}" class="sortable" data-page-id="{{ page.id }}">
+<li id="page-{{ page.id }}" class="sortable {% if forloop.last %}last{% endif %}" data-page-id="{{ page.id }}">
     <div class="row-fluid" >
         <h5 class="span10">
             {% if page.numchild %}

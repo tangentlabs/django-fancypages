@@ -8,21 +8,16 @@
 {% block page_title %}Fancy Pages - Asset Manager{% endblock %}
 
 {% block layout %}
-    <div class="container-fluid asset-fluid">
-        <div class="page_inner">
-            <div class="row-fluid">
-                <aside class="sidebar span2">
-                    {% block column_left %}
-                    {% endblock %}
-                </aside><!-- /span3 -->
-
-                <div class="span10 modal-body">
-                    {% block content %}
-                    {% endblock %}
-                </div><!-- /span9 -->
-            </div><!-- /row-fluid -->
-        </div><!-- /page_inner -->
-    </div><!-- /container-fluid -->
+    <div class="fp-assets">
+        <div class="fp-asset-upload">
+            {% block column_left %}
+            {% endblock %}
+        </div>
+        <div class="fp-modal-body">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
 {% endblock %}
 
 {% block extrastyles %}

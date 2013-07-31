@@ -7,7 +7,9 @@
         {% if asset.image %}
             <img src="{{ image_url }}" title="{{ object.title|default:image_asset_name }}" alt="{{ object.alt_text|default:image_asset_name }}" />
         {% else %}
-            <p class="no-asset edit-button"><i class="icon-picture"></i> <span class="visible-editor">{% trans "Click to add an image" %}</span></p>
+            <button class="visible-editor fp-btn fp-btn-block no-asset edit-button">
+            	<i class="glyphicon-picture"></i> <br>{% trans "Add an image" %}
+            </button>
         {% endif %}
     {% endwith %}
 </div>

@@ -1,14 +1,10 @@
 {% load thumbnail %}
-<li class="span2" data-behaviours="selectable-asset" data-asset-type="{{ image_asset.asset_type }}" data-asset-id="{{ image_asset.id }}">
-    {% thumbnail image_asset.image.path "200x200" as im %}
-    <div class="thumbnail">
-        <div class="image_container">
-            <img src="{{ im.url }}" alt="{{ image_asset.name|truncatechars:20 }}" />
-        </div>
+<li class="fp-thumbnail" data-behaviours="selectable-asset" data-asset-type="{{ image_asset.asset_type }}" data-asset-id="{{ image_asset.id }}">
+    {% thumbnail image_asset.image "150x150" as im %}
+        <img src="{{ im.url }}" alt="{{ image_asset.name|truncatechars:20 }}" />
         <div class="caption">
             <h6>{{ image_asset.name|truncatechars:20 }}</h6>
             <p>{{ image_asset.description }}</p>
         </div>
-    </div>
     {% endthumbnail %}
 </li>

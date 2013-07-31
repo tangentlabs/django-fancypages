@@ -1,6 +1,3 @@
-@import "bootstrap/variables.less";
-@import "bootstrap/mixins.less";
-
 @editorWidth: 325px;
 @editorGutter: 20px;
 @btnBorder: #454545;
@@ -25,6 +22,7 @@
   .opacity(100);
   .box-shadow(1px 3px 5px rgba(0,0,0,.2));
   .transition(padding-left 0.2s ease-in-out);
+  font-family: @sansFontFamily;
   &:hover {
     .opacity(90);
     cursor: pointer;
@@ -34,11 +32,12 @@
     font-size: 25px;
     line-height:25px;
     display:block;
+    margin:0 auto 5px;
   }
 }
-// Edit Hidden Controls
+// Edit Click Controls
 .editor-hidden #editor-panel,
-.editor-hidden #editor-panel .form-actions.fixed {
+.editor-hidden #editor-panel .fp-editor-actions {
   left: -400px;
 }
 .editable-page-wrapper {
@@ -47,11 +46,13 @@
 .editor-hidden .editable-page-wrapper {
   margin-left:0;
 }
+// Hide widget controls if not editing
 .editor-hidden {
   margin-bottom:0!important;
-  .edit-button.btn,
+  .edit-button.fp-btn,
   .block-move-delete,
-  .block-add-control {
+  .block-add-control,
+  .no-asset.edit-button {
     display:none;
   }
 }
@@ -73,56 +74,42 @@
   .box-shadow(inset -3px -7px 10px rgba(0,0,0,.1));
   z-index:1000; 
   color:#fff;
+  background:#333;
+  border-color:#000;
+  font-family: @sansFontFamily;
 }
-//Color Over-rides 
+#page-settings,
+#block_input_wrapper {
+  padding:@editorGutter;
+}
+.editing-area,
+#page-settings {
+  > h3 {
+    border-bottom:1px solid @grayLight;
+    margin-bottom:@baseLineHeight;
+    font-size:@baseFontSize + 4;
+    span {
+      font-size:18px;
+    }
+  }
+}
+//Editor Colors
 #editor-panel {
   label, h3, p {
     color:#fff;
   }
-  .modal {
+  .fp-modal {
     label, h3, p {
       color:#444;
     }
   }
-  .btn-block {
-    display: block;
-    width: 100%;
-    padding-left: 0;
-    padding-right: 0;
-    margin-top:@baseLineHeight;
-    .box-sizing(border-box);
+  .fp-btn-block,
+  .select2-container {
+    margin: @baseLineHeight / 2 0;
   }
 }
-#editor-panel {
-  background:#333;
-  border-color:#000;
-  input[type=text],
-  textarea,
-  select {
-    .box-sizing(border-box);
-    width:100%;
-    font-size:12px;
-    min-height: 35px;
-  }
-  .input-append {
-    input[type=text] {
-      width:85%;
-    }
-    .btn {
-      .box-sizing(border-box);
-      min-height: 35px;
-    }
-  }
-}
-.input-append .btn:last-child {
-  -webkit-border-radius: 0 3px 3px 0;
-  -moz-border-radius: 0 3px 3px 0;
-  border-radius: 0 3px 3px 0;
-}
-.sidebar-content {
-  width:@editorWidth - 2;
-}
-.form-actions.fixed {
+//Editor actions
+.fp-editor-actions {
   position: fixed;
   border-top-color:@gray;
   left: 0;
@@ -136,13 +123,41 @@
   a {
     color:@grayLight;
     float:left;
+    font-size:@baseFontSize - 2;
+    text-decoration: none;
+  }
+  .fp-btn {
+    float:right;
   }
   > div {
     .clearfix();
     padding:@editorGutter @editorGutter 0;
   }
 }
-//Scrollbar
+//Editor CLose
+.fp-editor-controls {
+  border-bottom:1px solid @grayDarker;
+  .clearfix();
+  .fp-close {
+    color: #fff;
+    padding: 15px;
+    background: #555;
+    font-size: 30px;
+    line-height: 30px;
+    border:0;
+    margin:0;
+    .opacity(80);
+    &:hover {
+      .opacity(100);
+      text-decoration:none;
+    }
+  }
+}
+//Editor Scrollbar
+.fp-scroll-content {
+  width:@editorWidth - 2;
+}
+  //Scrollbar plugin
  .jspContainer{overflow:hidden;position:relative}
  .jspPane{position:absolute}
  .jspVerticalBar{position:absolute;top:0;right:0;width:10px;height:100%;background:red}
@@ -160,13 +175,12 @@
  .jspCorner{background:#eeeef4;float:left;height:100%}
  * html .jspCorner{margin:0 -3px 0 0}
  
-.sidebar-content,
-.slide-pane {
+.fp-scroll-content {
   overflow: auto;
   overflow-x: hidden;
   overflow-y: auto;
   &:focus {
-  	outline:none;
+    outline:none;
   }
   .jspDrag {
     background: #999;
@@ -180,105 +194,7 @@
     background: #333;
   }
 }
-//Editing Area
-#page-settings,
-#block_input_wrapper {
-  padding:@editorGutter;
-}
-.editing-area,
-#page-settings {
-  > h3 {
-    border-bottom:1px solid @grayLight;
-    margin-bottom:@baseLineHeight;
-    span {
-      font-size:18px;
-    }
-  }
-}
-//Inverse WYSIWYG
-.navbar-inverse .nav > li > a {
-  background:none;
-}
-.nav-wysiwyg {
-  .nav > li > a {
-    padding: 5px 5px 3px;
-    text-transform:uppercase;
-    color: #ccc;
-    &:hover,
-    &:focus {
-      text-decoration: none;
-      background-color: #222;
-      -webkit-box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
-      -moz-box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
-      box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
-      color:#fff;
-    }
-  }
-  .navbar .nav > li {
-    line-height:15px;
-  }
-  .navbar-inner {
-    min-height: 15px;
-    padding-left: 5px;
-    padding-right: 5px;
-    #gradient > .vertical(lighten(#222, 10%), lighten(#111, 10%))!important;
-  }
-  .icon-text {
-    width:auto;
-  }
-}
-.navbar.navbar-inverse.nav-wysiwyg {
-  #gradient > .vertical(lighten(#222, 10%), lighten(#111, 10%))!important;
-  .border-radius(4px);
-  border-color: #252525;
-  height:auto;
-  .navbar-inner {
-    height:auto;
-  }
-}
-//Editor Main navigation
-.button-nav {
-  border-bottom:2px solid @grayDarker;
-  .clearfix();
-  .close {
-    color: #fff;
-    padding: 15px;
-    background: #555;
-    font-size: 30px;
-    border:0;
-    .opacity(80);
-    &:hover {
-      .opacity(100);
-    }
-  }
-  i {
-    font-size: 35px;
-    vertical-align:middle;
-    margin-right:5px;
-  }
-}
-.button-nav a:hover {
-  text-decoration:none;
-}
-//Editor Form Elements
-textarea:focus,
-input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="datetime"]:focus,
-input[type="datetime-local"]:focus,
-input[type="date"]:focus,
-input[type="month"]:focus,
-input[type="time"]:focus,
-input[type="week"]:focus,
-input[type="number"]:focus,
-input[type="email"]:focus,
-input[type="url"]:focus,
-input[type="search"]:focus,
-input[type="tel"]:focus,
-input[type="color"]:focus,
-.uneditable-input:focus {
-  border-color: rgba(82, 168, 236, 1);
-}
+//WYSIWYG Editor
 .wysihtml5-wrapper {
   overflow: auto;
   overflow-x:hidden;
@@ -288,168 +204,40 @@ input[type="color"]:focus,
   height:250px;
   overflow-x:hidden;
 }
-.wysihtml5-toolbar {
-  .btn-group {
-    margin-bottom:10px;
-  }
-}
 //Edditor Image
-#asset-input {
-  .thumbnail {
-    background:#fff;
+.fp-asset-input {
+  > div  {
+    background:lighten(@gray, 10%);
     margin-bottom:@baseLineHeight;
-    border-color:lighten(@gray,7%);
-  }
-  .image_container {
-    line-height:155px;
+    border: 1px solid lighten(@gray,7%);
+    line-height:150px;
+    height:150px;
+    padding:5px;
     margin-bottom:0;
+    text-align:center;
+    .box-sizing(content-box);
+    img {
+      vertical-align: middle;
+      width:auto;
+      max-width: 100%;
+      max-height:150px;
+    }
   }
 }
-#fullscreen-modal {
-  overflow:hidden;
-  > .modal-body {
-    max-height: none;
-  }
-  .close {
-    margin-right:10px;
-  }
-} 
 #messages {
   position: absolute;
   top: 80px;
   width: 97%;
   z-index: 1000;
 }
-//Modals
-#editor-panel .modal {
-  color:#444;
-}
-.modal {
-  > form {
-    margin:0;
-  }
-  .modal-header {
-    > button {
-      border:0;
-      padding:0;
-    }
-  }
-}
 .nested-sortable-placeholder {
     border: 1px solid black;
     background-color: gray;
     list-style: none;
 }
-//Tree
-.tree {
-  margin:0;
-  > li {
-    list-style:none;
-    border:1px solid #dddddd;
-    border-top-width:0;
-    padding:5px;
-    &:first-child {
-      border-top-width:1px;
-    }
-    &:nth-child(odd) {
-      background:#efefef;
-    }
+//Tree override
+.fp-page-tree {
+  a {
+    color:#08c;
   }
-}
-//Table Header
-.table-header {
-  .clearfix();
-  h2,h3 {
-    font-weight: bold;
-    font-size: 14px;
-    line-height: 28px;
-    margin:0;
-    > i {
-      padding-right: 10px;
-    }
-  }
-  font-weight: bold;
-  font-size: 14px;
-  margin-bottom: 0;
-  border: 1px solid #ccc;
-  border-bottom: none;
-  #gradient > .vertical(#F8F8F8, #e5e5e5);
-  color: #242424;
-  padding: 6px 10px;
-  .border-radius(3px 3px 0 0);
-  text-align: left;
-  line-height: 28px;
-  .btn-toolbar {
-    margin-top:0;
-    margin-bottom:0;
-  }
-  > i {
-    padding-right: 10px;
-  }
-}
-
-.tree, .tree ol {
-  list-style-type: none;
-}
-.tree, .tree ol {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-.tree {
-  a:hover {
-    text-decoration:none;
-  }
-  ol {
-    background:url(/static/fancypages/img/vline.png) transparent repeat-y;
-    margin-left: 10px;
-    > li {
-      margin: 0;
-      padding-left:5px 0 5px 12px;
-      margin-top:5px;
-      line-height: 20px;
-      background: url(/static/fancypages/img/node.png) transparent no-repeat;
-      color: #369;
-    }
-  }
-  > li {
-    border:1px solid #dddddd;
-    border-top-width:0;
-    padding:5px;
-    cursor:move;
-    &:first-child {
-      border-top-width:1px;
-      background:none!important;
-    }
-  }
-  h5, .btn-toolbar {
-    margin:0;
-  }
-  h5 {
-    margin-top:2px;
-  }
-}
-/* Simple styling for the modal list on the front-end of the fancy-pages */
-.modal-body .tree {
-  ol {
-    background: none;
-    > li {
-      background: none;
-      > a {
-        padding-left: 10px;
-      }
-    }
-  }
-}
-
-.collapsed .icon-caret-down:before {
- content: "\f0da";
-}
-.tree ol li.last {
-  background: #fff url(/static/fancypages/img/lastnode.png) no-repeat;
-}
-.row-actions {
-  background:#efefef;
-  padding:5px;
-  border-top:1px solid darken(#efefef, 10%);
 }

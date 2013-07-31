@@ -1,12 +1,7 @@
 {#{% load category_tags %}#}
 {% load i18n %}
 
-<div class="modal-body">
-    {#{% category_tree depth=3  as categories %}#}
-    <div class="table-header">
-        {% trans "Select a page from the list below" %}
-    </div>
-    <ol id="pages-sortable" class="tree">
-        {% include "fancypages/partials/page_select_link.html" %}
-    </ol>  
-</div>
+{#{% category_tree depth=3  as categories %}#}
+<ol class="fp-page-tree">
+    {% include "fancypages/partials/page_select_link.html" %}
+</ol>

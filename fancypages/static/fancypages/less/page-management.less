@@ -1,36 +1,14 @@
-//Page Management Dashboard
-.tree, .tree ol {
-  list-style-type: none;
-}
-.tree, .tree ol {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-.tree {
-  a:hover {
-    text-decoration:none;
-  }
-  ol {
-    background:url(/static/fancypages/img/vline.png) transparent repeat-y;
-    margin-left: 10px;
-    > li {
-      margin: 0;
-      padding-left:5px 0 5px 12px;
-      margin-top:5px;
-      line-height: 20px;
-      background: url(/static/fancypages/img/node.png) transparent no-repeat;
-      color: #369;
-    }
-  }
+//Page management tree and the FP page link tree
+@import "tree.less";
+
+//Tree override
+.fp-page-tree {
   > li {
     border:1px solid #dddddd;
     border-top-width:0;
-    padding:5px;
     cursor:move;
     &:first-child {
       border-top-width:1px;
-      background:none!important;
     }
   }
   h5, .btn-toolbar {
@@ -40,12 +18,7 @@
     margin-top:2px;
   }
 }
-.collapsed .icon-caret-down:before {
- content: "\f0da";
-}
-.tree ol li.last {
-  background: #fff url(/static/fancypages/img/lastnode.png) no-repeat;
-}
+
 .row-actions {
   background:#efefef;
   padding:5px;

@@ -47,7 +47,6 @@ fancypages.dashboard = {
                     $(this).removeAttr('data-old-position');
                 }
             });
-            $('.tree li:last-child').addClass('last');
         }
     }
 };

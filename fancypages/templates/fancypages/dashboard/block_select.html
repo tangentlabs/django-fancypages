@@ -4,19 +4,19 @@
 <div class="block-add-control">
     <a data-toggle="modal"
        {#data-behaviours="load-modal"#}
-       class="btn btn-large"
+       class="fp-btn fp-btn-block"
        data-target="#{{ container.name }}_modal"
        data-href="{% url "fp-api:block-type-list" %}"
        data-container-id="{{ container.id }}">
-        <i class="icon-plus"></i> {% trans "Add content" %}
+        <i class="glyphicon-plus"></i> {% trans "Add content" %}
     </a>
 </div>
 
-<div id="{{ container.name }}_modal" class="modal fade hide fullscreen"
+<div id="{{ container.name }}_modal" class="fp-modal fp-fade hide fullscreen"
      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-header">
-        <button class="close" data-dismiss="modal">×</button>
-        <h3><i class="icon-plus"></i> Add content</h3>
+    <div class="fp-modal-header">
+        <button class="fp-close" data-dismiss="modal">×</button>
+        <h3>Add content</h3>
     </div>
 
     <form id="{{ container.name }}_add_block_form"
@@ -24,23 +24,23 @@
           method="post" action="{% url "fp-api:block-list" %}" class="add-content">
         {% csrf_token %}
         <input name="container" value="{{ container.id }}" type="hidden"/>
-        <div class="modal-body">
+        <div class="fp-modal-body">
 
-            <div class='tabbable'>
-                <ul class="nav nav-tabs">
+            <div class='fp-tabbable'>
+                <ul class="fp-nav-tabs">
                 {% for group in grouped_blocks %}
                     <li {% if forloop.first %}class="active"{% endif %}>
                         <a href="#{{ container.name }}-{{ group|slugify }}" data-toggle="tab">{{ group }}</a>
                     </li>
                 {% endfor %}
                 </ul>
-                <div class="tab-content">
+                <div class="fp-tab-content">
                     {% for group,block_list in grouped_blocks.items %}
-                    <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{container.name}}-{{ group|slugify }}">
-                        <ul>
+                    <div class="fp-tab-pane {% if forloop.first %}active{% endif %}" id="{{container.name}}-{{ group|slugify }}">
+                        <ul class="fp-widget-list">
                             {% for fp_block in block_list %}
                             <li>
-                                <button type="submit" class="btn" name="code" value="{{ fp_block.0 }}">
+                                <button type="submit" class="fp-btn" name="code" value="{{ fp_block.0 }}">
                                     <div class="image_container">
                                         <!-- <label id="{{ fp_block.0 }}"> -->
                                         <img src="{% static "fancypages/img/block_icons/" %}{{ fp_block.0 }}.png" class="{{ fp_block.0 }}" alt="{{ fp_block.1 }}" title="{{ fp_block.1 }}">

@@ -34,18 +34,18 @@ fancypages.eventHandlers = {
             return;
         }
 
-        $(this).parents('.asset-input').addClass('editing');
+        $(this).parents('.fp-asset-input').addClass('editing');
         var fullscreenModal = $("#fullscreen-modal");
-        var iframeHtml = "<iframe id='" + iframeId + "' frameborder='0' width='100%' height='100%'></iframe>";
-        $(".modal-body", fullscreenModal).html(iframeHtml);
+        var iframeHtml = "<iframe id='" + iframeId + "' frameborder='0' width='99%' height='360'></iframe>";
+        $(".fp-modal-body", fullscreenModal).html(iframeHtml);
         fullscreenModal.modal('show');
 
         var assetManager = $('#' + iframeId),
             modalHeight = fullscreenModal.height() - 100;
+            heading = $(this).data('heading');
         assetManager.attr('src', $(this).data('iframe-src'));
+        fullscreenModal.find('.fp-modal-header h3').text(heading);
 
-        // Set height of the Asset IFrame
-        assetManager.attr('height', modalHeight);
     },
 
     /**
@@ -60,8 +60,9 @@ fancypages.eventHandlers = {
                 container: $(elem).data('container-id')
             },
             success: function (data) {
-                var target = $($(elem).data('target'));
-                target.parents('.modal').modal('show');
+                var target = $($(elem).data('target')),
+                    heading = $(elem).data('heading');
+                target.parents('.fp-modal').modal('show').find('.fp-modal-header h3').text(heading);
                 target.html(data.rendered_form);
 
                 // prevent collapse events within the modal from closing the modal

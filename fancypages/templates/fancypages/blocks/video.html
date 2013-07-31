@@ -8,8 +8,8 @@
             <iframe width="560" height="315" src="http://www.youtube.com/embed/{{ fp_block.video_code }}" frameborder="0" allowfullscreen></iframe>
         </div>
     {% else %}
-        <div class="thumbnail">
-            <p class="no-asset edit-button"><i class="icon-film"></i> <span class="visible-editor">{% trans "Click to add a video" %}</span></p>
-        </div>
+        <button class="visible-editor no-asset fp-btn fp-btn-block edit-button">
+        	<i class="glyphicon-play"></i> <br>{% trans "Add a video" %}
+        </button>
     {% endif %}
 {% endblock %}

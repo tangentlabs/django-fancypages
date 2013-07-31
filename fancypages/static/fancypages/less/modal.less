@@ -1,0 +1,168 @@
+//
+// Modals
+// --------------------------------------------------
+
+// Background
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: @zindexModalBackdrop;
+  background-color: @black;
+  // Fade for backdrop
+  &.fp-fade { opacity: 0; }
+}
+
+.modal-backdrop,
+.modal-backdrop.fp-fade.in {
+  .opacity(80);
+}
+
+// Base modal
+.fp-modal {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  z-index: @zindexModal;
+  width: 560px;
+  margin-left: -280px;
+  background-color: @white;
+  border: 1px solid #999;
+  border: 1px solid rgba(0,0,0,.3);
+  *border: 1px solid #999; /* IE6-7 */
+  .border-radius(6px);
+  .box-shadow(0 3px 7px rgba(0,0,0,0.3));
+  .background-clip(padding-box);
+  // Remove focus outline from opened modal
+  outline: none;
+  font-family: @sansFontFamily;
+
+  &.fp-fade {
+    .transition(e('opacity .3s linear, top .3s ease-out'));
+    top: -25%;
+  }
+  &.fp-fade.in { top: 10%; }
+}
+.fp-modal-header {
+  padding: 9px 15px;
+  border-bottom: 1px solid #eee;
+  .clearfix();
+  // Close icon
+  .fp-close { margin-top: 2px; }
+  // Heading
+  h3 {
+    margin: 0;
+    line-height: 30px;
+    font-size:@baseFontSize + 4;
+  }
+}
+
+// Body (where all modal content resides)
+.fp-modal-body {
+  position: relative;
+  overflow-y: auto;
+  max-height: 400px;
+  padding: 15px;
+}
+// Remove bottom margin if need be
+.fp-modal-form {
+  margin-bottom: 0;
+}
+
+// Footer (for actions)
+.fp-modal-footer {
+  padding: 14px 15px 15px;
+  margin-bottom: 0;
+  text-align: right; // right align buttons
+  background-color: #f5f5f5;
+  border-top: 1px solid #ddd;
+  .border-radius(0 0 6px 6px);
+  .box-shadow(inset 0 1px 0 @white);
+  .clearfix(); // clear it in case folks use .pull-* classes on buttons
+
+  // Properly space out buttons
+  .btn + .btn {
+    margin-left: 5px;
+    margin-bottom: 0; // account for input[type="submit"] which gets the bottom margin like all other inputs
+  }
+  // but override that for button groups
+  .btn-group .btn + .btn {
+    margin-left: -1px;
+  }
+  // and override it for block buttons as well
+  .btn-block + .btn-block {
+    margin-left: 0;
+  }
+}
+
+.fp-close {
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: @baseLineHeight;
+  color: @black;
+  text-shadow: 0 1px 0 rgba(255,255,255,1);
+  .opacity(20);
+  &:hover,
+  &:focus {
+    color: @black;
+    text-decoration: none;
+    cursor: pointer;
+    .opacity(40);
+  }
+}
+
+// Additional properties for button version
+// iOS requires the button element instead of an anchor tag.
+// If you want the anchor version, it requires `href="#"`.
+button.fp-close {
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  -webkit-appearance: none;
+}
+
+.fp-fade {
+  opacity: 0;
+  .transition(opacity .15s linear);
+  &.in {
+    opacity: 1;
+  }
+}
+
+// Toggling content
+.hide {
+  display: none;
+}
+.show {
+  display: block;
+}
+
+
+// Fullscreen modals
+.fp-modal.fullscreen {
+  width: 80%;
+  margin-left: -40%;
+  max-height: 500px;
+  overflow: auto;
+  top: 50%;
+  margin-top: -250px;
+}
+.fp-modal.fullscreen.in {
+  top: 50%; 
+}
+#fullscreen-modal {
+  overflow:hidden;
+  > .modal-body {
+    max-height: none;
+  }
+}
+//Forms in modals
+.fp-modal {
+  > form {
+    margin:0;
+  }
+}

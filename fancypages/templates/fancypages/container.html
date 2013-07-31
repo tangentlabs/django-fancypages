@@ -9,15 +9,15 @@
          data-container-name="{{ container.name }}" data-block-id="{{ block_id }}">
 
         {% if request.fancypages_edit_mode %}
-            <div class="edit-button btn"><i class="icon-edit"></i></div>
+            <div class="edit-button fp-btn"><i class="glyphicon-edit"></i></div>
         {% endif %}
 
         {{ rendered_block }}
 
         {% if request.fancypages_edit_mode %}
         <div class="block-move-delete btn-group">
-            <div class="btn move"><i class="icon-move"></i></div>
-            <div class="btn delete"><i class="icon-trash"></i></div>
+            <div class="fp-btn move"><i class="glyphicon-move"></i></div>
+            <div class="fp-btn delete"><i class="glyphicon-trash"></i></div>
         </div>
         {% endif %}
     </div>
