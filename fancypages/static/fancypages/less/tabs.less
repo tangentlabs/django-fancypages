@@ -1,0 +1,79 @@
+// BASE CLASS
+// ----------
+
+.fp-nav-tabs {
+  margin-left: 0;
+  padding-left:0;
+  margin-bottom: @baseLineHeight;
+  list-style: none;
+  .clearfix();
+}
+
+.fp-nav-tabs > li > a:hover,
+.fp-nav-tabs > li > a:focus {
+  text-decoration: none;
+  background-color: @grayLighter;
+}
+
+// Prevent IE8 from misplacing imgs
+// See https://github.com/h5bp/html5-boilerplate/issues/984#issuecomment-3985989
+.fp-nav-tabs > li > a > img {
+  max-width: none;
+}
+.fp-nav-tabs > li {
+  float: left;
+}
+.fp-nav-tabs > li > a {
+  display: block;
+  padding-right: 12px;
+  padding-left: 12px;
+  margin-right: 2px;
+  line-height: 14px;
+}
+.fp-nav-tabs {
+  border-bottom: 1px solid #ddd;
+}
+.fp-nav-tabs > li {
+  margin-bottom: -1px;
+}
+.fp-nav-tabs > li > a {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  line-height: 20px;
+  background:none;
+  color:#08c;
+  border: 1px solid transparent;
+  -webkit-border-radius: 4px 4px 0 0;
+  -moz-border-radius: 4px 4px 0 0;
+  border-radius: 4px 4px 0 0;
+  font-size:@baseFontSize - 1;
+  text-decoration: none;
+}
+.fp-nav-tabs > li > a:hover {
+  border-color: #eeeeee #eeeeee #dddddd;
+  background: #eeeeee;
+}
+.fp-nav-tabs > .active > a,
+.fp-nav-tabs > .active > a:hover,
+.fp-nav-tabs > .active > a:focus {
+  color: #555555;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-bottom-color: transparent;
+  cursor: default;
+}
+
+// Clear any floats
+.fp-tabbable {
+  .clearfix();
+}
+.fp-tab-content {
+  overflow: auto; // prevent content from running below tabs
+}
+// Show/hide tabbable areas
+.fp-tab-content > .fp-tab-pane {
+  display: none;
+}
+.fp-tab-content > .active {
+  display: block;
+}

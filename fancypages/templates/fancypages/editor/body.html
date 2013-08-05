@@ -2,7 +2,7 @@
 
 <div id="editor-panel">
 
-    <div class="button-nav">
+    <div class="fp-editor-controls">
         {% if form %}
         <button data-behaviours="page-settings">
             <span>
@@ -11,10 +11,10 @@
             </span>
         </button>
         {% endif %}
-        <button id="editor-close" type="button" class="close">×</button>
+        <button id="editor-close" type="button" class="fp-close">×</button>
     </div>
 
-    <div class="sidebar-content">
+    <div class="fp-scroll-content">
         <div id="page-settings">
             {% if form %}
             <h3><i class="icon-file"></i> <span>{% trans "Page Settings" %}</span></h3>
@@ -26,7 +26,7 @@
                     <div>
                         <a href="">{% trans "Cancel" %}</a>
 
-                        <button type="submit" class="btn btn-primary pull-right">
+                        <button type="submit" class="fp-btn fp-btn-primary pull-right">
                             {% trans "Save" %}
                         </button>
                     </div>
@@ -36,7 +36,7 @@
                 <p>
                     {% blocktrans %}
                         Hover over a widget and click
-                        <big>&quot;<i class="icon-edit"></i> edit&quot;</big>
+                        <big>&quot;<i class="glyphicon-edit glyphicon-white"></i> edit&quot;</big>
                         to see editable properties.
                     {% endblocktrans %}
                 </p>
@@ -45,14 +45,15 @@
         <div id="block_input_wrapper"></div>
     </div>
 </div>
-<div id='editor-handle'><i class="icon-large icon-edit"></i>edit</div>
-<div class="loading" data-behaviours="loading"></div>
+<div id='editor-handle'><i class="glyphicon-edit glyphicon-white"></i>edit</div>
+<div class="fp-loading" data-behaviours="loading"></div>
 
-<div class="modal hide fullscreen-modal" id="fullscreen-modal" tabindex="-1" role="dialog" aria-labelledby="asset-modal-label" aria-hidden="true">
-    <div class="row-fluid">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+<div class="fp-modal hide fullscreen" id="fullscreen-modal" tabindex="-1" role="dialog" aria-labelledby="asset-modal-label" aria-hidden="true">
+    <div class="fp-modal-header">
+        <button type="button" class="fp-close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3></h3>
     </div>
-    <div class="modal-body"></div>
+    <div class="fp-modal-body"></div>
 </div>
 
 {# include scripts that are only required in edit mode #}

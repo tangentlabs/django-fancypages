@@ -3,7 +3,7 @@
 {% load url from future %}
 
 <div class="editing-area">
-    <h3><i class="icon-edit"></i> <span>Edit</span></h3>
+    <h3>Edit</h3>
 
     <form id="{{ block.container.variable_name }}_block_form"
           data-block-id='{{ block.id }}' data-container-name="{{ block.container.variable_name }}"
@@ -11,10 +11,10 @@
           action="{% url "fp-dashboard:block-update" block.id %}">
         {% csrf_token %}
         {% render_block_form form %}
-        <div class="form-actions fixed">
+        <div class="fp-editor-actions">
             <div>
                 <a href="">{% trans "Cancel" %}</a>
-                <button type="submit" class="btn btn-large btn-primary pull-right">{% trans "Save" %}</button>
+                <button type="submit" class="fp-btn-primary fp-btn">{% trans "Save" %}</button>
             </div>
         </div>
     </form>

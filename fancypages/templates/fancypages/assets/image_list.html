@@ -5,7 +5,7 @@
 {% load staticfiles %}
 {% load url from future %}
 
-{% block body_class %}assets{% endblock %}
+{% block body_class %}fp-assets-page{% endblock %}
 
 {% block extrahead %}
     {{ block.super }}
@@ -13,11 +13,9 @@
 {% endblock %}
 
 {% block column_left %}
-<h3 id="fullscreen-modal-label"><i class="icon-picture"></i> <span>{% trans "Image Assets" %}</span></h3>
 <form id="fileupload" action="{% url "fp-dashboard:image-upload" %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <span class="btn btn-primary btn-block fileinput-button">
-        <i class="icon-upload icon-white"></i>
+    <span class="fp-btn fp-btn-primary fp-btn-block fileinput-button">
         <span>{% trans "Upload new image" %}</span>
         <input type="file" name="image" style="opacity: 0;">
     </span>
@@ -29,7 +27,7 @@
 {% endblock %}
 
 {% block content %}
-<ul id='asset-gallery' class="thumbnails">
+<ul id='fp-asset-gallery' class="fp-thumbnails">
 {% for image_asset in image_list %}
     {% include "fancypages/assets/partials/image_thumbnail.html" %}
 {% endfor %}

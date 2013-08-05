@@ -264,7 +264,7 @@ fancypages.editor = {
 
     setSelectedAsset: function (assetType, assetId, assetUrl) {
         $('#fullscreen-modal').modal('hide');
-        var assetInput = $(".asset-input.editing");
+        var assetInput = $(".fp-asset-input.editing");
         assetInput.removeClass('editing');
         $("input[name$='_id']", assetInput).attr('value', assetId);
         $("input[name$='_type']", assetInput).attr('value', assetType);
@@ -300,11 +300,11 @@ fancypages.editor = {
         var pageHeight = $(window).height(),
             navBarTop = $('.navbar-accounts').outerHeight(),
             subBarTop = $('.navbar-primary').outerHeight(),
-            buttonsTop = $('.button-nav').outerHeight(),
-            buttonsBottom = $('.form-actions.fixed').outerHeight();
+            buttonsTop = $('.fp-editor-controls').outerHeight(),
+            buttonsBottom = $('.fp-editor-actions').outerHeight();
 
-        $('.sidebar-content').css('height', pageHeight - buttonsTop - buttonsBottom);
-        $('.sidebar-content').jScrollPane();
+        $('.fp-scroll-content').css('height', pageHeight - buttonsTop - buttonsBottom);
+        $('.fp-scroll-content').jScrollPane();
     },
     /*
     * Checks for carousels, initiates viewable items based on where the
@@ -417,7 +417,7 @@ fancypages.editor = {
                 fancypages.eventHandlers.loadIframeModal
             );
             $("#fullscreen-modal").on('hide', function () {
-                $("#fullscreen-modal .modal-body").html('');
+                $("#fullscreen-modal .fp-modal-body").html('');
             });
         },
         /*

@@ -1,28 +1,18 @@
 {% for category,subcategories in categories %}
-    <li id="page-{{ field_id }}" class="sortable" data-page-id="{{ field_id }}">
-        <div class="row-fluid">
-            <h5>
-                {% if subcategories %}
-                <a href="#" data-toggle="collapse" data-target="#tree-{{ category.id }}" class="collapsed"><i class="icon-caret-down"></i></a>
-                {% endif %}
-            
-                <a data-target="#{{ field_id }}"
-                   data-behaviours="update-editor-field"
-                   data-src="{{ category.get_absolute_url }}"
-                   data-dismiss="modal"
-                   href="#">
-                   {{ category.name }}
-                </a>
-            </h5>
-        </div>
-        {% if subcategories %}
-        <ol id="tree-{{ category.id }}" class="collapse">
-            {% with filename="fancypages/partials/page_select_link.html" %}
-            {% include filename with categories=subcategories %}
-            {% endwith %}
-        </ol>
-        {% endif %}
-    </li>
-    
-    
+  <li id="page-{{ field_id }}" {% if forloop.last %}class="last"{% endif %} data-page-id="{{ field_id }}">
+      <a data-target="#{{ field_id }}"
+         data-behaviours="update-editor-field"
+         data-src="{{ category.get_absolute_url }}"
+         data-dismiss="modal"
+         href="#">
+         {{ category.name }}
+      </a>
+      {% if subcategories %}
+      <ol>
+          {% with filename="fancypages/partials/page_select_link.html" %}
+          {% include filename with categories=subcategories %}
+          {% endwith %}
+      </ol>
+      {% endif %}
+  </li>
 {% endfor %}

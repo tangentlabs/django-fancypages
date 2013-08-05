@@ -27,7 +27,7 @@
         {% csrf_token %}
 
         {% if page_list|length %}
-            <ol id="pages-sortable" class="tree">
+            <ol id="pages-sortable" class="fp-page-tree">
                 {% include "fancypages/dashboard/partials/page_list_item.html" with page_list=page_list %}
             </ol>
         {% else %}

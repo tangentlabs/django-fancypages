@@ -32,5 +32,5 @@ function initFlexSlider() {
 $(document).ready(function() {
     resetCarousel();
     initFitvids();
-    //initFlexSlider();
+    initFlexSlider();
 });

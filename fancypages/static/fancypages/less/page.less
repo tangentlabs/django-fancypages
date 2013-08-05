@@ -1,3 +1,4 @@
+//Sheet used for a FP when not logged in or not editing
 @import "bootstrap/variables.less";
 @import "bootstrap/mixins.less";
 
@@ -8,18 +9,6 @@
 //Widgets
 .block-wrapper {
   margin-bottom:@baseLineHeight;
-}
-//No Assest default
-.no-asset {
-  text-align:center;
-  padding:60px 0;
-  margin:0;
-  #gradient .vertical(#fff, #efefef);
-  i {
-    font-size:50px;
-    line-height:40px;
-    display:block;
-  }
 }
 //Change content layout dependent on container width
 .span1,.span2, .span3, .span4 {
@@ -42,6 +31,7 @@
   }
 }
 
+//TODO: not sure if this is needed
 .fullscreen-modal {
   position: fixed;
   top: 5%;
@@ -55,8 +45,9 @@
     overflow:hidden;
   }
 }
-//Moving content into smaller containers
-/**** TO ADD IN  LATER ONCE WIDGET NAMES AR KNOWN ****/
+
+//TODO: flexibility moving large content containers into small ones
+/**** TO ADD IN  LATER ONCE WIDGET NAMES ARE KNOWN ****/
 /*.span4 {
   .block-wrapper {
     height:30px;
