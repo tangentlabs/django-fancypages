@@ -3,9 +3,9 @@ from django.conf import settings
 from django.db.models import get_model
 from django.template import defaultfilters, loader
 
-from .. import forms
 from .. import library
 from .. import renderers
+from ..dashboard import forms
 
 ContentType = get_model('contenttypes', 'ContentType')
 
@@ -17,7 +17,7 @@ def update_blocks_form(page, container_name):
     container = page.get_container_from_name(container_name)
     if not container:
         return None
-    return forms.WidgetUpdateSelectForm(container)
+    return forms.BlockUpdateSelectForm(container)
 
 
 @register.simple_tag(takes_context=True)
