@@ -93,7 +93,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
     'fancypages.middleware.EditorMiddleware',
 )
 
@@ -116,7 +117,7 @@ DJANGO_APPS = (
     'django.contrib.flatpages',
     'django.contrib.admin',
 
-    'debug_toolbar',
+    #'debug_toolbar',
     'django_extensions',
 )
 

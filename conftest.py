@@ -47,7 +47,6 @@ def pytest_configure():
             'django.middleware.csrf.CsrfViewMiddleware',
             'django.contrib.auth.middleware.AuthenticationMiddleware',
             'django.contrib.messages.middleware.MessageMiddleware',
-            'debug_toolbar.middleware.DebugToolbarMiddleware',
             'fancypages.middleware.EditorMiddleware',
         ),
         ROOT_URLCONF='sandbox.sandbox.urls',
