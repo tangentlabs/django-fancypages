@@ -19,7 +19,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'versiontools>=1.9.1,<1.10',
-        'Django>=1.4.5,<1.5',
+        'Django>=1.4.5,<1.6',
         'django-model-utils>=1.1.0,<1.5',
         'djangorestframework>=2.1.12,<2.2',
         'South>=0.7.6,<0.9',
