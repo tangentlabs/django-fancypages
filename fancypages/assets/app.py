@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 
 from ..utils.application import Application
 from ..utils.decorators import staff_member_required
