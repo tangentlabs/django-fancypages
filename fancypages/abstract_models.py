@@ -359,5 +359,4 @@ class AbstractContentBlock(models.Model):
 
     class Meta:
         ordering = ['display_order']
-        app_label = 'fancypages'
         abstract = True

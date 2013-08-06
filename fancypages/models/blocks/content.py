@@ -16,6 +16,9 @@ ImageAsset = models.get_model('assets', 'ImageAsset')
 class ContentBlock(abstract_models.AbstractContentBlock):
     objects = InheritanceManager()
 
+    class Meta:
+        app_label = 'fancypages'
+
 
 @register_content_block
 class TextBlock(ContentBlock):
