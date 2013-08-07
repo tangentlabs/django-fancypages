@@ -86,8 +86,7 @@ def fp_container(parser, token):
     return FancyContainerNode(container_name)
 
 
-@register.tag
-def fp_object_container(parser, token):
+def _parse_object_token(token):
     # split_contents() knows not to split quoted strings.
     args = token.split_contents()
 
@@ -103,4 +102,23 @@ def fp_object_container(parser, token):
         object_name = args.pop(0)
     except IndexError:
         object_name = None
+    return container_name, object_name
+
+
+@register.tag
+def fp_object_container(parser, token):
+    container_name, object_name = _parse_object_token(token)
     return FancyObjectContainerNode(container_name, object_name)
+
+
+@register.tag
+def fp_block_container(parser, token):
+    """
+    Template tag for convenience to use within templates for e.g. layout blocks
+    where the container is assigned to the widget rather then the object in the
+    context. The same could be achieved using::
+
+        {% fp_object_container some-name fp_block %}
+    """
+    container_name, __ = _parse_object_token(token)
+    return FancyObjectContainerNode(container_name, u'fp_block')

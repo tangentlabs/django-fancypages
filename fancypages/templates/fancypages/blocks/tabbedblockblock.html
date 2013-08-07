@@ -27,7 +27,7 @@
     {% for tab in fp_block.tabs.all %}
         <div class="tab-pane {% if forloop.first %}active{% endif %}"
              id="tab-{{ fp_block.id }}-{{ forloop.counter }}">
-            {% fp_object_container tab %}
+            {% fp_block_container tab %}
         </div>
     {% endfor %}
     </div>
