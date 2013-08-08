@@ -90,6 +90,7 @@
     border-bottom:1px solid @grayLight;
     margin-bottom:@baseLineHeight;
     font-size:@baseFontSize + 4;
+    text-transform: capitalize;
     span {
       font-size:18px;
     }
@@ -137,10 +138,11 @@
   }
 }
 //Editor CLose
+//!importants are here because these tabs are inside a modal in the site markup
 .fp-editor-controls {
   border-bottom:1px solid @grayDarker;
   .clearfix();
-  .fp-close {
+  button.fp-close {
     color: #fff;
     padding: 15px;
     background: #555;
