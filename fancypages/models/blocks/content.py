@@ -3,8 +3,6 @@ import os
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from model_utils.managers import InheritanceManager
-
 from ... import abstract_models
 from ...assets.fields import AssetKey
 from ..mixins import ImageMetadataMixin
@@ -14,9 +12,9 @@ ImageAsset = models.get_model('assets', 'ImageAsset')
 
 
 class ContentBlock(abstract_models.AbstractContentBlock):
-    objects = InheritanceManager()
 
     class Meta:
+        ordering = ['display_order']
         app_label = 'fancypages'
 
 

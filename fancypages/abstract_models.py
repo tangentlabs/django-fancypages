@@ -9,10 +9,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 
 from treebeard.mp_tree import MP_Node
+from model_utils.managers import InheritanceManager
 
 from .manager import PageManager
 from .utils import get_container_names_from_template
-
 
 class AbstractTreeNode(MP_Node):
     """
@@ -305,6 +305,8 @@ class AbstractContentBlock(models.Model):
 
     display_order = models.PositiveIntegerField()
 
+    objects = InheritanceManager()
+
     def get_template_names(self):
         if self.template_name:
             return [self.template_name]
@@ -363,5 +365,4 @@ class AbstractContentBlock(models.Model):
         return "Block #%s" % self.id
 
     class Meta:
-        ordering = ['display_order']
         abstract = True
