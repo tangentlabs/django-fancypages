@@ -10,6 +10,9 @@
 
         {% if request.fp_edit_mode %}
             <div class="edit-button fp-btn"><i class="glyphicon-edit"></i></div>
+            {% if request.fp_debug_enabled %}
+                <div class="edit-button fp-btn">Block #{{ block_id }} | Container {{ container.uid }}</div>
+            {% endif %}
         {% endif %}
 
         {{ rendered_block }}

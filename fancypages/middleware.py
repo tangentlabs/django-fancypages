@@ -1,9 +1,12 @@
 import re
 
+from django.conf import settings
 from django.template import RequestContext
 from django.utils.encoding import smart_unicode
 from django.template.loader import render_to_string
 
+DEBUG = getattr(settings, 'DEBUG', False)
+FP_DEBUG_ENABLED = getattr(settings, 'FP_DEBUG_ENABLED', DEBUG)
 BODY_STARTTAG = re.compile(r'(?P<body_tag><body[^>]+>)')
 
 
@@ -33,6 +36,7 @@ class EditorMiddleware(object):
         if request.user.is_authenticated() and request.user.is_staff:
             edit_mode = True
         request.fp_edit_mode = edit_mode
+        request.fp_debug_enabled = FP_DEBUG_ENABLED
 
     def process_response(self, request, response):
         user = getattr(request, 'user', None)
