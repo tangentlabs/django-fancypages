@@ -214,6 +214,11 @@ class AbstractContainer(models.Model):
     object_id = models.PositiveIntegerField(null=True)
     page_object = generic.GenericForeignKey('content_type', 'object_id')
 
+    @property
+    def uid(self):
+        #TODO: we should make this a proper UUID at some point
+        return "{0}-{1}".format(self.name, self.id)
+
     def clean(self):
         if self.object_id and self.content_type:
             return

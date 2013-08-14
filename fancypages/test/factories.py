@@ -1,3 +1,5 @@
+import factory
+
 from factory.django import DjangoModelFactory
 
 from django.conf import settings
@@ -11,6 +13,14 @@ class UserFactory(DjangoModelFactory):
 
     username = 'peter.griffin'
     email = 'peter@griffin.com'
+    is_staff = False
+
+    @factory.post_generation
+    def password(self, create, extracted, **kwargs):
+        if extracted:
+            self.set_password(extracted)
+            if create:
+                self.save()
 
 
 class PageTypeFactory(DjangoModelFactory):
@@ -19,6 +29,12 @@ class PageTypeFactory(DjangoModelFactory):
     name = 'Sample page type'
     slug = 'sample-page-type'
     template_name = settings.FP_DEFAULT_TEMPLATE
+
+
+class ContainerFactory(DjangoModelFactory):
+    FACTORY_FOR = get_model('fancypages', 'Container')
+
+    name = 'test-container'
 
 
 class TextBlockFactory(DjangoModelFactory):
