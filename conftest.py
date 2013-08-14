@@ -67,11 +67,13 @@ def pytest_configure():
             'twitter_tag',
             'sorl.thumbnail',
             'rest_framework',
+            'django_extensions',
         ] + fp.get_fancypages_apps(),
         AUTHENTICATION_BACKENDS=(
             'django.contrib.auth.backends.ModelBackend',
         ),
         LOGIN_REDIRECT_URL='/accounts/',
         APPEND_SLASH=True,
+        SITE_ID=1,
         **FANCYPAGES_SETTINGS
     )
