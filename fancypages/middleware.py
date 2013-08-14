@@ -32,7 +32,7 @@ class EditorMiddleware(object):
         edit_mode = False
         if request.user.is_authenticated() and request.user.is_staff:
             edit_mode = True
-        request.fancypages_edit_mode = edit_mode
+        request.fp_edit_mode = edit_mode
 
     def process_response(self, request, response):
         user = getattr(request, 'user', None)

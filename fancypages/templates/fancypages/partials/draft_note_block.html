@@ -2,7 +2,7 @@
 {% load fp_block_tags %}
 
 {% get_object_visibility object as is_visible %}
-{% if user.is_staff and request.fancypages_edit_mode and not is_visible %}
+{% if user.is_staff and request.fp_edit_mode and not is_visible %}
 <div class="alert alert-danger">
     <strong>{% trans "Note:" %}</strong>
     {% trans "You can only see this because you are logged in as a user with access rights to the dashboard." %}

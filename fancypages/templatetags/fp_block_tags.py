@@ -86,7 +86,7 @@ def get_content_type(obj):
                         takes_context=True)
 def render_block_selection(context):
     request = context.get('request')
-    if not request or not request.fancypages_edit_mode:
+    if not request or not request.fp_edit_mode:
         return u''
     grouped_blocks = library.get_grouped_content_blocks()
     return {
