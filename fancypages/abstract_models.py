@@ -14,6 +14,7 @@ from model_utils.managers import InheritanceManager
 from .manager import PageManager
 from .utils import get_container_names_from_template
 
+
 class AbstractTreeNode(MP_Node):
     """
     Define the tree structure properties of the fancy page. This is a
