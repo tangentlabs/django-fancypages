@@ -11,7 +11,7 @@
         </li>
         {% endfor %}
 
-        {% if request.fancypages_edit_mode %}
+        {% if request.fp_edit_mode %}
         <li>
             {% get_content_type fp_block as content_type %}
             <a data-action="{% url "fp-api:ordered-container-list" %}"

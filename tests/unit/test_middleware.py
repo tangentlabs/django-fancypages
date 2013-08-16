@@ -21,7 +21,7 @@ class TestEditorMiddleware(TestCase):
         mw = EditorMiddleware()
         mw.process_request(self.request)
 
-        self.assertTrue(self.request.fancypages_edit_mode)
+        self.assertTrue(self.request.fp_edit_mode)
 
     def test_doesnt_add_edit_mode_for_non_staff_user(self):
         self.user.is_staff = False
@@ -30,7 +30,7 @@ class TestEditorMiddleware(TestCase):
         mw = EditorMiddleware()
         mw.process_request(self.request)
 
-        self.assertFalse(self.request.fancypages_edit_mode)
+        self.assertFalse(self.request.fp_edit_mode)
 
     def test_doesnt_add_edit_mode_for_unauthenticated_user(self):
         self.user.is_authenticated = mock.MagicMock(return_value=False)
@@ -38,4 +38,4 @@ class TestEditorMiddleware(TestCase):
         mw = EditorMiddleware()
         mw.process_request(self.request)
 
-        self.assertFalse(self.request.fancypages_edit_mode)
+        self.assertFalse(self.request.fp_edit_mode)

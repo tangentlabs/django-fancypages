@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 
 from treebeard.mp_tree import MP_Node
+from model_utils.managers import InheritanceManager
 
 from .manager import PageManager
 from .utils import get_container_names_from_template
@@ -214,6 +215,11 @@ class AbstractContainer(models.Model):
     object_id = models.PositiveIntegerField(null=True)
     page_object = generic.GenericForeignKey('content_type', 'object_id')
 
+    @property
+    def uid(self):
+        #TODO: we should make this a proper UUID at some point
+        return "{0}-{1}".format(self.name, self.id)
+
     def clean(self):
         if self.object_id and self.content_type:
             return
@@ -300,6 +306,8 @@ class AbstractContentBlock(models.Model):
 
     display_order = models.PositiveIntegerField()
 
+    objects = InheritanceManager()
+
     def get_template_names(self):
         if self.template_name:
             return [self.template_name]
@@ -358,5 +366,4 @@ class AbstractContentBlock(models.Model):
         return "Block #%s" % self.id
 
     class Meta:
-        ordering = ['display_order']
         abstract = True

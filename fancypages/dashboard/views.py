@@ -50,15 +50,6 @@ class PageUpdateView(generic.UpdateView):
     context_object_name = 'page'
     model = FancyPage
 
-    #def get_initial(self):
-    #    initial = super(PageUpdateView, self).get_initial()
-    #    # add exposed category attributes to initial values
-    #    # to make sure that they are displayed in the edit form
-    #    initial['name'] = self.object.name
-    #    initial['description'] = self.objec.description
-    #    initial['image'] = category.image
-    #    return initial
-
     def get_context_data(self, **kwargs):
         ctx = super(PageUpdateView, self).get_context_data(**kwargs)
         ctx['title'] = _("Update page")

@@ -5,21 +5,21 @@
     <a data-toggle="modal"
        {#data-behaviours="load-modal"#}
        class="fp-btn fp-btn-block"
-       data-target="#{{ container.name }}_modal"
+       data-target="#{{ container.uid }}_modal"
        data-href="{% url "fp-api:block-type-list" %}"
        data-container-id="{{ container.id }}">
         <i class="glyphicon-plus"></i> {% trans "Add content" %}
     </a>
 </div>
 
-<div id="{{ container.name }}_modal" class="fp-modal fp-fade hide fullscreen"
+<div id="{{ container.uid }}_modal" class="fp-modal fp-fade hide fullscreen"
      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="fp-modal-header">
         <button class="fp-close" data-dismiss="modal">×</button>
         <h3>Add content</h3>
     </div>
 
-    <form id="{{ container.name }}_add_block_form"
+    <form id="{{ container.uid }}_add_block_form"
           data-behaviours='submit-block-form' data-container-id="{{ container.id }}"
           method="post" action="{% url "fp-api:block-list" %}" class="add-content">
         {% csrf_token %}
