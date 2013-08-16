@@ -73,7 +73,7 @@ class TestAStaffMember(test.FancyPagesWebTest):
 
         form = page.form
         self.assertEquals(form['name'].value, page_name)
-        self.assertEquals(form['description'].value, page_description)
+        self.assertEquals(form['description'].value.strip(), page_description)
         self.assertEquals(
             form['date_visible_start'].value,
             date(now, 'd-m-Y')
