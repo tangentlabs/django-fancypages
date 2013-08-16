@@ -9,7 +9,7 @@ def get_fancypages_paths(path):
 
 
 def get_required_apps():
-    return (
+    return [
         'django_extensions',
         # used for image thumbnailing
         'sorl.thumbnail',
@@ -25,11 +25,11 @@ def get_required_apps():
         'south',
         # package used for twitter block
         'twitter_tag',
-    )
+    ]
 
 
 def get_fancypages_apps():
-    return (
+    return [
         'fancypages.assets',
         'fancypages',
-    )
+    ]
