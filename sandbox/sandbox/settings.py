@@ -107,7 +107,7 @@ TEMPLATE_DIRS = [
     location('templates'),
 ]
 
-DJANGO_APPS = (
+DJANGO_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -119,7 +119,7 @@ DJANGO_APPS = (
 
     #'debug_toolbar',
     'django_extensions',
-)
+]
 
 from fancypages.defaults import *
 INSTALLED_APPS = DJANGO_APPS + fp.get_required_apps() + fp.get_fancypages_apps()

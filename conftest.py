@@ -53,7 +53,7 @@ def pytest_configure():
         TEMPLATE_DIRS=(
             sandbox('templates'),
         ),
-        INSTALLED_APPS=(
+        INSTALLED_APPS=[
             'django.contrib.auth',
             'django.contrib.contenttypes',
             'django.contrib.sessions',
@@ -67,7 +67,7 @@ def pytest_configure():
             'twitter_tag',
             'sorl.thumbnail',
             'rest_framework',
-        ) + fp.get_fancypages_apps(),
+        ] + fp.get_fancypages_apps(),
         AUTHENTICATION_BACKENDS=(
             'django.contrib.auth.backends.ModelBackend',
         ),

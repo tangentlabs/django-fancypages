@@ -40,9 +40,9 @@ To use ``django-fancypages`` in your own project follow these steps:
 
     from fancyages import get_required_apps, get_fancypages_apps
 
-    YOUR_OTHER_APPS = (
+    YOUR_OTHER_APPS = [
         ...
-    )
+    ]
     INSTALLED_APPS = YOUR_OTHER_APPS + get_required_apps() + get_fancypages_apps()
 
 3. Add the editor middleware that provides the editing panel to every
