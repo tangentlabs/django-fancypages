@@ -12,9 +12,10 @@ Fancy CMS-style page editing for Django
 .. note: This is a work in progress and part of this project will likely change
     and could potentially break things. Be careful with using it.
 
-The idea of fanycpages is to provide some easy inline editing of pages. Another
-content management system, you ask? Know it is not! We rather call it a content
-enhancement system (CEnS) because it provides a user with the controlled
+Fancypages provides easy inline page editing. 
+
+Another content management system, you ask? No it is not! Rather, it is a *content
+enhancement system* (CEnS) because it provides a user with the controlled
 ability to edit content on a page.
 
 The way this Django app works is inspired by `django-frontend-admin`_,
@@ -28,8 +29,7 @@ based on the ideas in the two apps mentioned above.
 Installation
 ------------
 
-Using ``django-fancypages`` in your own project follows these steps to get
-everything up and running:
+To use ``django-fancypages`` in your own project follow these steps:
 
     1. install via pip into you virtualenv (for now you have to install from
        the github repo because we haven't released it to PyPI yet)::
@@ -46,7 +46,7 @@ everything up and running:
         )
         INSTALLED_APPS = YOUR_OTHER_APPS + get_required_apps() + get_fancypages_apps()
 
-    3. Add the editor middleware that provides the editting panel to every
+    3. Add the editor middleware that provides the editing panel to every
        fancypage or page that contains an FP container::
 
         MIDDLEWARE_CLASSES = (
