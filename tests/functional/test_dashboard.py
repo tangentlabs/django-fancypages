@@ -134,6 +134,21 @@ class TestAStaffMember(test.FancyPagesWebTest):
         FancyPage.add_root(name="3rd page")
         self.assertEquals(FancyPage.objects.count(), 3)
 
+    def test_can_create_child_page(self):
+        parent_page = FancyPage.add_root(name="A new page")
+        page = self.get(reverse("fp-dashboard:page-list"))
+
+        child_page_name = 'Test Page'
+        create_form = page.click("Add child page").form
+        create_form['name'] = child_page_name
+        list_page = create_form.submit()
+
+        self.assertRedirects(list_page, reverse('fp-dashboard:page-list'))
+
+        child_page = FancyPage.objects.get(name=child_page_name)
+        self.assertTrue(child_page.path.startswith(parent_page.path))
+        self.assertTrue(child_page.depth, 2)
+
 
 class TestANewPage(test.FancyPagesWebTest):
     is_staff = True

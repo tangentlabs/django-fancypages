@@ -112,6 +112,8 @@ class PageCreateForm(PageFormMixin, forms.ModelForm):
     def save(self, *args, **kwargs):
         page_kwargs = copy(self.cleaned_data)
         page_kwargs.pop('visibility_types')
+        if self.parent:
+            return self.parent.add_child(**page_kwargs)
         return FancyPage.add_root(**page_kwargs)
 
     class Meta:
