@@ -1,6 +1,7 @@
 ########## FANCYPAGES SETTINGS
 FP_HOMEPAGE_NAME = 'Home'
 FP_DEFAULT_TEMPLATE = 'fancypages/pages/page.html'
+FP_DEFAULT_PAGE_STATUS = 'draft'
 ########## END FANCYPAGES SETTINGS
 
 ########## TWITTER TAG SETTINGS

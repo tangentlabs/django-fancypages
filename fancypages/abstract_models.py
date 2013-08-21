@@ -134,7 +134,7 @@ class AbstractFancyPage(models.Model):
         _(u"Status"),
         max_length=15,
         choices=STATUS_CHOICES,
-        default=DRAFT
+        blank=True,
     )
 
     date_visible_start = models.DateTimeField(
@@ -192,6 +192,12 @@ class AbstractFancyPage(models.Model):
     def save(self, update_slugs=True, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
+        if not self.status:
+            self.status = getattr(
+                settings,
+                'FP_DEFAULT_PAGE_STATUS',
+                self.DRAFT
+            )
         super(AbstractFancyPage, self).save(*args, **kwargs)
 
         try:
