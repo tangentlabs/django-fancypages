@@ -1,3 +1,4 @@
+from django.utils.datastructures import SortedDict
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ImproperlyConfigured
 
@@ -43,16 +44,18 @@ def get_content_block(code):
 
 
 def get_grouped_content_blocks():
-    registered_blocks = {}
+    blocks = {}
     for block in _content_blocks.values():
-        if not block._meta.abstract:
-            if not block.name:
-                raise ImproperlyConfigured(
-                    "a block model has to provide 'name' attributes"
-                )
-            group = getattr(block, 'group', _('Default'))
-            registered_blocks.setdefault(unicode(group), []).append((
-                block.code,
-                unicode(block.name)
-            ))
-    return registered_blocks
+        if block._meta.abstract:
+            continue
+        if not block.name or not block.code:
+            raise ImproperlyConfigured(
+                "a block model has to provide a 'name' and 'code' attributes"
+            )
+        group = getattr(block, 'group', _('Ungrouped'))
+        blocks.setdefault(unicode(group), []).append((
+            block.code,
+            unicode(block.name)
+        ))
+    # we now have to sort the the groups alphabetically
+    return SortedDict([(g, blocks[g]) for g in sorted(blocks.keys())])
