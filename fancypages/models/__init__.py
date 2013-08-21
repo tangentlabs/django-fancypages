@@ -20,7 +20,6 @@ from .blocks import (
     TextBlock,
     TitleTextBlock,
     PageNavigationBlock,
-    PrimaryNavigationBlock,
     VideoBlock,
     TwitterBlock
 )

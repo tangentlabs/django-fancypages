@@ -167,24 +167,10 @@ class PageNavigationBlock(ContentBlock):
     name = _("Page Navigation")
     code = 'page-navigation'
     group = _("Content")
-    template_name = "fancypages/blocks/pagenavigationblock.html"
+    template_name = "fancypages/blocks/page_navigation_block.html"
 
     def __unicode__(self):
         return u'Page Navigation'
-
-    class Meta:
-        app_label = 'fancypages'
-
-
-@register_content_block
-class PrimaryNavigationBlock(ContentBlock):
-    name = _("Primary Navigation")
-    code = 'primary-navigation'
-    group = _("Content")
-    template_name = "fancypages/blocks/primarynavigationblock.html"
-
-    def __unicode__(self):
-        return u'Primary Navigation'
 
     class Meta:
         app_label = 'fancypages'

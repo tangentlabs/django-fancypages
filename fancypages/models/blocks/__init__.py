@@ -8,8 +8,7 @@ from .content import (
     ContentBlock,
     TextBlock,
     TitleTextBlock,
-    #ImageBlock,
+    ImageBlock,
     PageNavigationBlock,
-    PrimaryNavigationBlock,
 )
 from .social import (VideoBlock, TwitterBlock)
