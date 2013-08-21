@@ -1,16 +1,16 @@
-{% for category,subcategories in categories %}
+{% for page,sub_tree in page_tree %}
   <li id="page-{{ field_id }}" {% if forloop.last %}class="last"{% endif %} data-page-id="{{ field_id }}">
       <a data-target="#{{ field_id }}"
          data-behaviours="update-editor-field"
-         data-src="{{ category.get_absolute_url }}"
+         data-src="{{ page.get_absolute_url }}"
          data-dismiss="modal"
          href="#">
-         {{ category.name }}
+         {{ page.name }}
       </a>
-      {% if subcategories %}
+      {% if sub_tree %}
       <ol>
           {% with filename="fancypages/partials/page_select_link.html" %}
-          {% include filename with categories=subcategories %}
+              {% include filename with page_tree=sub_tree %}
           {% endwith %}
       </ol>
       {% endif %}

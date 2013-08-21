@@ -1,7 +1,7 @@
-{#{% load category_tags %}#}
 {% load i18n %}
+{% load fp_sitemap_tags %}
 
-{#{% category_tree depth=3  as categories %}#}
+{% get_page_tree depth=3 as page_tree %}
 <ol class="fp-page-tree">
     {% include "fancypages/partials/page_select_link.html" %}
 </ol>
