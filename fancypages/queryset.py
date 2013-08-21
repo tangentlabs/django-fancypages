@@ -5,7 +5,7 @@ from django.db.models.query import QuerySet
 
 class PageQuerySet(QuerySet):
 
-    def visible(self):
+    def visible(self, **kwargs):
         now = timezone.now()
         return self.filter(
             status=self.model.PUBLISHED
@@ -14,7 +14,7 @@ class PageQuerySet(QuerySet):
             models.Q(date_visible_start__lt=now),
             models.Q(date_visible_end=None) |
             models.Q(date_visible_end__gt=now)
-        )
+        ).filter(**kwargs)
 
-    def visible_in(self, visibility_type):
-        return self.visible().filter(visibility_types=visibility_type)
+    def visible_in(self, group):
+        return self.visible(groups=group)

@@ -1,6 +1,6 @@
 from .base import (
     FancyPage,
-    VisibilityType,
+    PageGroup,
     PageType,
     Container,
     OrderedContainer,

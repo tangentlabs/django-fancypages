@@ -1,4 +1,5 @@
 import factory
+import itertools
 
 from factory.django import DjangoModelFactory
 
@@ -6,6 +7,9 @@ from django.conf import settings
 from django.db.models import get_model
 
 from fancypages.compat import get_user_model
+
+
+PAGE_GROUPS_NAMES = itertools.cycle(['Primary Navigation', 'Footer'])
 
 
 class UserFactory(DjangoModelFactory):
@@ -29,6 +33,12 @@ class PageTypeFactory(DjangoModelFactory):
     name = 'Sample page type'
     slug = 'sample-page-type'
     template_name = settings.FP_DEFAULT_TEMPLATE
+
+
+class PageGroupFactory(DjangoModelFactory):
+    FACTORY_FOR = get_model('fancypages', 'PageGroup')
+
+    name = factory.LazyAttribute(lambda a: PAGE_GROUPS_NAMES.next())
 
 
 class ContainerFactory(DjangoModelFactory):

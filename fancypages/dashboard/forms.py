@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 FancyPage = get_model('fancypages', 'FancyPage')
 PageType = get_model('fancypages', 'PageType')
-VisibilityType = get_model('fancypages', 'VisibilityType')
+PageGroup = get_model('fancypages', 'PageGroup')
 
 DATE_FORMAT = '%d-%m-%Y'
 
@@ -22,7 +22,7 @@ class PageFormMixin(object):
         'status',
         'date_visible_start',
         'date_visible_end',
-        'visibility_types'
+        'groups'
     ]
 
     def update_field_order(self):
@@ -34,9 +34,9 @@ class PageFormMixin(object):
     def set_field_choices(self):
         if 'page_type' in self.fields:
             self.fields['page_type'].queryset = PageType.objects.all()
-        if 'visibility_types' in self.fields:
-            self.fields['visibility_types'].queryset = \
-                VisibilityType.objects.all()
+        if 'groups' in self.fields:
+            self.fields['groups'].queryset = \
+                PageGroup.objects.all()
 
 
 class PageForm(PageFormMixin, forms.ModelForm):
@@ -52,8 +52,8 @@ class PageForm(PageFormMixin, forms.ModelForm):
         input_formats=[DATE_FORMAT],
         required=False
     )
-    visibility_types = forms.ModelMultipleChoiceField(
-        VisibilityType.objects.none(),
+    groups = forms.ModelMultipleChoiceField(
+        PageGroup.objects.none(),
         widget=forms.CheckboxSelectMultiple(),
         required=False
     )
@@ -81,8 +81,8 @@ class PageCreateForm(PageFormMixin, forms.ModelForm):
         input_formats=[DATE_FORMAT],
         required=False
     )
-    visibility_types = forms.ModelMultipleChoiceField(
-        VisibilityType.objects.none(),
+    groups = forms.ModelMultipleChoiceField(
+        PageGroup.objects.none(),
         widget=forms.CheckboxSelectMultiple(),
         required=False
     )
@@ -111,7 +111,7 @@ class PageCreateForm(PageFormMixin, forms.ModelForm):
 
     def save(self, *args, **kwargs):
         page_kwargs = copy(self.cleaned_data)
-        page_kwargs.pop('visibility_types')
+        page_kwargs.pop('groups')
         if self.parent:
             return self.parent.add_child(**page_kwargs)
         return FancyPage.add_root(**page_kwargs)

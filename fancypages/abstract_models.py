@@ -94,14 +94,18 @@ class AbstractPageType(models.Model):
         app_label = 'fancypages'
 
 
-class AbstractVisibilityType(models.Model):
+class AbstractPageGroup(models.Model):
+    """
+    A page group provides a way to group fancy pages and retrieve only
+    pages within a specific group.
+    """
     name = models.CharField(_("Name"), max_length=128)
     slug = models.SlugField(_("Slug"), max_length=128, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-        return super(AbstractVisibilityType, self).save(*args, **kwargs)
+        return super(AbstractPageGroup, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.name
@@ -126,16 +130,28 @@ class AbstractFancyPage(models.Model):
         (DRAFT, _("Draft")),
         (ARCHIVED, _("Archived")),
     )
-    status = models.CharField(_(u"Status"), max_length=15,
-                              choices=STATUS_CHOICES, default=DRAFT)
+    status = models.CharField(
+        _(u"Status"),
+        max_length=15,
+        choices=STATUS_CHOICES,
+        default=DRAFT
+    )
 
-    date_visible_start = models.DateTimeField(_("Visible from"), null=True,
-                                              blank=True)
-    date_visible_end = models.DateTimeField(_("Visible until"), null=True,
-                                            blank=True)
-
-    visibility_types = models.ManyToManyField('fancypages.VisibilityType',
-                                              verbose_name=_("Visible in"))
+    date_visible_start = models.DateTimeField(
+        _("Visible from"),
+        null=True,
+        blank=True
+    )
+    date_visible_end = models.DateTimeField(
+        _("Visible until"),
+        null=True,
+        blank=True,
+    )
+    groups = models.ManyToManyField(
+        'fancypages.PageGroup',
+        verbose_name=_("Groups"),
+        related_name="pages",
+    )
 
     # this is the default manager that should is
     # passed into subclasses when inheriting
@@ -190,8 +206,8 @@ class AbstractFancyPage(models.Model):
 
         parent = self.get_parent()
         if parent:
-            for visibility_type in self.visibility_types.all():
-                parent.visibility_types.add(visibility_type)
+            for visibility_type in self.groups.all():
+                parent.groups.add(visibility_type)
             parent.save()
 
     class Meta:

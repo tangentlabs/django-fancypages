@@ -9,7 +9,7 @@ class PageType(abstract_models.AbstractPageType):
         app_label = 'fancypages'
 
 
-class VisibilityType(abstract_models.AbstractVisibilityType):
+class PageGroup(abstract_models.AbstractPageGroup):
     class Meta:
         app_label = 'fancypages'
 
