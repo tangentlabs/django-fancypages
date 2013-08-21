@@ -4,22 +4,26 @@
 {% load fp_sitemap_tags %}
 
 {% block block_content %}
-    {% get_page_tree depth=2 as page_tree %}
 
-    <div class="side_categories" style="padding: 8px 0;">
+    {% if fp_block.is_relative and fancypage %}
+        {% get_page_tree depth=fp_block.depth relative_to=fancypage as page_tree %}
+    {% else %}
+        {% get_page_tree depth=fp_block.depth as page_tree %}
+    {% endif %}
+
+    <div style="padding: 8px 0;">
         {% if page_tree %}
         <ul class="nav nav-list">
-            <li class="nav-header">{% trans "Browse categories" %}</li>
-            {% for page,sub_pages in page_tree %}
-            <li><a href="{{ page.get_absolute_url }}">{{ page.name }}</a>
-                {% if sub_pages %}
-                <ul>
-                    {% for sub_page,__ in sub_pages %}
-                    <li><a href="{{ sub_page.get_absolute_url }}">{{ sub_page.name }}</a>
-                    {% endfor %}
-                </ul>
-                {% endif %}
+            <li class="nav-header">
+                {% trans "Browse pages" %}
             </li>
+            {% for page,subtree in page_tree %}
+                <li>
+                    <a href="{{ page.get_absolute_url }}">
+                        {{ page.name }}
+                    </a>
+                    {% include "fancypages/blocks/partials/subtree.html" %}
+                </li>
             {% endfor %}
         </ul>
         {% endif %}

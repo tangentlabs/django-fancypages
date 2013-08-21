@@ -154,3 +154,12 @@ class TestPageTreeTag(PageTreeMixin, TestCase):
             page_tree = sm_tags.get_page_tree(group='invalid-group')
 
         self.assertSequenceEqual(page_tree, [])
+
+    def test_returns_subpage_tree_relative_to_page(self):
+        self.primnav_child.groups.add(self.primary_nav_group)
+        with self.assertNumQueries(1):
+            page_tree = sm_tags.get_page_tree(
+                group=self.primary_nav_group,
+                relative_to=self.first_primnav_page
+            )
+        self.assertSequenceEqual(page_tree, [(self.primnav_child, [])])

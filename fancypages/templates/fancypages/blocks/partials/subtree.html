@@ -1,0 +1,14 @@
+{% if subtree %}
+    <ul>
+        {% for page,sub_pages in subtree %}
+            <li>
+                <a href="{{ page.get_absolute_url }}">
+                    {{ page.name }}
+                </a>
+                {% with filename="fancypages/blocks/partials/subtree.html" %}
+                    {% include filename with subtree=sub_pages %}
+                {% endwith %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

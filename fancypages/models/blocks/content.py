@@ -1,6 +1,7 @@
 import os
 
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from ... import abstract_models
@@ -169,7 +170,25 @@ class PageNavigationBlock(ContentBlock):
     group = _("Content")
     template_name = "fancypages/blocks/page_navigation_block.html"
 
+    depth = models.PositiveIntegerField(
+        _("Navigation depth"),
+        default=2,
+    )
+
+    is_relative = models.BooleanField(
+        _("Is navigation relative to this page?"),
+        default=False,
+    )
+
+    def clean(self):
+        if self.depth < 1:
+            raise ValidationError(
+                _("Navigation depth has to be greater than 0")
+            )
+
     def __unicode__(self):
+        if self.is_relative:
+            return u'Relative page navigation'
         return u'Page Navigation'
 
     class Meta:

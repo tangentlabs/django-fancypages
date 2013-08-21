@@ -1,5 +1,5 @@
 from django import template
-from django.db.models import get_model
+from django.db.models import Q, get_model
 
 
 PageGroup = get_model('fancypages', 'PageGroup')
@@ -32,8 +32,18 @@ def get_pages(group):
 
 
 @register.assignment_tag
-def get_page_tree(group=None, depth=1):
-    pages = FancyPage.objects.filter(depth__lte=depth)
+def get_page_tree(group=None, depth=1, relative_to=None):
+    depth_offset = 0
+    pages = FancyPage.objects.all()
+
+    if relative_to:
+        depth_offset = relative_to.depth
+        pages = pages.filter(
+            Q(path__startswith=relative_to.path) &
+            ~Q(path=relative_to.path)
+        )
+
+    pages = pages.filter(depth__lte=(depth + depth_offset))
 
     if group:
         if isinstance(group, PageGroup):
@@ -41,9 +51,8 @@ def get_page_tree(group=None, depth=1):
         pages = pages.filter(groups__slug=group)
 
     page_buckets = [[] for i in range(depth)]
-
     for page in pages:
-        page_buckets[page.depth - 1].append(page)
+        page_buckets[page.depth - depth_offset - 1].append(page)
 
     page_subtree = []
     build_tree(page_subtree, None, page_buckets, 0)
