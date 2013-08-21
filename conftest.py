@@ -73,9 +73,5 @@ def pytest_configure():
         ),
         LOGIN_REDIRECT_URL='/accounts/',
         APPEND_SLASH=True,
-        NOSE_ARGS=[
-            '-s',
-            '--with-specplugin',
-        ],
         **FANCYPAGES_SETTINGS
     )
