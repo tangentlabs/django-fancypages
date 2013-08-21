@@ -19,6 +19,7 @@
       display: block;
       margin-bottom: 5px;
       text-transform: capitalize;
+      font-family: @baseFontFamily; 
     }
 
     // Form controls
@@ -104,6 +105,16 @@
       *margin-top: 0; /* IE7 */
       margin-top: 1px \9; /* IE8-9 */
       line-height: normal;
+    }
+    input[type="radio"] {
+      -webkit-appearance: radio;
+      -moz-appearance:    radio;
+      appearance:         radio;
+    }
+    input[type="checkbox"] {
+      -webkit-appearance: checkbox;
+      -moz-appearance:    checkbox;
+      appearance:         checkbox;
     }
 
     // Reset width of input images, buttons, radios, checkboxes
