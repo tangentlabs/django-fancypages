@@ -4,7 +4,9 @@ from django.conf import settings
 
 import fancypages as fp
 
-location = lambda x: os.path.join(os.path.dirname(os.path.realpath(__file__)), x)
+location = lambda x: os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), x
+)
 sandbox = lambda x: location("sandbox/%s" % x)
 
 
