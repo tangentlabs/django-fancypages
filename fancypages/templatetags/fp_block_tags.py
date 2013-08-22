@@ -39,7 +39,7 @@ def render_attribute(context, attr_name, *args):
     if not user.is_staff:
         return unicode(value)
 
-    wrapped_attr = u'<div id="block-%d-%s">%s</div>'
+    wrapped_attr = u'<span id="block-%d-%s">%s</span>'
     return wrapped_attr % (block.id, attr_name, unicode(value))
 
 
