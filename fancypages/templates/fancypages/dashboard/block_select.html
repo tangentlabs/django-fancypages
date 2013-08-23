@@ -1,6 +1,8 @@
 {% load i18n %}
 {% load staticfiles %}
 {% load url from future %}
+{% load thumbnail %}
+
 <div class="block-add-control">
     <a data-toggle="modal"
        {#data-behaviours="load-modal"#}
@@ -42,8 +44,11 @@
                             <li>
                                 <button type="submit" class="fp-btn" name="code" value="{{ fp_block.0 }}">
                                     <div class="image_container">
+                                        {% thumbnail image_asset.image "150x150" as im %}
+                                            <img src="{{ im.url }}" alt="{{ image_asset.name|truncatechars:20 }}" />
+                                        {% endthumbnail %}
                                         <!-- <label id="{{ fp_block.0 }}"> -->
-                                        <img src="{% static "fancypages/img/block_icons/" %}{{ fp_block.0 }}.png" class="{{ fp_block.0 }}" alt="{{ fp_block.1 }}" title="{{ fp_block.1 }}">
+                                        <img src="{% static "fancypages/img/block_icons/" %}{{ fp_block.0 }}.png" class="fp-{{ fp_block.0 }}" alt="{{ fp_block.1 }}" title="{{ fp_block.1 }}">
                                         <!-- </label> -->
                                     </div>
                                     {{ fp_block.1 }}
