@@ -142,16 +142,16 @@ fancypages.editor = {
      * editor panel.
      */
     initEditorPanel: function () {
-        $('#editor-handle').click(function (ev) {
-            ev.preventDefault();
-            $(this).hide();
-            $('body').removeClass('editor-hidden');
-        });
-        $('#editor-close').click(function (ev) {
-            ev.preventDefault();
-            $('#editor-handle').show();
-            $('body').addClass('editor-hidden');
-        });
+        var isEditorOpened = $.cookie('fpEditorOpened');
+
+        if(!!isEditorOpened) {
+            fancypages.panels.showEditPanel();
+        } else {
+            fancypages.panels.hideEditPanel();
+        }
+
+        $('#editor-handle').click(fancypages.panels.showEditPanel);
+        $('#editor-close').click(fancypages.panels.hideEditPanel);
     },
 
     initialiseEventsOnPageContent: function () {
@@ -445,14 +445,17 @@ fancypages.panels = {
         if (ev) {
             ev.preventDefault();
         }
-        $('#editor-handle').hide();
+
+        $('#editor-handle').trigger('show');
         $('body').removeClass('editor-hidden');
+        $.cookie('fpEditorOpened', true);
     },
     hideEditPanel: function (ev) {
         if (ev) {
             ev.preventDefault();
         }
-        $('#editor-handle').show();
+        $('#editor-handle').trigger('hide');
         $('body').addClass('editor-hidden');
+        $.removeCookie('fpEditorOpened', false);
     }
 };
