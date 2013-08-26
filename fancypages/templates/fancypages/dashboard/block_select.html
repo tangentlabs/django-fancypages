@@ -30,13 +30,13 @@
                 <ul class="fp-nav-tabs">
                 {% for group in grouped_blocks %}
                     <li {% if forloop.first %}class="active"{% endif %}>
-                        <a href="#{{ container.name }}-{{ group|slugify }}" data-toggle="tab">{{ group }}</a>
+                        <a href="#{{ container.uid }}-{{ group|slugify }}" data-toggle="tab">{{ group }}</a>
                     </li>
                 {% endfor %}
                 </ul>
                 <div class="fp-tab-content">
                     {% for group,block_list in grouped_blocks.items %}
-                    <div class="fp-tab-pane {% if forloop.first %}active{% endif %}" id="{{container.name}}-{{ group|slugify }}">
+                    <div class="fp-tab-pane {% if forloop.first %}active{% endif %}" id="{{ container.uid }}-{{ group|slugify }}">
                         <ul class="fp-widget-list">
                             {% for fp_block in block_list %}
                             <li>
