@@ -1,3 +1,5 @@
+import os
+
 from purl import URL
 
 from django.conf import settings
@@ -8,7 +10,11 @@ from splinter import Browser
 
 from fancypages.test import factories
 
-SPLINTER_WEBDRIVER = getattr(settings, 'SPLINTER_WEBDRIVER', 'phantomjs')
+SPLINTER_WEBDRIVER = getattr(
+    settings,
+    'SPLINTER_WEBDRIVER',
+    os.environ.get('SPLINTER_WEBDRIVER', 'phantomjs')
+)
 
 
 class SplinterTestCase(LiveServerTestCase):

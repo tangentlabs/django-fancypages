@@ -23,7 +23,9 @@ def pytest_configure():
         MEDIA_ROOT=sandbox('public/media'),
         MEDIA_URL='/media/',
         STATIC_URL='/static/',
-        STATICFILES_DIRS=(sandbox('static/'),),
+        STATICFILES_DIRS=[
+            sandbox('static/')
+        ],
         STATIC_ROOT=sandbox('public'),
         STATICFILES_FINDERS=(
             'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -52,9 +54,9 @@ def pytest_configure():
             'fancypages.middleware.EditorMiddleware',
         ),
         ROOT_URLCONF='sandbox.sandbox.urls',
-        TEMPLATE_DIRS=(
+        TEMPLATE_DIRS=[
             sandbox('templates'),
-        ),
+        ],
         INSTALLED_APPS=[
             'django.contrib.auth',
             'django.contrib.contenttypes',
@@ -63,16 +65,14 @@ def pytest_configure():
             'django.contrib.messages',
             'django.contrib.staticfiles',
             'django.contrib.admin',
-
-            'model_utils',
-            'compressor',
-            'twitter_tag',
-            'sorl.thumbnail',
-            'rest_framework',
-            'django_extensions',
-        ] + fp.get_fancypages_apps(),
+        ] + fp.get_required_apps() + fp.get_fancypages_apps(),
         AUTHENTICATION_BACKENDS=(
             'django.contrib.auth.backends.ModelBackend',
+        ),
+        COMPRESS_ENABLED=True,
+        COMPRESS_OFFLINE=False,
+        COMPRESS_PRECOMPILERS=(
+            ('text/less', 'lessc {infile} {outfile}'),
         ),
         LOGIN_REDIRECT_URL='/accounts/',
         APPEND_SLASH=True,

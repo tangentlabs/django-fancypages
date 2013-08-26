@@ -16,6 +16,7 @@ install:
   - pip install Django$DJANGO_VERSION djangorestframework$DRF_VERSION
   - pip install . --use-mirrors
   - pip install -r requirements.txt --use-mirrors
+  - apt-get install node-less #required for browser testing
 script:
   - py.test --pep8 --cov fancypages
 after_success:
