@@ -5,6 +5,9 @@ from purl import URL
 from django.conf import settings
 from django.test import LiveServerTestCase
 from django.core.urlresolvers import reverse
+from django import VERSION as DJANGO_VERSION
+from django.core.management import call_command
+from django.db import connections, DEFAULT_DB_ALIAS
 
 from splinter import Browser
 
@@ -58,3 +61,17 @@ class SplinterTestCase(LiveServerTestCase):
     def goto(self, path):
         url = self.base_url.path(path)
         return self.browser.visit(url.as_string())
+
+
+# We need to patch the LiveServerTestCase here because the database in
+# Django < 1.5.x doesn't clean up the database properly.
+if DJANGO_VERSION[1] < 5:
+    def _fixture_teardown(self):
+        if getattr(self, 'multi_db', False):
+            databases = connections
+        else:
+            databases = [DEFAULT_DB_ALIAS]
+        for db in databases:
+            call_command('flush', verbosity=0, interactive=False, database=db)
+
+    SplinterTestCase._fixture_teardown = _fixture_teardown
