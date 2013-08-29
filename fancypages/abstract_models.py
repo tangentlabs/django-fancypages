@@ -210,12 +210,6 @@ class AbstractFancyPage(models.Model):
             if cname not in existing_containers:
                 self.containers.create(page_object=self, name=cname)
 
-        parent = self.get_parent()
-        if parent:
-            for visibility_type in self.groups.all():
-                parent.groups.add(visibility_type)
-            parent.save()
-
     class Meta:
         app_label = 'fancypages'
         abstract = True
