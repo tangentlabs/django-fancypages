@@ -1,6 +1,6 @@
 import os
 
-__version__ = (0, 1, 1, 'alpha', 1)
+__version__ = (0, 2, 0, 'alpha', 1)
 
 
 def get_fancypages_paths(path):
