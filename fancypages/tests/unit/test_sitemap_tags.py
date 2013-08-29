@@ -59,7 +59,7 @@ class TestGetPagesTag(PageTreeMixin, TestCase):
     def test_returns_pages_for_group_slug_provided(self):
         with self.assertNumQueries(1):
             pages = sm_tags.get_pages(group=self.footer_group.slug)
-            self.assertSequenceEqual(
+            self.assertItemsEqual(
                 pages,
                 [self.footer_page, self.both_groups_page]
             )
@@ -75,7 +75,7 @@ class TestGetPagesTag(PageTreeMixin, TestCase):
     def test_can_lookup_pages_from_group_object(self):
         with self.assertNumQueries(1):
             pages = sm_tags.get_pages(group=self.footer_group)
-            self.assertSequenceEqual(
+            self.assertItemsEqual(
                 pages,
                 [self.footer_page, self.both_groups_page]
             )

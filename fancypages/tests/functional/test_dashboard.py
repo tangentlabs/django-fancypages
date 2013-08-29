@@ -1,6 +1,7 @@
 import os
 import shutil
 import tempfile
+import pytest
 
 from PIL import Image
 
@@ -169,6 +170,7 @@ class TestANewPage(test.FancyPagesWebTest):
         self.assertContains(page, 'A page with this title already exists')
 
 
+@pytest.mark.fp_only
 @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class TestAnImageForAFancyPage(test.FancyPagesWebTest):
     is_staff = True
