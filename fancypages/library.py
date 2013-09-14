@@ -19,8 +19,8 @@ def register_content_block(klass):
         )
     if klass.code in _content_blocks:
         raise ImproperlyConfigured(
-            _("a content_block with code {0} is already "
-              "registered").format(klass.code)
+            _("a content_block with code {codename} is already "
+              "registered").format(codename=klass.code)
         )
     _content_blocks[klass.code] = klass
     return klass
