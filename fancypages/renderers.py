@@ -2,6 +2,7 @@ from copy import copy
 
 from django import template
 from django.template import loader
+from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ImproperlyConfigured
 
 from .models import ContentBlock, Container
@@ -12,8 +13,8 @@ class ContainerRenderer(object):
     def __init__(self, container, context, extra_context=None):
         if not container and not issubclass(container, Container):
             raise TypeError(
-                "block must be a subclass of 'ContentBlock' not "
-                "'%s'" % type(container)
+                _("block must be a subclass of 'ContentBlock' not "
+                  "'{container_type}'").format(container_type=type(container))
             )
         if not extra_context:
             extra_context = {}
