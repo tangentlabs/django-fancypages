@@ -1,0 +1,48 @@
+{% extends "fancypages/base.html" %}
+{% load compress %}
+{% load staticfiles %}
+
+{% block layout %}
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <div class="brand">Fancy Sandbox</div>
+            <ul class="nav">
+              <li><a href="/">Home</a></li>
+            </ul>
+            <div class="pull-right">
+                <ul class="nav">
+                {% if not request.user.is_authenticated %} 
+                      <li><a href="/admin/login/">Login</a></li>
+                {% else %}
+                      <li><a href="/admin/logout/">Logout</a></li>
+                {% endif %}
+                </ul>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    {# Main content of page - other layout templates may override this block #}
+    {% block content_wrapper %}
+	<div class="container-fluid page">
+        <div class="page_inner">
+            {% block header %}
+                <div class="page-header action">
+                    <h1>{% block headertext %}{% endblock %}</h1>
+                </div>
+                {% include "fancypages/partials/draft_note_block.html" %}
+            {% endblock %}
+
+            {% block subnavigation %}{% endblock %}
+
+            <div class="content">
+                {% block subheader %}{% endblock subheader %}
+                {# Div exists for AJAX updates to entire content section #}
+                <div id="content_inner">{% block content %}{% endblock %}</div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+{% endblock %}
