@@ -25,6 +25,17 @@ based on the ideas in the two apps mentioned above.
 .. _`django-frontend-admin`: https://github.com/bartTC/django-frontendadmin
 .. _`django-content-blocks`: https://github.com/KevinBrolly/django-content-blocks
 
+Screenshots
+-----------
+
+.. image:: https://raw.github.com/tangentlabs/django-fancypages/master/docs/source/images/screenshots/homepage_editor_hidden.png
+
+.. image:: https://raw.github.com/tangentlabs/django-fancypages/master/docs/source/images/screenshots/homepage_editor_opened.png
+
+.. image:: https://raw.github.com/tangentlabs/django-fancypages/master/docs/source/images/screenshots/homepage_edit_block_form.png
+
+.. image:: https://raw.github.com/tangentlabs/django-fancypages/master/docs/source/images/screenshots/homepage_block_menu.png
+
 Installation
 ------------
 
