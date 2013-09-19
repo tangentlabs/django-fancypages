@@ -1,4 +1,5 @@
 import os
+import sys
 
 from django.conf import settings
 
@@ -8,6 +9,8 @@ location = lambda x: os.path.join(
     os.path.dirname(os.path.realpath(__file__)), x
 )
 sandbox = lambda x: location("sandbox/%s" % x)
+
+sys.path.insert(0, location('sandbox'))
 
 
 def pytest_configure():
@@ -66,6 +69,7 @@ def pytest_configure():
                 'django.contrib.messages',
                 'django.contrib.staticfiles',
                 'django.contrib.admin',
+                'blog',
             ] + fp.get_required_apps() + fp.get_fancypages_apps(),
             AUTHENTICATION_BACKENDS=(
                 'django.contrib.auth.backends.ModelBackend',
