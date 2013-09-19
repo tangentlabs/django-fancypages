@@ -88,12 +88,7 @@ class ImageAndTextBlock(ImageMetadataMixin, ContentBlock):
         blank=True,
         null=True,
     )
-
-    text = models.CharField(
-        _("Text"),
-        max_length=2000,
-        default="Your text goes here."
-    )
+    text = models.TextField(_("Text"), default=_("Your text goes here."))
 
     def __unicode__(self):
         if self.image_asset:
