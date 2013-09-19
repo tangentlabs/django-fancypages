@@ -5,11 +5,17 @@ from django.conf.urls import patterns, include, url
 import fancypages.urls
 from fancypages import views
 
+from blog.views import PostDetailView, PostListView
+
 admin.autodiscover()
 
 
 urlpatterns = patterns('',
     url(r'^$', views.HomeView.as_view(), name='home'),
+
+    url(r'^posts/$', PostListView.as_view(), name="post-list"),
+    url(r'^posts/(?P<slug>[\w-]+)/$', PostDetailView.as_view(),
+        name="post-detail"),
 
     url(r'^admin/', include(admin.site.urls)),
 

@@ -1,0 +1,14 @@
+{% extends "fancypages/layout.html" %}
+
+{% block content %}
+    <div class="container-fluid">
+        {% for post in post_list %}
+        <div class="row">
+            <article>
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.content|truncatewords:30 }}</p>
+            </article>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

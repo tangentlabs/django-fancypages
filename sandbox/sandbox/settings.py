@@ -119,7 +119,15 @@ DJANGO_APPS = [
 
     #'debug_toolbar',
     'django_extensions',
+    'blog',
 ]
+
+try:
+    import devserver
+except ImportError:
+    pass
+else:
+    DJANGO_APPS.append('devserver')
 
 from fancypages.defaults import *
 INSTALLED_APPS = DJANGO_APPS + fp.get_required_apps() + fp.get_fancypages_apps()
