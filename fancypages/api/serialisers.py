@@ -43,8 +43,10 @@ class RenderFormFieldMixin(object):
     def get_form_class(self, obj):
         # check if the block has a class-level attribute that
         # defines a specific form class to be used
-        form_class = getattr(obj.__class__, 'form_class', None)
-        return modelform_factory(obj.__class__, form=form_class)
+        get_form_class = getattr(obj.__class__, 'get_form_class', None)
+        if not get_form_class:
+            return modelform_factory(obj.__class__)
+        return modelform_factory(obj.__class__, form=get_form_class())
 
 
 class BlockSerializer(RenderFormFieldMixin, serializers.ModelSerializer):
@@ -67,13 +69,15 @@ class BlockSerializer(RenderFormFieldMixin, serializers.ModelSerializer):
 
     def get_form_class(self, obj):
         model = self.object.__class__
-        form_class = getattr(model, 'form_class')
-        if not form_class:
-            form_class = getattr(
-                forms,
-                "%sForm" % model.__name__,
-                forms.BlockForm
-            )
+        get_form_class = getattr(model, 'get_form_class')
+        if get_form_class:
+            return modelform_factory(model, form=get_form_class())
+
+        form_class = getattr(
+            forms,
+            "%sForm" % model.__name__,
+            forms.BlockForm
+        )
         return modelform_factory(model, form=form_class)
 
     class Meta:

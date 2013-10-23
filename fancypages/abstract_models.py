@@ -324,6 +324,10 @@ class AbstractContentBlock(models.Model):
 
     objects = InheritanceManager()
 
+    @classmethod
+    def get_form_class(cls):
+        return cls.form_class
+
     def get_template_names(self):
         if self.template_name:
             return [self.template_name]
