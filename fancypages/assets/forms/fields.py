@@ -8,6 +8,7 @@ from .widgets import AssetWidget
 class AssetField(MultiValueField):
     _delimiter = ':'
     widget = AssetWidget
+    pk_field_name = 'id'
     default_fields = {
         'asset_pk': IntegerField,
         'asset_type': CharField,
@@ -15,7 +16,7 @@ class AssetField(MultiValueField):
 
     def __init__(self, *args, **kwargs):
         kwargs.pop('queryset', None)
-        self.pk_field_name = kwargs.pop('to_field_name')
+        self.pk_field_name = kwargs.pop('to_field_name', self.pk_field_name)
         fields = (
             self.default_fields['asset_pk'](),
             self.default_fields['asset_type'](),
