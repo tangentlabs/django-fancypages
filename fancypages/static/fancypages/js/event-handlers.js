@@ -28,6 +28,30 @@ fancypages.eventHandlers = {
         });
     },
 
+    deleteTab: function (ev) {
+        ev.preventDefault();
+
+        $.ajax({
+            url: $(this).data('action'),
+            type: 'DELETE',
+            data: {
+                content_type: $(this).data('content-type-id'),
+                object_id: $(this).parents('.block').data('block-id')
+            },
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", fancypages.getCsrfToken());
+            },
+            success: function (data) {
+                parent.fancypages.editor.reloadPage();
+            },
+            error: function () {
+                parent.fancypages.utils.messages.error(
+                    "An error occured trying to add a new tab. Please try it again."
+                );
+            }
+        });
+    },
+
     loadIframeModal: function (ev) {
         var iframeId = $(this).data('iframe-id');
         if (iframeId === undefined) {
