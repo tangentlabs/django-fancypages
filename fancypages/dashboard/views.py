@@ -104,13 +104,15 @@ class BlockUpdateView(generic.UpdateView, FancypagesMixin):
 
     def get_form_class(self):
         model = self.object.__class__
-        form_class = getattr(model, 'form_class')
-        if not form_class:
-            form_class = getattr(
-                forms,
-                "%sForm" % model.__name__,
-                forms.BlockForm
-            )
+        get_form_class = getattr(model, 'get_form_class')
+        if get_form_class and get_form_class():
+            return modelform_factory(model, form=get_form_class())
+
+        form_class = getattr(
+            forms,
+            "%sForm" % model.__name__,
+            forms.BlockForm
+        )
         return modelform_factory(model, form=form_class)
 
     def form_invalid(self, form):

@@ -70,7 +70,7 @@ class BlockSerializer(RenderFormFieldMixin, serializers.ModelSerializer):
     def get_form_class(self, obj):
         model = self.object.__class__
         get_form_class = getattr(model, 'get_form_class')
-        if get_form_class:
+        if get_form_class and get_form_class():
             return modelform_factory(model, form=get_form_class())
 
         form_class = getattr(
