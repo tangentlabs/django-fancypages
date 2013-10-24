@@ -4,15 +4,18 @@
 
 <div class="sortable connectedSortable {% if request.fp_edit_mode %}editable-container{% endif %}"
      data-container-id="{{ container.id }}">
-{% for block_id,rendered_block in rendered_blocks %}
-    <div id="block-{{ block_id }}" class="block {{ container.name }}"
-         data-container-name="{{ container.name }}" data-block-id="{{ block_id }}">
+{% for fp_block,rendered_block in rendered_blocks %}
+    <div id="block-{{ fp_block.id }}" class="block {{ container.name }}"
+         data-container-name="{{ container.name }}" data-block-id="{{ fp_block.id }}">
 
         {% if request.fp_edit_mode %}
             <div class="edit-button fp-btn"><i class="glyphicon-edit"></i></div>
 
             {% if request.fp_debug_enabled %}
-                <div class="edit-button fp-btn">Block #{{ block_id }} | Container {{ container.uid }}</div>
+                <div class="edit-button fp-btn">
+                    Block {{ fp_block }} (ID {{ fp_block.id }})
+                    | Container {{ container.uid }}
+                </div>
             {% endif %}
 
         {% endif %}

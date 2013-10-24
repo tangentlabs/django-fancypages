@@ -39,7 +39,7 @@ class ContainerRenderer(object):
                 rendered_block = renderer.render()
             except ImproperlyConfigured:
                 continue
-            rendered_blocks.append((block.id, rendered_block))
+            rendered_blocks.append((block, rendered_block))
 
         self.context['container'] = self.container
         self.context['rendered_blocks'] = rendered_blocks
