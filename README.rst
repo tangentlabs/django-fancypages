@@ -8,6 +8,8 @@ Fancy CMS-style page editing for Django
 .. image:: https://coveralls.io/repos/tangentlabs/django-fancypages/badge.png?branch=master
     :target: https://coveralls.io/r/tangentlabs/django-fancypages?branch=master
 
+.. image:: https://d2weczhvl823v0.cloudfront.net/tangentlabs/django-fancypages/trend.png
+
 .. note: This is a work in progress and part of this project will likely change
     and could potentially break things. Be careful with using it.
 
