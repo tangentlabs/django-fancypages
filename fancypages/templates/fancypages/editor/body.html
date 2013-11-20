@@ -1,4 +1,5 @@
 {% load i18n staticfiles %}
+{% load fp_block_tags %}
 
 <div id="editor-panel">
 
@@ -48,6 +49,7 @@
 <div id='editor-handle'><i class="glyphicon-edit glyphicon-white"></i>edit</div>
 <div class="fp-loading" data-behaviours="loading"></div>
 
+{# the modal used for asset management #}
 <div class="fp-modal hide fullscreen" id="fullscreen-modal" tabindex="-1" role="dialog" aria-labelledby="asset-modal-label" aria-hidden="true">
     <div class="fp-modal-header">
         <button type="button" class="fp-close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -55,6 +57,9 @@
     </div>
     <div class="fp-modal-body"></div>
 </div>
+
+{# modal used for the selection of blocks when adding them to the container #}
+{% render_block_selection %}
 
 {# include scripts that are only required in edit mode #}
 {% include "fancypages/editor/partials/cdn_scripts.html" %}

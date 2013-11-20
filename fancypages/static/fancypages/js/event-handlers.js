@@ -73,6 +73,20 @@ fancypages.eventHandlers = {
     },
 
     /**
+     * Open the block selection modal and attach the container ID of the
+     * current element to the form to make sure that submitting it to the API
+     * has access to the container that tiggered the adding of content.
+     */
+    showBlockSelection: function (ev) {
+        var elem = $(this),
+            modalElem = $(elem.data('target')),
+            containerId = elem.data('container-id');
+        $('form', modalElem).attr('data-container-id', containerId);
+        $('form input[name=container]').val(containerId);
+        modalElem.modal('show');
+    },
+
+    /**
      * Load and display the content of a modal.
      */
     loadModal: function (ev) {

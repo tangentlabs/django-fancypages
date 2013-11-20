@@ -81,15 +81,11 @@ def get_content_type(obj):
     return ContentType.objects.get_for_model(obj.__class__)
 
 
-##TODO need re-write due to new registered blocks
-@register.inclusion_tag('fancypages/dashboard/block_select.html',
-                        takes_context=True)
+@register.inclusion_tag(
+    'fancypages/dashboard/block_select.html', takes_context=True)
 def render_block_selection(context):
     request = context.get('request')
     if not request or not request.fp_edit_mode:
         return u''
     grouped_blocks = library.get_grouped_content_blocks()
-    return {
-        'container': context['container'],
-        'grouped_blocks': grouped_blocks,
-    }
+    return {'grouped_blocks': grouped_blocks}

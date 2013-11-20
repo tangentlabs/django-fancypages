@@ -1,6 +1,6 @@
 {% load i18n %}
-{% load fp_block_tags %}
 {% load fp_container_tags %}
+{% load url from future %}
 
 <div class="sortable connectedSortable {% if request.fp_edit_mode %}editable-container{% endif %}"
      data-container-id="{{ container.id }}">
@@ -34,5 +34,13 @@
 </div>
 
 {% if request.fp_edit_mode %}
-    {% render_block_selection %}
+    <div class="block-add-control">
+        <a class="fp-btn fp-btn-block"
+           data-behaviours='show-block-selection'
+           data-target="#block_selection_modal"
+           data-href="{% url "fp-api:block-type-list" %}"
+           data-container-id="{{ container.id }}">
+            <i class="glyphicon-plus"></i> {% trans "Add content" %}
+        </a>
+    </div>
 {% endif %}

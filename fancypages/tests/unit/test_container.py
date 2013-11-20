@@ -34,8 +34,9 @@ class TestAContainer(TestCase):
         ctn_id = 15
         container = factories.ContainerFactory.build(id=ctn_id)
         html = ContainerRenderer(container, self.request_context).render()
-        self.assertIn('<div id="{0}_modal"'.format(container.uid), html)
-        self.assertIn('data-target="#{0}_modal"'.format(container.uid), html)
+        self.assertIn(
+            'data-target="#block_selection_modal"'.format(container.uid), html)
+        self.assertIn('data-container-id="{}"'.format(container.id), html)
 
 
 class TestAnObjectContainer(TestCase):

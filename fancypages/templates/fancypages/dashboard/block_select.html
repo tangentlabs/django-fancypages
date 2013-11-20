@@ -1,18 +1,8 @@
 {% load i18n %}
 {% load staticfiles %}
 {% load url from future %}
-<div class="block-add-control">
-    <a data-toggle="modal"
-       {#data-behaviours="load-modal"#}
-       class="fp-btn fp-btn-block"
-       data-target="#{{ container.uid }}_modal"
-       data-href="{% url "fp-api:block-type-list" %}"
-       data-container-id="{{ container.id }}">
-        <i class="glyphicon-plus"></i> {% trans "Add content" %}
-    </a>
-</div>
 
-<div id="{{ container.uid }}_modal" class="fp-modal fp-fade hide fullscreen"
+<div id="block_selection_modal" class="fp-modal fp-fade hide fullscreen"
      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="fp-modal-header">
         <button class="fp-close" data-dismiss="modal">×</button>
@@ -20,10 +10,10 @@
     </div>
 
     <form id="{{ container.uid }}_add_block_form"
-          data-behaviours='submit-block-form' data-container-id="{{ container.id }}"
+          data-behaviours='submit-block-form'
           method="post" action="{% url "fp-api:block-list" %}" class="add-content">
         {% csrf_token %}
-        <input name="container" value="{{ container.id }}" type="hidden"/>
+        <input name="container" value="" type="hidden"/>
         <div class="fp-modal-body">
 
             <div class='fp-tabbable'>

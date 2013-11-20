@@ -161,6 +161,7 @@ fancypages.editor = {
         //load the form to select a new block to add to the container
         //and display it in a modal
         $("a[data-behaviours~=load-modal]").click(fancypages.eventHandlers.loadModal);
+        $("a[data-behaviours~=show-block-selection]").click(fancypages.eventHandlers.showBlockSelection);
 
         $('.edit-button').click(fancypages.eventHandlers.editWidget);
         $('div.delete').click(fancypages.eventHandlers.deleteWidget);
@@ -350,7 +351,6 @@ fancypages.editor = {
         }
         form.data('locked', true);
 
-        //formData.container = $(form).data('container-id');
         $.ajax({
             url: form.attr('action'),
             type: "POST",
