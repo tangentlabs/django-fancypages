@@ -9,7 +9,7 @@
         <h3>Add content</h3>
     </div>
 
-    <form id="{{ container.uid }}_add_block_form"
+    <form id="add_block_form"
           data-behaviours='submit-block-form'
           method="post" action="{% url "fp-api:block-list" %}" class="add-content">
         {% csrf_token %}
@@ -20,13 +20,13 @@
                 <ul class="fp-nav-tabs">
                 {% for group in grouped_blocks %}
                     <li {% if forloop.first %}class="active"{% endif %}>
-                        <a href="#{{ container.uid }}-{{ group|slugify }}" data-toggle="tab">{{ group }}</a>
+                        <a href="#{{ group|slugify }}" data-toggle="tab">{{ group }}</a>
                     </li>
                 {% endfor %}
                 </ul>
                 <div class="fp-tab-content">
                     {% for group,block_list in grouped_blocks.items %}
-                    <div class="fp-tab-pane {% if forloop.first %}active{% endif %}" id="{{ container.uid }}-{{ group|slugify }}">
+                    <div class="fp-tab-pane {% if forloop.first %}active{% endif %}" id="{{ group|slugify }}">
                         <ul class="fp-widget-list">
                             {% for fp_block in block_list %}
                             <li>
