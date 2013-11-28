@@ -1,8 +1,9 @@
-from django.core.urlresolvers import reverse
+import pytest
 
 from fancypages.test.testcases import SplinterTestCase
 
 
+@pytest.mark.integration
 class TestTheEditorPanel(SplinterTestCase):
     is_staff = True
     is_logged_in = True
