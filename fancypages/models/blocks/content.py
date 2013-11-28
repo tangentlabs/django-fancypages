@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from ... import abstract_models
+from .base import MultiImageLinkMeta
 from ...assets.fields import AssetKey
 from ..mixins import ImageMetadataMixin
 from ...library import register_content_block
@@ -103,12 +104,12 @@ class ImageAndTextBlock(ImageMetadataMixin, ContentBlock):
 
 @register_content_block
 class CarouselBlock(ContentBlock):
+    __metaclass__ = MultiImageLinkMeta
+
     name = _("Image carousel")
     code = 'carousel'
     group = _("Content")
-    num_images = 10
-    image_field_name = "image_%d"
-    link_field_name = "link_url_%d"
+    num_images = num_links = 10
     template_name = "fancypages/blocks/carouselblock.html"
 
     def get_images_and_links(self):
@@ -133,29 +134,6 @@ class CarouselBlock(ContentBlock):
 
     class Meta:
         app_label = 'fancypages'
-
-
-# generate the image field for the CarouselBlock dynamically
-# because I am lazy ;)
-for idx in range(1, CarouselBlock.num_images + 1):
-    CarouselBlock.add_to_class(
-        CarouselBlock.image_field_name % idx,
-        AssetKey(
-            'assets.ImageAsset',
-            verbose_name=_("Image %d" % idx),
-            related_name="+",
-            blank=True,
-            null=True,
-        )
-    )
-    CarouselBlock.add_to_class(
-        CarouselBlock.link_field_name % idx,
-        models.CharField(
-            _("Link URL %d" % idx),
-            max_length=500,
-            blank=True, null=True
-        )
-    )
 
 
 @register_content_block

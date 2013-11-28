@@ -1,13 +1,15 @@
 import os
+import mock
 
 from purl import URL
 
 from django.conf import settings
-from django.test import LiveServerTestCase
+from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django import VERSION as DJANGO_VERSION
 from django.core.management import call_command
 from django.db import connections, DEFAULT_DB_ALIAS
+from django.test import TestCase, LiveServerTestCase
 
 from splinter import Browser
 
@@ -18,6 +20,20 @@ SPLINTER_WEBDRIVER = getattr(
     'SPLINTER_WEBDRIVER',
     os.environ.get('SPLINTER_WEBDRIVER', 'phantomjs')
 )
+
+
+class BlockTestCase(TestCase):
+
+    def setUp(self):
+        super(BlockTestCase, self).setUp()
+        self.user = factories.UserFactory.build()
+
+        self.request_context = RequestContext(mock.MagicMock())
+        self.request_context['user'] = self.user
+
+    def get_rendered_block(self, block):
+        renderer = block.get_renderer_class()(block, self.request_context)
+        return renderer.render()
 
 
 class SplinterTestCase(LiveServerTestCase):
