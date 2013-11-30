@@ -12,6 +12,13 @@
 # serve to show the default.
 
 import sys, os
+root_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), '../..'))
+
+sandbox_dir = os.path.realpath(
+    os.path.join(os.path.dirname(__file__), '../../sandbox'))
+sys.path.append(root_dir)
+sys.path.append(sandbox_dir)
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sandbox.sandbox.settings')
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -103,7 +110,7 @@ RTD_NEW_THEME = True
 #html_theme_options = {}
 
 # Add any paths that contain custom themes here, relative to this directory.
-#html_theme_path = []
+html_theme_path = ['../_themes']
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -247,3 +254,46 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+
+import inspect
+from django.utils.html import strip_tags
+from django.utils.encoding import force_unicode
+
+
+def process_docstring(app, what, name, obj, options, lines):
+    # This causes import errors if left outside the function
+    from django.db import models
+
+    # Only look at objects that inherit from Django's base model class
+    if inspect.isclass(obj) and issubclass(obj, models.Model):
+
+        # Grab the field list from the meta class
+        fields = obj._meta._fields()
+
+        for field in fields:
+            # Decode and strip any html out of the field's help text
+            help_text = strip_tags(force_unicode(field.help_text))
+
+            # Decode and capitalize the verbose name, for use if there isn't
+            # any help text
+            verbose_name = force_unicode(field.verbose_name).capitalize()
+
+            if help_text:
+                # Add the model field to the end of the docstring as a param
+                # using the help text as the description
+                lines.append(u':param %s: %s' % (field.attname, help_text))
+            else:
+                # Add the model field to the end of the docstring as a param
+                # using the verbose name as the description
+                lines.append(u':param %s: %s' % (field.attname, verbose_name))
+
+            # Add the field's type to the docstring
+            lines.append(u':type %s: %s' % (field.attname, type(field).__name__))
+
+    # Return the extended docstring
+    return lines
+
+def setup(app):
+    # Register the docstring processor with sphinx
+    app.connect('autodoc-process-docstring', process_docstring)

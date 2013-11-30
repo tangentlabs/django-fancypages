@@ -13,7 +13,7 @@ Contents:
 
    getting_started
    recipes
-   api
+   reference
 
 
 Indices and tables
