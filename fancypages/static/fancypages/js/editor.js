@@ -199,7 +199,7 @@ fancypages.editor = {
             ev.preventDefault();
 
             var fieldElem = $('input', this);
-            if (!fieldElem) {
+            if (!fieldElem || (typeof fieldElem.id === 'undefined')) {
                 return false;
             }
             var blockId = $(this).parents('form').data('block-id');
