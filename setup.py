@@ -1,9 +1,11 @@
 #!/usr/bin/env python
+from fancypages import __version__
 from setuptools import setup, find_packages
+
 
 setup(
     name='django-fancypages',
-    version=":versiontools:fancypages:",
+    version=__version__,
     url='https://github.com/tangentlabs/django-fancypages',
     author="Sebastian Vetter",
     author_email="sebastian.vetter@tangentsnowball.com.au",
@@ -18,20 +20,19 @@ setup(
     packages=find_packages(exclude=["sandbox*"]),
     include_package_data=True,
     install_requires=[
-        'versiontools>=1.9.1,<1.10',
-        'Django>=1.4.5,<1.6',
-        'django-model-utils>=1.1.0,<1.5',
-        'djangorestframework>=2.1.12,<2.2',
-        'South>=0.7.6,<0.9',
-        'django-treebeard>=1.61,<1.7',
-        'django-appconf>=0.6,<0.7',
-        'django-twitter-tag>=1.1,<1.2',
-        'pillow>=2.0.0,<2.1',
-        'sorl-thumbnail>=11.12,<12',
-        'django-compressor>=1.2,<1.4',
-    ],
-    setup_requires=[
-        'versiontools >= 1.8',
+        'Django',
+        'South',
+        'django-appconf',
+        'django-treebeard',
+        'django-model-utils',
+        # we are using DRF routers that are only available in
+        # DRF 2.3+ so we are restricting the version here
+        'djangorestframework>=2.3',
+
+        'django-twitter-tag',
+
+        'pillow',
+        'sorl-thumbnail>=11.12',
     ],
     # See http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
