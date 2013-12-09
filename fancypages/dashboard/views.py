@@ -2,7 +2,6 @@ from django import http
 from django.views import generic
 from django.db.models import get_model
 from django.core.urlresolvers import reverse
-from django.forms.models import modelform_factory
 from django.utils.translation import ugettext_lazy as _
 
 from fancypages.dashboard import forms
@@ -65,62 +64,3 @@ class PageDeleteView(generic.DeleteView):
 
     def get_success_url(self):
         return reverse('fp-dashboard:page-list')
-
-
-class FancypagesMixin(object):
-
-    def get_block_class(self):
-        model = None
-        for block_class in ContentBlock.itersubclasses():
-            if block_class._meta.abstract:
-                continue
-
-            if block_class.code == self.kwargs.get('code'):
-                model = block_class
-                break
-        return model
-
-    def get_block_object(self):
-        try:
-            return self.model.objects.select_subclasses().get(
-                id=self.kwargs.get('pk')
-            )
-        except self.model.DoesNotExist:
-            raise http.Http404
-
-
-class BlockUpdateView(generic.UpdateView, FancypagesMixin):
-    model = ContentBlock
-    context_object_name = 'block'
-    template_name = "fancypages/dashboard/block_update.html"
-
-    def get_object(self, queryset=None):
-        return self.get_block_object()
-
-    def get_form_kwargs(self):
-        kwargs = super(BlockUpdateView, self).get_form_kwargs()
-        kwargs['instance'] = self.get_object()
-        return kwargs
-
-    def get_form_class(self):
-        model = self.object.__class__
-        get_form_class = getattr(model, 'get_form_class')
-        if get_form_class and get_form_class():
-            return modelform_factory(model, form=get_form_class())
-
-        form_class = getattr(
-            forms,
-            "%sForm" % model.__name__,
-            forms.BlockForm
-        )
-        return modelform_factory(model, form=form_class)
-
-    def form_invalid(self, form):
-        if self.request.is_ajax():
-            # FIXME this should actually return a rendered response
-            # with the invalid form data init.
-            return http.HttpResponseBadRequest()
-        return super(BlockUpdateView, self).form_invalid(form)
-
-    def get_success_url(self):
-        return reverse('fp-dashboard:block-update', args=(self.object.id,))

@@ -139,9 +139,7 @@ class BlockForm(forms.ModelForm):
 
     class Meta:
         exclude = ('container',)
-        widgets = {
-            'display_order': forms.HiddenInput()
-        }
+        widgets = {'display_order': forms.HiddenInput()}
 
 
 class TextBlockForm(BlockForm):
@@ -149,8 +147,7 @@ class TextBlockForm(BlockForm):
         exclude = ('container',)
         widgets = {
             'display_order': forms.HiddenInput(),
-            'text': forms.Textarea(attrs={'cols': 80, 'rows': 10}),
-        }
+            'text': forms.Textarea(attrs={'cols': 80, 'rows': 10})}
 
 
 class TitleTextBlockForm(BlockForm):

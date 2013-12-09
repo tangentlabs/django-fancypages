@@ -55,10 +55,10 @@ fancypages.editor = {
         $('form[id$=update_block_form]').each(function (idx, form) {
             var selection = $("select", form);
             var containerName = $(form).attr('id').replace('_update_block_form', '');
-            fancypages.editor.loadWidgetForm(selection.val(), containerName);
+            fancypages.editor.loadBlockForm(selection.val(), containerName);
 
             selection.change(function (ev) {
-                fancypages.editor.loadWidgetForm($(this).val(), containerName);
+                fancypages.editor.loadBlockForm($(this).val(), containerName);
             });
         });
 
@@ -178,7 +178,7 @@ fancypages.editor = {
         // Attach handler to dynamically loaded block form for 'submit' event.
         $(document).on('click', 'form[data-behaviours~=submit-block-form] button[type=submit]', function (ev) {
             ev.preventDefault();
-            fancypages.editor.submitWidgetForm($(this));
+            fancypages.editor.submitBlockForm($(this));
         });
         // Listen on modal cancel buttons and hide and remove the modal
         // when clicked.
@@ -254,22 +254,22 @@ fancypages.editor = {
     /**
      * Load the the block form for the specified url
      */
-    loadWidgetForm: function (blockId, containerName, options) {
-        var blockUrl = fancypages.apiBaseUrl + 'block/' + blockId;
-        var func =
-        $.getJSON(
-            blockUrl,
-            {includeForm: true},
-            fancypages.utils.partial(fancypages.eventHandlers.displayWidgetForm, options)
-        );
+    loadBlockForm: function (blockId, containerName, options) {
+        var blockUrl = fancypages.apiBaseUrl + 'block/' + blockId + '/form';
+        $.ajax({
+            url: blockUrl,
+            success: fancypages.utils.partial(
+                fancypages.eventHandlers.displayBlockForm, options
+            )
+        });
     },
 
     setSelectedAsset: function (assetType, assetId, assetUrl) {
         $('#fullscreen-modal').modal('hide');
         var assetInput = $(".fp-asset-input.editing");
         assetInput.removeClass('editing');
-        $("input[name$='_id']", assetInput).attr('value', assetId);
-        $("input[name$='_type']", assetInput).attr('value', assetType);
+
+        $("input", assetInput).attr('value', assetId);
         $("img", assetInput).attr('src', assetUrl);
     },
     getAssetDocument: function (elem) {
@@ -334,15 +334,18 @@ fancypages.editor = {
     },
 
     /**
-     * Submit the block form using an AJAX call and create or update the
-     * corresponding block. The form is submitted to the URL specified in
-     * the action attribute and is removed from the editor panel right after
-     * submission was successful.
+     * FIXME: this currently only works for updating blocks, we need to make it work
+     * with creating blocks again!!!!!!!!!!!!
      */
-    submitWidgetForm: function (submitButton) {
+    submitBlockForm: function (submitButton) {
         form = $(submitButton).parents('form');
-        formData = form.serialize();
-        formData += '&code=' + $(submitButton).val();
+
+        formData = {};
+        $.each(form.serializeArray(), function (idx, obj) {
+            formData[obj.name] = obj.value;
+        });
+        formData.code = form.data('block-code');
+        formData.container = form.data('container-id');
 
         submitButton.attr('disabled', true);
 
@@ -352,9 +355,13 @@ fancypages.editor = {
         form.data('locked', true);
 
         $.ajax({
-            url: form.attr('action'),
-            type: "POST",
+            //url: form.attr('action'),
+            url: fancypages.apiBaseUrl + "block/" + $(form).data('block-id'),
+            type: "PUT",
             data: formData,
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", fancypages.getCsrfToken());
+            },
             success: function (data) {
                 $('div[id=block_input_wrapper]').html("");
                 fancypages.editor.reloadPage();

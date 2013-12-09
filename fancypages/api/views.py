@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework.authentication import SessionAuthentication
 
+from . import renderers
 from . import serialisers
 from ..library import get_grouped_content_blocks
 
@@ -39,6 +40,20 @@ class BlockRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAdminUser,)
+
+    def get_object(self):
+        return self.model.objects.get_subclass(
+            id=self.kwargs.get(self.pk_url_kwarg))
+
+
+class BlockFormView(generics.RetrieveAPIView):
+    model = ContentBlock
+    serializer_class = serialisers.BlockSerializer
+
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAdminUser,)
+
+    renderer_classes = (renderers.BlockFormRenderer,)
 
     def get_object(self):
         return self.model.objects.get_subclass(

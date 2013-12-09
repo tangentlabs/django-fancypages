@@ -10,7 +10,7 @@ class AssetWidget(MultiWidget):
 
     def __init__(self, attrs=None, date_format=None, time_format=None):
         widgets = (HiddenInput(), HiddenInput())
-        self.widget_id_suffixes = ('id', 'type')
+        self.widget_id_suffixes = ('', 'type')
         super(AssetWidget, self).__init__(widgets, attrs)
 
     def render(self, name, value, attrs=None):
@@ -46,6 +46,8 @@ class AssetWidget(MultiWidget):
         }))
 
     def get_widget_id(self, name, idx):
+        if not self.widget_id_suffixes[idx]:
+            return name
         return "%s_%s" % (name, self.widget_id_suffixes[idx])
 
     def value_from_datadict(self, data, files, name):
