@@ -5,7 +5,6 @@ from fancypages.api import views
 
 urlpatterns = patterns(
     '',
-    url(r'^$', views.ApiV2View.as_view(), name="api-root"),
     url(r'^blocks$', views.BlockListView.as_view(), name='block-list'),
     url(
         r'^block/(?P<pk>\d+)$',

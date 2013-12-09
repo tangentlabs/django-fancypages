@@ -1,8 +1,3 @@
-import os
-#from PIL import Image
-import tempfile
-
-from django.core.files import File
 from django.db.models import get_model
 from django.core.urlresolvers import reverse
 
@@ -22,13 +17,13 @@ TitleTextBlock = get_model('fancypages', 'TitleTextBlock')
 
 class TestABlock(test.FancyPagesWebTest):
     is_staff = True
+    csrf_checks = False
 
     def setUp(self):
         super(TestABlock, self).setUp()
         self.prepare_template_file(
             "{% load fp_container_tags%}"
-            "{% fp_object_container page-container %}"
-        )
+            "{% fp_object_container page-container %}")
 
         self.page = FancyPage.add_root(name="A new page", slug='a-new-page')
 
@@ -50,22 +45,13 @@ class TestABlock(test.FancyPagesWebTest):
         self.assertEquals(self.other_text_block.display_order, 1)
         self.assertEquals(self.third_text_block.display_order, 2)
 
-    #def test_can_be_deleted(self):
-    #    page = self.get(reverse(
-    #        'fp-dashboard:block-delete',
-    #        args=(self.third_text_block.id,)
-    #    ))
-    #    # we need to fake a body as the template does not
-    #    # contain that
-    #    page.body = "<body>%s</body>" % page.body
-    #    page = page.form.submit()
-
-    #    self.assertEquals(TextBlock.objects.count(), 2)
-    #    self.assertRaises(
-    #        TextBlock.DoesNotExist,
-    #        TextBlock.objects.get,
-    #        id=self.third_text_block.id
-    #    )
+    def test_can_be_deleted(self):
+        self.delete(reverse('fp-api:block-retrieve-update-destroy',
+                            args=(self.third_text_block.id,)))
+        self.assertEquals(ContentBlock.objects.count(), 2)
+        self.assertEquals(TextBlock.objects.count(), 2)
+        with self.assertRaises(TextBlock.DoesNotExist):
+            TextBlock.objects.get(id=self.third_text_block.id)
 
     #def test_can_be_deleted_and_remaining_blocks_are_reordered(self):
     #    page = self.get(reverse(
@@ -141,8 +127,5 @@ class TestBlockRendering(test.FancyPagesWebTest):
         for block_class in library.get_content_blocks().values():
             container = self.page.containers.get(name='page-container')
             block = block_class.objects.create(container=container)
-            self.get(reverse(
-                'fancypages:page-detail',
-                args=(self.page.slug,)
-            ))
+            self.get(reverse('fancypages:page-detail', args=(self.page.slug,)))
             block.delete()

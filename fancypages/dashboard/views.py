@@ -123,26 +123,4 @@ class BlockUpdateView(generic.UpdateView, FancypagesMixin):
         return super(BlockUpdateView, self).form_invalid(form)
 
     def get_success_url(self):
-        return reverse('fp-dashboard:block-update',
-                       args=(self.object.id,))
-
-
-class BlockDeleteView(generic.DeleteView, FancypagesMixin):
-    model = ContentBlock
-    context_object_name = 'block'
-    template_name = "fancypages/dashboard/block_delete.html"
-
-    def get_object(self, queryset=None):
-        return self.get_block_object()
-
-    def delete(self, request, *args, **kwargs):
-        response = super(BlockDeleteView, self).delete(request, *args,
-                                                       **kwargs)
-        blocks = self.object.container.blocks.all().select_subclasses()
-        for idx, block in enumerate(blocks):
-            block.display_order = idx
-            block.save()
-        return response
-
-    def get_success_url(self):
-        return reverse('fp-dashboard:page-list')
+        return reverse('fp-dashboard:block-update', args=(self.object.id,))

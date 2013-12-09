@@ -66,3 +66,11 @@ class FancyPagesWebTest(WebTest, MockTemplateMixin):
     def post(self, *args, **kwargs):
         kwargs['user'] = self.user
         return self.app.post(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        kwargs['user'] = self.user
+        return self.app.delete(*args, **kwargs)
+
+    def put(self, *args, **kwargs):
+        kwargs['user'] = self.user
+        return self.app.put(*args, **kwargs)

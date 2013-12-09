@@ -13,12 +13,8 @@ class FancypagesApplication(Application):
     def get_urls(self):
         urlpatterns = patterns(
             '',
-            url(
-                r'^(?P<slug>[\w-]+(/[\w-]+)*)/$',
-                self.page_view.as_view(),
-                name='page-detail'
-            ),
-        )
+            url(r'^(?P<slug>[\w-]+(/[\w-]+)*)/$', self.page_view.as_view(),
+                name='page-detail'))
         return self.post_process_urls(urlpatterns)
 
 
