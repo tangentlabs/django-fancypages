@@ -5,10 +5,12 @@
 <div class="editing-area">
     <h3>Edit</h3>
 
-    <form id="{{ block.container.variable_name }}_block_form"
-          data-block-id='{{ block.id }}' data-container-name="{{ block.container.variable_name }}"
+    <form id="{{ block.container.name }}_block_form"
+          data-block-id='{{ block.id }}'
+          data-block-code='{{ block.code }}'
+          data-container-id="{{ block.container.id }}"
           data-behaviours="submit-block-form" class="form" method="post"
-          action="{% url "fp-dashboard:block-update" block.id %}">
+          action="{% url "fp-api:block-retrieve-update-destroy" block.id %}">
         {% csrf_token %}
         {% render_block_form form %}
         <div class="fp-editor-actions">

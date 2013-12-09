@@ -12,6 +12,11 @@ urlpatterns = patterns(
         name='block-retrieve-update-destroy'
     ),
     url(
+        r'^block/(?P<pk>\d+)/form$',
+        views.BlockFormView.as_view(),
+        name='block-form'
+    ),
+    url(
         r'^block/(?P<pk>\d+)/move$',
         views.BlockMoveView.as_view(),
         name='block-move'

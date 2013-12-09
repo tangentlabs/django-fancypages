@@ -16,8 +16,6 @@ class FancypagesDashboardApplication(Application):
     page_update_view = views.PageUpdateView
     page_delete_view = views.PageDeleteView
 
-    block_update_view = views.BlockUpdateView
-
     def get_urls(self):
         urlpatterns = patterns(
             '',
@@ -47,12 +45,6 @@ class FancypagesDashboardApplication(Application):
                 r'^delete/(?P<pk>\d+)/$',
                 self.page_delete_view.as_view(),
                 name='page-delete'
-            ),
-
-            url(
-                r'^block/update/(?P<pk>\d+)/$',
-                self.block_update_view.as_view(),
-                name='block-update'
             ),
         )
         return self.post_process_urls(urlpatterns)

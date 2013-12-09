@@ -118,14 +118,13 @@ fancypages.eventHandlers = {
     /**
      * Delete a content block using the API. The block ID needs to be retrieved
      * from the blocker wrapper <div> which is a parent of the clicked delete
-     * button. A page reload is triggered when the block has been deleted
-     * successfully.
+     * button. A page reload is triggered when the block has been deleted successfully.
      */
     deleteBlock: function () {
         var block = $(this).parents('.block');
 
         $.ajax({
-            url: '/api/v2/block/' + $(block).data('block-id'),
+            url: fancypages.apiBaseUrl + $(block).data('block-id'),
             type: 'DELETE',
             beforeSend: function (xhr, settings) {
                 xhr.setRequestHeader("X-CSRFToken", fancypages.getCsrfToken());
@@ -156,7 +155,7 @@ fancypages.eventHandlers = {
 
         fancypages.panels.showEditPanel();
 
-        fancypages.editor.loadWidgetForm($(block).data('block-id'), $(block).data('container-name'), {
+        fancypages.editor.loadBlockForm($(block).data('block-id'), $(block).data('container-name'), {
             success: function () {
                 // attach slider to column width slider
                 var sliderSelection = $('#id_left_width');
@@ -193,9 +192,9 @@ fancypages.eventHandlers = {
     /**
      * Display form containing block settings in editor panel.
      */
-    displayWidgetForm: function (options, data) {
+    displayBlockForm: function (options, data) {
         var blockWrapper = $('div[id=block_input_wrapper]');
-        blockWrapper.html(data.rendered_form);
+        blockWrapper.html(data);
         $('#page-settings').hide();
 
         fancypages.editor.wysiwyg.init();

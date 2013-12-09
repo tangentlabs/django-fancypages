@@ -1,84 +1,41 @@
 from django.db.models import get_model
 from django.utils.translation import ugettext as _
-from django.forms.models import modelform_factory
-from django.template import loader, RequestContext
 
 from rest_framework import serializers
 
 from .. import library
-from ..dashboard import forms
 
 FancyPage = get_model('fancypages', 'FancyPage')
 ContentBlock = get_model('fancypages', 'ContentBlock')
 OrderedContainer = get_model('fancypages', 'OrderedContainer')
 
 
-class RenderFormFieldMixin(object):
-    form_template_name = None
-    context_object_name = 'object'
-
-    def get_rendered_form(self, obj):
-        request = self.context.get('request')
-        if not request or 'includeForm' not in request.GET:
-            return u''
-
-        form_class = self.get_form_class(obj)
-        form_kwargs = self.get_form_kwargs(obj)
-
-        tmpl = loader.get_template(self.form_template_name)
-        ctx = RequestContext(
-            self.context['request'],
-            {
-                self.context_object_name: obj,
-                'form': form_class(**form_kwargs),
-            }
-        )
-        return tmpl.render(ctx)
-
-    def get_form_kwargs(self, obj):
-        return {
-            'instance': obj,
-        }
-
-    def get_form_class(self, obj):
-        # check if the block has a class-level attribute that
-        # defines a specific form class to be used
-        get_form_class = getattr(obj.__class__, 'get_form_class', None)
-        if not get_form_class:
-            return modelform_factory(obj.__class__)
-        return modelform_factory(obj.__class__, form=get_form_class())
-
-
-class BlockSerializer(RenderFormFieldMixin, serializers.ModelSerializer):
-    form_template_name = "fancypages/dashboard/block_update.html"
-    context_object_name = 'block'
-
+class BlockSerializer(serializers.ModelSerializer):
     display_order = serializers.IntegerField(required=False, default=-1)
     code = serializers.CharField(required=True)
-    rendered_form = serializers.SerializerMethodField('get_rendered_form')
 
-    def restore_object(self, attrs, instance=None):
-        code = attrs.pop('code')
+    def __init__(self, instance=None, data=None, files=None,
+                 context=None, partial=False, many=None,
+                 allow_add_remove=False, **kwargs):
 
-        if instance is None:
+        if instance:
+            self.Meta.model = instance.__class__
+        elif data is not None:
+            code = data.get('code')
             block_class = library.get_content_block(code)
             if block_class:
-                self.opts.model = block_class
+                self.Meta.model = block_class
 
+        super(BlockSerializer, self).__init__(
+            instance, data, files, context, partial, many, allow_add_remove,
+            **kwargs)
+
+    def restore_object(self, attrs, instance=None):
+        # we need to remove the 'code' attribute as it is not a valid keyword
+        # for content block subclasses. It's only used in the serialiser
+        if 'code' in attrs:
+            del attrs['code']
         return super(BlockSerializer, self).restore_object(attrs, instance)
-
-    def get_form_class(self, obj):
-        model = self.object.__class__
-        get_form_class = getattr(model, 'get_form_class')
-        if get_form_class and get_form_class():
-            return modelform_factory(model, form=get_form_class())
-
-        form_class = getattr(
-            forms,
-            "%sForm" % model.__name__,
-            forms.BlockForm
-        )
-        return modelform_factory(model, form=form_class)
 
     class Meta:
         model = ContentBlock
