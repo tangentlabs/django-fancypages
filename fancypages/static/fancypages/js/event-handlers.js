@@ -116,26 +116,30 @@ fancypages.eventHandlers = {
         });
     },
     /**
-     * Delete a block
+     * Delete a content block using the API. The block ID needs to be retrieved
+     * from the blocker wrapper <div> which is a parent of the clicked delete
+     * button. A page reload is triggered when the block has been deleted
+     * successfully.
      */
-    deleteWidget: function (ev) {
+    deleteBlock: function () {
         var block = $(this).parents('.block');
-        var deleteUrl = '/dashboard/fancypages/block/delete/' + $(block).data('block-id') + "/";
 
-        $.ajax(deleteUrl)
-            .done(function (data) {
-                var blockWrapper = $('div[id=block_input_wrapper]');
-                blockWrapper.after(data);
-
-                $(data).load(function () {
-                    $(this).modal('show');
-                });
-            })
-            .error(function () {
+        $.ajax({
+            url: '/api/v2/block/' + $(block).data('block-id'),
+            type: 'DELETE',
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", fancypages.getCsrfToken());
+            },
+            success: function (data) {
+                fancypages.editor.reloadPage();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
                 fancypages.utils.messages.error(
-                    "An error occured trying to delete a block. Please try it again."
+                    "An error occured trying to delete a block. " +
+                    "Please try it again."
                 );
-            });
+            }
+        });
     },
     /**
      * Load block form when edit button is clicked, add slider if a range

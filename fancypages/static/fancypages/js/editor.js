@@ -164,7 +164,7 @@ fancypages.editor = {
         $("a[data-behaviours~=show-block-selection]").click(fancypages.eventHandlers.showBlockSelection);
 
         $('.edit-button').click(fancypages.eventHandlers.editWidget);
-        $('div.delete').click(fancypages.eventHandlers.deleteWidget);
+        $('div.delete').click(fancypages.eventHandlers.deleteBlock);
     },
 
     initialiseEventsOnLoadedContent: function () {

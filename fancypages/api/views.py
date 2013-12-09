@@ -4,7 +4,6 @@ from django.template import loader, RequestContext
 from rest_framework import status
 from rest_framework import generics
 from rest_framework.views import APIView
-from rest_framework.reverse import reverse
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework.authentication import SessionAuthentication
@@ -16,16 +15,6 @@ FancyPage = get_model('fancypages', 'FancyPage')
 Container = get_model('fancypages', 'Container')
 ContentBlock = get_model('fancypages', 'ContentBlock')
 OrderedContainer = get_model('fancypages', 'OrderedContainer')
-
-
-class ApiV2View(APIView):
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsAdminUser,)
-
-    def get(self, request):
-        return Response({
-            'blocks': reverse('fp-api:block-list', request=request),
-        })
 
 
 class BlockListView(generics.ListCreateAPIView):
@@ -53,8 +42,7 @@ class BlockRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         return self.model.objects.get_subclass(
-            id=self.kwargs.get(self.pk_url_kwarg)
-        )
+            id=self.kwargs.get(self.pk_url_kwarg))
 
 
 class BlockMoveView(generics.UpdateAPIView):
