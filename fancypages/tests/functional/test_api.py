@@ -189,18 +189,10 @@ class TestTheBlockMoveApi(test.FancyPagesWebTest):
             )
 
         self.app.put(
-            reverse(
-                'fp-api:block-move',
-                kwargs={
-                    'pk': self.main_blocks[1].id,
-                }
-            ),
-            params={
-                'container': self.left_container.id,
-                'index': 1,
-            },
-            user=self.user
-        )
+            reverse('fp-api:block-move', kwargs={
+                'uuid': self.main_blocks[1].uuid}),
+            params={'container': self.left_container.id, 'index': 1},
+            user=self.user)
 
         moved_block = TextBlock.objects.get(id=self.main_blocks[1].id)
         self.assertEquals(

@@ -7,7 +7,7 @@ from fancypages.dashboard import forms
 
 
 class BlockFormRenderer(HTMLFormRenderer):
-    template_name = "fancypages/dashboard/block_update.html"
+    template_name = "fancypages/api/block_form.html"
 
     def get_form_class(self):
         model = self.object.__class__

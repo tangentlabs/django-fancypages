@@ -6,11 +6,11 @@
     <h3>Edit</h3>
 
     <form id="{{ block.container.name }}_block_form"
-          data-block-id='{{ block.id }}'
+          data-block-id='{{ block.uuid }}'
           data-block-code='{{ block.code }}'
-          data-container-id="{{ block.container.id }}"
+          data-container-id="{{ block.container.uuid }}"
           data-behaviours="submit-block-form" class="form" method="PUT"
-          action="{% url "fp-api:block-retrieve-update-destroy" block.id %}">
+          action="{% url "fp-api:block-detail" uuid=block.uuid %}">
         {# no CSRF token required because submission is handled by JS #}
         {% render_block_form form %}
         <div class="fp-editor-actions">

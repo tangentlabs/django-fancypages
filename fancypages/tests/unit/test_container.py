@@ -35,17 +35,18 @@ class TestAContainer(TestCase):
         container = factories.ContainerFactory.build(id=ctn_id)
         html = ContainerRenderer(container, self.request_context).render()
         self.assertIn(
-            'data-target="#block_selection_modal"'.format(container.uid), html)
-        self.assertIn('data-container-id="{}"'.format(container.id), html)
+            'data-target="#block_selection_modal"'.format(container.uuid),
+            html)
+        self.assertIn('data-container-id="{}"'.format(container.uuid), html)
 
 
 class TestAnObjectContainer(TestCase):
 
     def test_can_be_retrieved_by_name(self):
         user = User.objects.create(username='testuser')
-        container = Container.objects.create(name='some-container',
-                                             page_object=user)
+        container = Container.objects.create(
+            name='some-container', page_object=user)
 
-        retrieved_container = Container.get_container_by_name(container.name,
-                                                              user)
+        retrieved_container = Container.get_container_by_name(
+            container.name, user)
         self.assertEquals(container.id, retrieved_container.id)

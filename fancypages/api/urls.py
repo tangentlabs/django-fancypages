@@ -1,23 +1,27 @@
+import shortuuid
+
 from django.conf.urls import patterns, url
 
 from fancypages.api import views
+
+SHORTUUID_ALPHA = shortuuid.get_alphabet()
 
 
 urlpatterns = patterns(
     '',
     url(r'^blocks$', views.BlockListView.as_view(), name='block-list'),
     url(
-        r'^block/(?P<pk>\d+)$',
-        views.BlockRetrieveUpdateDestroyView.as_view(),
-        name='block-retrieve-update-destroy'
+        r'^block/(?P<uuid>[{0}]+)$'.format(SHORTUUID_ALPHA),
+        views.BlockDetailView.as_view(),
+        name='block-detail'
     ),
     url(
-        r'^block/(?P<pk>\d+)/form$',
+        r'^block/(?P<uuid>[{0}]+)/form$'.format(SHORTUUID_ALPHA),
         views.BlockFormView.as_view(),
         name='block-form'
     ),
     url(
-        r'^block/(?P<pk>\d+)/move$',
+        r'^block/(?P<uuid>[{0}]+)/move$'.format(SHORTUUID_ALPHA),
         views.BlockMoveView.as_view(),
         name='block-move'
     ),
