@@ -14,10 +14,8 @@ class BlockSerializer(serializers.ModelSerializer):
     display_order = serializers.IntegerField(required=False, default=-1)
     code = serializers.CharField(required=True)
 
-    def __init__(self, instance=None, data=None, files=None,
-                 context=None, partial=False, many=None,
-                 allow_add_remove=False, **kwargs):
-
+    def __init__(self, instance=None, data=None, files=None, context=None,
+                 partial=False, many=None, allow_add_remove=False, **kwargs):
         if instance:
             self.Meta.model = instance.__class__
         elif data is not None:

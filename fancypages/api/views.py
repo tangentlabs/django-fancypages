@@ -18,12 +18,16 @@ ContentBlock = get_model('fancypages', 'ContentBlock')
 OrderedContainer = get_model('fancypages', 'OrderedContainer')
 
 
-class BlockListView(generics.ListCreateAPIView):
+class BlockAPIMixin(object):
     model = ContentBlock
+    lookup_field = 'uuid'
     serializer_class = serialisers.BlockSerializer
 
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAdminUser,)
+
+
+class BlockListView(BlockAPIMixin, generics.ListCreateAPIView):
 
     def pre_save(self, obj):
         if obj.display_order < 0:
@@ -34,43 +38,27 @@ class BlockListView(generics.ListCreateAPIView):
         return super(BlockListView, self).get_queryset().select_subclasses()
 
 
-class BlockRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    model = ContentBlock
-    serializer_class = serialisers.BlockSerializer
-
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsAdminUser,)
+class BlockDetailView(BlockAPIMixin, generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         return self.model.objects.get_subclass(
-            id=self.kwargs.get(self.pk_url_kwarg))
+            uuid=self.kwargs.get(self.lookup_field))
 
 
-class BlockFormView(generics.RetrieveAPIView):
-    model = ContentBlock
-    serializer_class = serialisers.BlockSerializer
-
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsAdminUser,)
-
+class BlockFormView(BlockAPIMixin, generics.RetrieveAPIView):
     renderer_classes = (renderers.BlockFormRenderer,)
 
     def get_object(self):
         return self.model.objects.get_subclass(
-            id=self.kwargs.get(self.pk_url_kwarg))
+            uuid=self.kwargs.get(self.lookup_field))
 
 
-class BlockMoveView(generics.UpdateAPIView):
-    model = ContentBlock
+class BlockMoveView(BlockAPIMixin, generics.UpdateAPIView):
     serializer_class = serialisers.BlockMoveSerializer
-
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsAdminUser,)
 
     def get_object(self):
         block = self.model.objects.get_subclass(
-            id=self.kwargs.get(self.pk_url_kwarg)
-        )
+            uuid=self.kwargs.get(self.lookup_field))
         block.prev_container = block.container
         return block
 

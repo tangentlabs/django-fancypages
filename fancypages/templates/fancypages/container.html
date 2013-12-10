@@ -3,18 +3,18 @@
 {% load url from future %}
 
 <div class="sortable connectedSortable {% if request.fp_edit_mode %}editable-container{% endif %}"
-     data-container-id="{{ container.id }}">
+     data-container-id="{{ container.uuid }}">
 {% for fp_block,rendered_block in rendered_blocks %}
-    <div id="block-{{ fp_block.id }}" class="block {{ container.name }}"
-         data-container-name="{{ container.name }}" data-block-id="{{ fp_block.id }}">
+    <div id="block-{{ fp_block.uuid }}" class="block {{ container.name }}"
+         data-container-name="{{ container.name }}" data-block-id="{{ fp_block.uuid }}">
 
         {% if request.fp_edit_mode %}
             <div class="edit-button fp-btn"><i class="glyphicon-edit"></i></div>
 
             {% if request.fp_debug_enabled %}
                 <div class="edit-button fp-btn">
-                    Block {{ fp_block }} (ID {{ fp_block.id }})
-                    | Container {{ container.uid }}
+                    Block {{ fp_block }} (ID {{ fp_block.uuid }})
+                    | Container {{ container.uuid }}
                 </div>
             {% endif %}
 
@@ -39,7 +39,7 @@
            data-behaviours='show-block-selection'
            data-target="#block_selection_modal"
            data-href="{% url "fp-api:block-type-list" %}"
-           data-container-id="{{ container.id }}">
+           data-container-id="{{ container.uuid }}">
             <i class="glyphicon-plus"></i> {% trans "Add content" %}
         </a>
     </div>

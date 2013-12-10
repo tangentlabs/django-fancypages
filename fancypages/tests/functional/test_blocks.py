@@ -46,8 +46,8 @@ class TestABlock(test.FancyPagesWebTest):
         self.assertEquals(self.third_text_block.display_order, 2)
 
     def test_can_be_deleted(self):
-        self.delete(reverse('fp-api:block-retrieve-update-destroy',
-                            args=(self.third_text_block.id,)))
+        self.delete(reverse('fp-api:block-detail',
+                            kwargs={'uuid': self.third_text_block.uuid}))
         self.assertEquals(ContentBlock.objects.count(), 2)
         self.assertEquals(TextBlock.objects.count(), 2)
         with self.assertRaises(TextBlock.DoesNotExist):
@@ -56,7 +56,7 @@ class TestABlock(test.FancyPagesWebTest):
     def test_can_retrieve_block_form(self):
         response = self.get(
             reverse('fp-api:block-form', kwargs={
-                'pk': self.third_text_block.id}))
+                'uuid': self.third_text_block.uuid}))
         raise NotImplementedError('needs validation of block form')
 
 
@@ -109,7 +109,7 @@ class TestABlock(test.FancyPagesWebTest):
 #
 #    def test_can_be_updated_when_no_asset_assigned(self):
 #        response = self.get(reverse('fp-dashboard:block-update',
-#                                    args=(self.block.id,)))
+#                                    kwargs={'uuid': self.block.uuid}))
 #        response.form['image_asset_id'] = self.image_asset.pk
 #        response.form['image_asset_type'] = 'imageasset'
 #        response.form.submit().follow()
