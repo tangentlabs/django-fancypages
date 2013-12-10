@@ -1,12 +1,16 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 
+from shortuuidfield import ShortUUIDField
+
 from ..compat import get_user_model
 
 User = get_user_model()
 
 
 class AbstractAsset(models.Model):
+    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+
     name = models.CharField(_("Name"), max_length=255)
 
     date_created = models.DateTimeField(_("Date created"), auto_now_add=True)
@@ -24,11 +28,8 @@ class AbstractAsset(models.Model):
 
 class ImageAsset(AbstractAsset):
     image = models.ImageField(
-        upload_to='asset/images/%Y/%m',
-        width_field='width',
-        height_field='height',
-        verbose_name=_("Image")
-    )
+        upload_to='asset/images/%Y/%m', width_field='width',
+        height_field='height', verbose_name=_("Image"))
     width = models.IntegerField(_("Width"), blank=True)
     height = models.IntegerField(_("Height"), blank=True)
     size = models.IntegerField(_("Size"), blank=True, null=True)  # Bytes
