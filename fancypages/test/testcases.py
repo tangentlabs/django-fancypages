@@ -1,5 +1,6 @@
 import os
 import mock
+import pytest
 
 from purl import URL
 
@@ -16,10 +17,11 @@ from splinter import Browser
 from fancypages.test import factories
 
 SPLINTER_WEBDRIVER = getattr(
-    settings,
-    'SPLINTER_WEBDRIVER',
-    os.environ.get('SPLINTER_WEBDRIVER', 'phantomjs')
-)
+    settings, 'SPLINTER_WEBDRIVER',
+    os.environ.get('SPLINTER_WEBDRIVER', 'phantomjs'))
+
+SAUCELABS_USERNAME = os.environ.get('SAUCELABS_USERNAME')
+SAUCELABS_KEY = os.environ.get('SAUCELABS_KEY')
 
 
 class BlockTestCase(TestCase):
@@ -36,6 +38,7 @@ class BlockTestCase(TestCase):
         return renderer.render()
 
 
+@pytest.mark.integration
 class SplinterTestCase(LiveServerTestCase):
     username = 'peter.griffin'
     email = 'peter@griffin.com'
@@ -44,12 +47,26 @@ class SplinterTestCase(LiveServerTestCase):
     is_staff = False
     is_logged_in = True
 
+    def get_remote_browser(self):
+        remote_url = "http://{}:{}@localhost:4445/wd/hub".format(
+            SAUCELABS_USERNAME, SAUCELABS_KEY)
+        return Browser(
+            driver_name="remote", url=remote_url, browser='firefox',
+            platform="OSX 10.6", version="25", name="Firefox 25 on OSX 10.6")
+
+    def get_local_browser(self):
+        return Browser(SPLINTER_WEBDRIVER)
+
     def setUp(self):
         settings.DEBUG = True
         super(SplinterTestCase, self).setUp()
         self.user = None
         self.base_url = URL(self.live_server_url)
-        self.browser = Browser(SPLINTER_WEBDRIVER)
+
+        if os.environ.get('CI'):
+            self.browser = self.get_remote_browser()
+        else:
+            self.browser = self.get_local_browser()
 
         if self.is_anonymous and not self.is_staff:
             return
@@ -72,7 +89,8 @@ class SplinterTestCase(LiveServerTestCase):
 
     def tearDown(self):
         super(SplinterTestCase, self).tearDown()
-        self.browser.quit()
+        if not os.getenv('SPLINTER_DEBUG'):
+            self.browser.quit()
 
     def goto(self, path):
         url = self.base_url.path(path)

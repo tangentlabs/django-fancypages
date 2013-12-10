@@ -1,9 +1,7 @@
-import pytest
-
+from fancypages.test import factories
 from fancypages.test.testcases import SplinterTestCase
 
 
-@pytest.mark.integration
 class TestTheEditorPanel(SplinterTestCase):
     is_staff = True
     is_logged_in = True
@@ -41,3 +39,20 @@ class TestTheEditorPanel(SplinterTestCase):
         self.goto(self.home_page_url)
         body_tag = self.browser.find_by_css('body').first
         self.assertFalse(body_tag.has_class('editor-hidden'))
+
+
+class TestATextBlock(SplinterTestCase):
+    is_staff = True
+    is_logged_in = True
+    home_page_url = '/'
+
+    def setUp(self):
+        super(TestATextBlock, self).setUp()
+        self.page = factories.PageFactory()
+
+    def test_can_be_added_to_container(self):
+        self.goto(self.page.get_absolute_url())
+        self.browser.find_by_css('#editor-handle').click()
+
+        self.browser.find_by_css("div[class=block-add-control]>a").click()
+        self.browser.find_by_css("button[name=code][value=text]").click()
