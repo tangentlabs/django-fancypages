@@ -334,8 +334,10 @@ fancypages.editor = {
     },
 
     /**
-     * FIXME: this currently only works for updating blocks, we need to make it work
-     * with creating blocks again!!!!!!!!!!!!
+     * Submit the block form to the API and reload the page on success. The
+     * submitButton element passed in has to be named 'code' and have the 
+     * block code assigned as its value. This is needed because the API
+     * requires the code to determine the type of block to be handled.
      */
     submitBlockForm: function (submitButton) {
         form = $(submitButton).parents('form');
@@ -344,7 +346,7 @@ fancypages.editor = {
         $.each(form.serializeArray(), function (idx, obj) {
             formData[obj.name] = obj.value;
         });
-        formData.code = form.data('block-code');
+        formData.code = submitButton.val();
         formData.container = form.data('container-id');
 
         submitButton.attr('disabled', true);
@@ -355,9 +357,8 @@ fancypages.editor = {
         form.data('locked', true);
 
         $.ajax({
-            //url: form.attr('action'),
-            url: fancypages.apiBaseUrl + "block/" + $(form).data('block-id'),
-            type: "PUT",
+            url: form.attr('action'),
+            type: form.attr('method'),
             data: formData,
             beforeSend: function (xhr, settings) {
                 xhr.setRequestHeader("X-CSRFToken", fancypages.getCsrfToken());

@@ -53,6 +53,13 @@ class TestABlock(test.FancyPagesWebTest):
         with self.assertRaises(TextBlock.DoesNotExist):
             TextBlock.objects.get(id=self.third_text_block.id)
 
+    def test_can_retrieve_block_form(self):
+        response = self.get(
+            reverse('fp-api:block-form', kwargs={
+                'pk': self.third_text_block.id}))
+        raise NotImplementedError('needs validation of block form')
+
+
     #def test_can_be_deleted_and_remaining_blocks_are_reordered(self):
     #    page = self.get(reverse(
     #        'fp-dashboard:block-delete',

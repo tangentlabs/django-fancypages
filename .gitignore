@@ -7,9 +7,13 @@
 *.coverage
 
 local_settings.py
+environment.sh
 
 *.egg-info/
 *.cache/
+*.tox
 
 docs/build/
 sandbox/public/
+node_modules/
+htmlcov/

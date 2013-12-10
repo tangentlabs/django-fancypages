@@ -9,14 +9,17 @@
           data-block-id='{{ block.id }}'
           data-block-code='{{ block.code }}'
           data-container-id="{{ block.container.id }}"
-          data-behaviours="submit-block-form" class="form" method="post"
+          data-behaviours="submit-block-form" class="form" method="PUT"
           action="{% url "fp-api:block-retrieve-update-destroy" block.id %}">
-        {% csrf_token %}
+        {# no CSRF token required because submission is handled by JS #}
         {% render_block_form form %}
         <div class="fp-editor-actions">
             <div>
                 <a href="">{% trans "Cancel" %}</a>
-                <button type="submit" class="fp-btn-primary fp-btn">{% trans "Save" %}</button>
+                <button type="submit" name="code" value="{{ block.code }}"
+                        class="fp-btn-primary fp-btn">
+                    {% trans "Save" %}
+                </button>
             </div>
         </div>
     </form>
