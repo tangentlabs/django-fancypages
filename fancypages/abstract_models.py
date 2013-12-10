@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 
 from treebeard.mp_tree import MP_Node
+from shortuuidfield import ShortUUIDField
 from model_utils.managers import InheritanceManager
 
 from .manager import PageManager
@@ -77,6 +78,7 @@ class AbstractTreeNode(MP_Node):
 
 
 class AbstractPageType(models.Model):
+    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
     name = models.CharField(_("Name"), max_length=128)
     slug = models.SlugField(_("Slug"), max_length=128)
     template_name = models.CharField(_("Template name"), max_length=255)
@@ -99,6 +101,7 @@ class AbstractPageGroup(models.Model):
     A page group provides a way to group fancy pages and retrieve only
     pages within a specific group.
     """
+    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
     name = models.CharField(_("Name"), max_length=128)
     slug = models.SlugField(_("Slug"), max_length=128, null=True, blank=True)
 
@@ -116,9 +119,11 @@ class AbstractPageGroup(models.Model):
 
 
 class AbstractFancyPage(models.Model):
-    page_type = models.ForeignKey('fancypages.PageType',
-                                  verbose_name=_("Page type"),
-                                  related_name="pages", null=True, blank=True)
+    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+
+    page_type = models.ForeignKey(
+        'fancypages.PageType', verbose_name=_("Page type"),
+        related_name="pages", null=True, blank=True)
 
     keywords = models.CharField(_("Keywords"), max_length=255, blank=True)
 
@@ -131,27 +136,14 @@ class AbstractFancyPage(models.Model):
         (ARCHIVED, _("Archived")),
     )
     status = models.CharField(
-        _(u"Status"),
-        max_length=15,
-        choices=STATUS_CHOICES,
-        blank=True,
-    )
+        _(u"Status"), max_length=15, choices=STATUS_CHOICES, blank=True)
 
     date_visible_start = models.DateTimeField(
-        _("Visible from"),
-        null=True,
-        blank=True
-    )
+        _("Visible from"), null=True, blank=True)
     date_visible_end = models.DateTimeField(
-        _("Visible until"),
-        null=True,
-        blank=True,
-    )
+        _("Visible until"), null=True, blank=True)
     groups = models.ManyToManyField(
-        'fancypages.PageGroup',
-        verbose_name=_("Groups"),
-        related_name="pages",
-    )
+        'fancypages.PageGroup', verbose_name=_("Groups"), related_name="pages")
 
     # this is the default manager that should is
     # passed into subclasses when inheriting
@@ -217,6 +209,8 @@ class AbstractFancyPage(models.Model):
 
 class AbstractContainer(models.Model):
     template_name = 'fancypages/container.html'
+
+    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
 
     # this is the name of the variable used in the template tag
     # e.g. {% fancypages-container var-name %}
@@ -313,12 +307,14 @@ class AbstractContentBlock(models.Model):
     renderer_class = None
     form_class = None
 
+    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+
     # we ignore the related names for each content block model
     # to prevent cluttering the container model. Also the look up has
     # to be done more efficient than through these attributes.
-    container = models.ForeignKey('fancypages.Container',
-                                  verbose_name=_("Container"),
-                                  related_name="blocks")
+    container = models.ForeignKey(
+        'fancypages.Container', verbose_name=_("Container"),
+        related_name="blocks")
 
     display_order = models.PositiveIntegerField()
 
