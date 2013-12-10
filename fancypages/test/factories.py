@@ -11,6 +11,8 @@ from fancypages.compat import get_user_model
 
 PAGE_GROUPS_NAMES = itertools.cycle(['Primary Navigation', 'Footer'])
 
+FancyPage = get_model('fancypages', 'FancyPage')
+
 
 class UserFactory(DjangoModelFactory):
     FACTORY_FOR = get_user_model()
@@ -39,6 +41,14 @@ class PageGroupFactory(DjangoModelFactory):
     FACTORY_FOR = get_model('fancypages', 'PageGroup')
 
     name = factory.LazyAttribute(lambda a: PAGE_GROUPS_NAMES.next())
+
+
+class PageFactory(DjangoModelFactory):
+    FACTORY_FOR = FancyPage
+
+    depth = 0
+    name = factory.Sequence(lambda n: 'Sample page {}'.format(n))
+    status = FancyPage.PUBLISHED
 
 
 class ContainerFactory(DjangoModelFactory):
