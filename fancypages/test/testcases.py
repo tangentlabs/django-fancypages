@@ -18,7 +18,7 @@ from fancypages.test import factories
 
 SPLINTER_WEBDRIVER = getattr(
     settings, 'SPLINTER_WEBDRIVER',
-    os.environ.get('SPLINTER_WEBDRIVER', 'phantomjs'))
+    os.environ.get('SPLINTER_WEBDRIVER', 'firefox'))
 
 SAUCELABS_USERNAME = os.environ.get('SAUCELABS_USERNAME')
 SAUCELABS_KEY = os.environ.get('SAUCELABS_KEY')

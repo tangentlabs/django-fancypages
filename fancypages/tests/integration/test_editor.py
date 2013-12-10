@@ -1,5 +1,9 @@
+from django.db.models import get_model
+
 from fancypages.test import factories
 from fancypages.test.testcases import SplinterTestCase
+
+TextBlock = get_model('fancypages', 'TextBlock')
 
 
 class TestTheEditorPanel(SplinterTestCase):
@@ -56,3 +60,32 @@ class TestATextBlock(SplinterTestCase):
 
         self.browser.find_by_css("div[class=block-add-control]>a").click()
         self.browser.find_by_css("button[name=code][value=text]").click()
+
+        default_text = 'Your text goes here'
+        if not self.browser.is_text_present(default_text, 2):
+            self.fail("Could not find text block on page")
+
+        if not self.browser.is_element_present_by_css('.edit-button', 2):
+            self.fail("Could not find edit button for block")
+
+        self.browser.find_by_css('.edit-button').click()
+
+        text_sel = 'textarea[name=text]'
+        if not self.browser.is_element_present_by_css(text_sel, 2):
+            self.fail("Could not find input area for 'text' field")
+
+        new_text = "The new text for this block"
+        with self.browser.get_iframe(0) as iframe:
+            ibody = iframe.find_by_css('body')
+            ibody.type('\b' * (len(default_text) + 1))
+            ibody.type(new_text)
+
+        self.browser.find_by_css('button[type=submit]').click()
+
+        if not self.browser.is_text_present(new_text, 5):
+            self.fail("Could not find updated text")
+
+        self.assertEquals(TextBlock.objects.count(), 1)
+        # check for the text with an appended <br> because typing text into
+        # the input box via Selenium causes a linebreak at the end.
+        self.assertEquals(TextBlock.objects.all()[0].text, new_text+'<br>')
