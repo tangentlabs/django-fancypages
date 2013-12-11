@@ -2,12 +2,12 @@ from django.core import exceptions
 from django.db import IntegrityError
 from django.template import loader, Context
 
-from fancypages import test
 from fancypages import models
+from fancypages.test import testcases
 from fancypages.utils import get_container_names_from_template
 
 
-class TestContainerNames(test.FancyPagesTestCase):
+class TestContainerNames(testcases.FancyPagesTestCase):
 
     def test_can_be_extracted_from_template(self):
         self.prepare_template_file("""{% load fp_container_tags %}
@@ -36,7 +36,7 @@ class TestContainerNames(test.FancyPagesTestCase):
             self.template_name
         )
 
-class TestAPage(test.FancyPagesTestCase):
+class TestAPage(testcases.FancyPagesTestCase):
 
     def test_creates_containers_when_saved(self):
         self.prepare_template_file("""{% load fp_container_tags %}
@@ -59,7 +59,7 @@ class TestAPage(test.FancyPagesTestCase):
         self.assertEquals(article_page.containers.count(), 2)
 
 
-class TestContainer(test.FancyPagesTestCase):
+class TestContainer(testcases.FancyPagesTestCase):
 
     def test_without_page_object_is_unique(self):
         var_name = 'test-container'
@@ -117,7 +117,7 @@ class TestContainer(test.FancyPagesTestCase):
             )
 
 
-class TestContainerWithObject(test.FancyPagesTestCase):
+class TestContainerWithObject(testcases.FancyPagesTestCase):
 
     def setUp(self):
         super(TestContainerWithObject, self).setUp()
@@ -163,7 +163,7 @@ class TestContainerWithObject(test.FancyPagesTestCase):
         self.assertEquals(self.page.containers.count(), 1)
 
 
-class TestContainerWithoutObject(test.FancyPagesTestCase):
+class TestContainerWithoutObject(testcases.FancyPagesTestCase):
 
     def setUp(self):
         super(TestContainerWithoutObject, self).setUp()

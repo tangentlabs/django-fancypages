@@ -13,8 +13,11 @@ from django.db import connections, DEFAULT_DB_ALIAS
 from django.test import TestCase, LiveServerTestCase
 
 from splinter import Browser
+from django_webtest import WebTest
 
 from fancypages.test import factories
+from fancypages.compat import get_user_model
+from fancypages.test.mixins import MockTemplateMixin
 
 SPLINTER_WEBDRIVER = getattr(
     settings, 'SPLINTER_WEBDRIVER',
@@ -22,6 +25,58 @@ SPLINTER_WEBDRIVER = getattr(
 
 SAUCELABS_USERNAME = os.environ.get('SAUCELABS_USERNAME')
 SAUCELABS_KEY = os.environ.get('SAUCELABS_KEY')
+
+User = get_user_model()
+
+
+class FancyPagesTestCase(TestCase, MockTemplateMixin):
+
+    def setUp(self):
+        super(FancyPagesTestCase, self).setUp()
+        MockTemplateMixin.setUp(self)
+
+    def tearDown(self):
+        super(FancyPagesTestCase, self).tearDown()
+        MockTemplateMixin.tearDown(self)
+
+
+class FancyPagesWebTest(WebTest, MockTemplateMixin):
+    username = 'testuser'
+    email = 'testuser@example.com'
+    password = 'mysecretpassword'
+    is_anonymous = True
+    is_staff = False
+
+    def setUp(self):
+        super(FancyPagesWebTest, self).setUp()
+        MockTemplateMixin.setUp(self)
+        self.user = None
+
+        if self.is_staff:
+            self.is_anonymous = False
+
+        if self.is_staff or not self.is_anonymous:
+            self.user = User.objects.create_user(
+                username=self.username, email=self.email,
+                password=self.password)
+            self.user.is_staff = self.is_staff
+            self.user.save()
+
+    def get(self, *args, **kwargs):
+        kwargs['user'] = self.user
+        return self.app.get(*args, **kwargs)
+
+    def post(self, *args, **kwargs):
+        kwargs['user'] = self.user
+        return self.app.post(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        kwargs['user'] = self.user
+        return self.app.delete(*args, **kwargs)
+
+    def put(self, *args, **kwargs):
+        kwargs['user'] = self.user
+        return self.app.put(*args, **kwargs)
 
 
 class BlockTestCase(TestCase):

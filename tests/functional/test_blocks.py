@@ -6,8 +6,8 @@ from django.core.files import File
 from django.db.models import get_model
 from django.core.urlresolvers import reverse
 
-from fancypages import test
 from fancypages import library
+from fancypages.test import testcases
 from fancypages.test import TEMP_IMAGE_DIR
 
 User = get_model('auth', 'User')
@@ -21,7 +21,7 @@ ContentBlock = get_model('fancypages', 'ContentBlock')
 TitleTextBlock = get_model('fancypages', 'TitleTextBlock')
 
 
-class TestABlock(test.FancyPagesWebTest):
+class TestABlock(testcases.FancyPagesWebTest):
     is_staff = True
     csrf_checks = False
 
@@ -89,7 +89,7 @@ class TestABlock(test.FancyPagesWebTest):
         self.get(reverse('fancypages:page-detail', args=(self.page.slug,)))
 
 
-class TestAnAssetBlock(test.FancyPagesWebTest):
+class TestAnAssetBlock(testcases.FancyPagesWebTest):
     is_staff = True
     csrf_checks = False
 
@@ -116,7 +116,7 @@ class TestAnAssetBlock(test.FancyPagesWebTest):
         self.assertEquals(block.image_asset.id, self.image_asset.id)
 
 
-class TestBlockRendering(test.FancyPagesWebTest):
+class TestBlockRendering(testcases.FancyPagesWebTest):
 
     def setUp(self):
         super(TestBlockRendering, self).setUp()
