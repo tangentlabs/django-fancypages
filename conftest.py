@@ -1,5 +1,6 @@
 import os
 import sys
+import tempfile
 
 from django.conf import settings
 
@@ -11,6 +12,8 @@ location = lambda x: os.path.join(
 sandbox = lambda x: location("sandbox/%s" % x)
 
 sys.path.insert(0, location('sandbox'))
+
+TEMP_MEDIA_ROOT = tempfile.mkdtemp(suffix='_page_tests_media')
 
 
 def pytest_configure():
@@ -24,12 +27,10 @@ def pytest_configure():
                     'NAME': ':memory:',
                 }
             },
-            MEDIA_ROOT=sandbox('public/media'),
+            MEDIA_ROOT=TEMP_MEDIA_ROOT,
             MEDIA_URL='/media/',
             STATIC_URL='/static/',
-            STATICFILES_DIRS=[
-                sandbox('static/')
-            ],
+            STATICFILES_DIRS=[sandbox('static/') ],
             STATIC_ROOT=sandbox('public'),
             STATICFILES_FINDERS=(
                 'django.contrib.staticfiles.finders.FileSystemFinder',

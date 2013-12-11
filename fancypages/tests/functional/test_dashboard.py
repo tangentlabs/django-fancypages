@@ -1,23 +1,22 @@
 import os
-import shutil
 import tempfile
 import pytest
 
 from PIL import Image
 
+from django.conf import settings
 from django.utils import timezone
 from django.db.models import get_model
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import date
-from django.test.utils import override_settings
+
+from webtest import Upload
 
 from fancypages import test
+from fancypages.test import TEMP_IMAGE_DIR
 
 PageType = get_model('fancypages', 'PageType')
 FancyPage = get_model('fancypages', 'FancyPage')
-
-TEMP_IMAGE_DIR = tempfile.mkdtemp(suffix='_page_tests_images')
-TEMP_MEDIA_ROOT = tempfile.mkdtemp(suffix='_page_tests_media')
 
 
 class TestAStaffMember(test.FancyPagesWebTest):
@@ -39,15 +38,10 @@ class TestAStaffMember(test.FancyPagesWebTest):
         create_form['page_type'] = self.page_type.id
         page = create_form.submit()
 
-        #print page.context[0]['form'].errors
-
         self.assertRedirects(page, reverse('fp-dashboard:page-list'))
         page = page.follow()
 
         article_page = FancyPage.objects.get(name="A new page")
-        # we use the default template for this page with only has one
-        # container
-        #self.assertEquals(article_page.containers.count(), 1)
 
         self.assertEquals(article_page.status, FancyPage.DRAFT)
         self.assertEquals(article_page.is_visible, False)
@@ -171,37 +165,27 @@ class TestANewPage(test.FancyPagesWebTest):
 
 
 @pytest.mark.fp_only
-@override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class TestAnImageForAFancyPage(test.FancyPagesWebTest):
     is_staff = True
-
-    def tearDown(self):
-        super(TestAnImageForAFancyPage, self).tearDown()
-        if os.path.exists(TEMP_MEDIA_ROOT):
-            shutil.rmtree(TEMP_MEDIA_ROOT)
-        if os.path.exists(TEMP_IMAGE_DIR):
-            shutil.rmtree(TEMP_IMAGE_DIR)
 
     def test_can_be_added_in_the_dashboard(self):
         fancy_page = FancyPage.add_root(name='Sample Page')
         self.assertEquals(fancy_page.image, None)
 
         im = Image.new("RGB", (320, 240), "red")
-
         __, filename = tempfile.mkstemp(suffix='.jpg', dir=TEMP_IMAGE_DIR)
         im.save(filename, "JPEG")
 
         page = self.get(
-            reverse('fp-dashboard:page-update', args=(fancy_page.id,))
-        )
+            reverse('fp-dashboard:page-update', args=(fancy_page.id,)))
 
         settings_form = page.form
-        settings_form['image'] = (filename,)
+        settings_form['image'] = Upload(filename)
         list_page = settings_form.submit()
 
         self.assertRedirects(list_page, reverse('fp-dashboard:page-list'))
 
-        pages_path = os.path.join(TEMP_MEDIA_ROOT, 'fancypages/pages')
+        pages_path = os.path.join(settings.MEDIA_ROOT, 'fancypages/pages')
         fancy_page = FancyPage.objects.get(id=fancy_page.id)
         self.assertEquals(
             fancy_page.image.path,

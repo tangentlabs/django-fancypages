@@ -1,8 +1,14 @@
+import tempfile
+
+from PIL import Image
+
+from django.core.files import File
 from django.db.models import get_model
 from django.core.urlresolvers import reverse
 
 from fancypages import test
 from fancypages import library
+from fancypages.test import TEMP_IMAGE_DIR
 
 User = get_model('auth', 'User')
 FancyPage = get_model('fancypages', 'FancyPage')
@@ -29,18 +35,15 @@ class TestABlock(test.FancyPagesWebTest):
 
         self.text_block = TextBlock.objects.create(
             container=self.page.get_container_from_name('page-container'),
-            text="some text",
-        )
+            text="some text")
 
         self.other_text_block = TextBlock.objects.create(
             container=self.page.get_container_from_name('page-container'),
-            text="some text",
-        )
+            text="some text")
 
         self.third_text_block = TextBlock.objects.create(
             container=self.page.get_container_from_name('page-container'),
-            text="second text",
-        )
+            text="second text")
         self.assertEquals(self.text_block.display_order, 0)
         self.assertEquals(self.other_text_block.display_order, 1)
         self.assertEquals(self.third_text_block.display_order, 2)
@@ -57,31 +60,28 @@ class TestABlock(test.FancyPagesWebTest):
         response = self.get(
             reverse('fp-api:block-form', kwargs={
                 'uuid': self.third_text_block.uuid}))
-        raise NotImplementedError('needs validation of block form')
+        self.assertIn(
+            '<textarea id="id_text" rows="10" cols="80" name="text">second '
+            'text</textarea>', response)
+        self.assertIn(
+            "data-block-id='{}'".format(self.third_text_block.uuid), response)
 
+    def test_can_be_deleted_and_remaining_blocks_are_reordered(self):
+        self.assertEquals(TextBlock.objects.count(), 3)
 
-    #def test_can_be_deleted_and_remaining_blocks_are_reordered(self):
-    #    page = self.get(reverse(
-    #        'fp-dashboard:block-delete',
-    #        args=(self.other_text_block.id,)
-    #    ))
-    #    # we need to fake a body as the template does not
-    #    # contain that
-    #    page.body = "<body>%s</body>" % page.body
-    #    page = page.form.submit()
+        self.delete(reverse('fp-api:block-detail',
+                            kwargs={'uuid': self.other_text_block.uuid}))
 
-    #    self.assertEquals(TextBlock.objects.count(), 2)
-    #    self.assertRaises(
-    #        TextBlock.DoesNotExist,
-    #        TextBlock.objects.get,
-    #        id=self.other_text_block.id
-    #    )
+        self.assertEquals(TextBlock.objects.count(), 2)
 
-    #    block = TextBlock.objects.get(id=self.text_block.id)
-    #    self.assertEquals(block.display_order, 0)
+        with self.assertRaises(TextBlock.DoesNotExist):
+            TextBlock.objects.get(id=self.other_text_block.id)
 
-    #    block = TextBlock.objects.get(id=self.third_text_block.id)
-    #    self.assertEquals(block.display_order, 1)
+        block = TextBlock.objects.get(id=self.text_block.id)
+        self.assertEquals(block.display_order, 0)
+
+        block = TextBlock.objects.get(id=self.third_text_block.id)
+        self.assertEquals(block.display_order, 1)
 
     def test_a_block_without_template_is_ignored(self):
         container = self.page.get_container_from_name('page-container')
@@ -89,33 +89,31 @@ class TestABlock(test.FancyPagesWebTest):
         self.get(reverse('fancypages:page-detail', args=(self.page.slug,)))
 
 
-#class TestAnAssetBlock(test.FancyPagesWebTest):
-#    is_staff = True
-#
-#    def setUp(self):
-#        super(TestAnAssetBlock, self).setUp()
-#        __, self.filename = tempfile.mkstemp(prefix="assetformtest", suffix='.jpg')
-#        im = Image.new("RGB", (200, 200), color=(255, 0, 0))
-#        im.save(self.filename, "JPEG")
-#        container = Container.objects.create(name='test-container')
-#        self.image_asset = ImageAsset.objects.create(
-#            image=File(open(self.filename)),
-#            creator=self.user,
-#        )
-#        self.block = ImageBlock.objects.create(container=container)
-#
-#    def tearDown(self):
-#        os.remove(self.filename)
-#
-#    def test_can_be_updated_when_no_asset_assigned(self):
-#        response = self.get(reverse('fp-dashboard:block-update',
-#                                    kwargs={'uuid': self.block.uuid}))
-#        response.form['image_asset_id'] = self.image_asset.pk
-#        response.form['image_asset_type'] = 'imageasset'
-#        response.form.submit().follow()
-#
-#        block = ImageBlock.objects.get(id=self.block.id)
-#        self.assertEquals(block.image_asset.id, self.image_asset.id)
+class TestAnAssetBlock(test.FancyPagesWebTest):
+    is_staff = True
+    csrf_checks = False
+
+    def setUp(self):
+        super(TestAnAssetBlock, self).setUp()
+
+        im = Image.new("RGB", (200, 200), color=(255, 0, 0))
+        __, self.filename = tempfile.mkstemp(suffix='.jpg', dir=TEMP_IMAGE_DIR)
+        im.save(self.filename, "JPEG")
+        container = Container.objects.create(name='test-container')
+        self.image_asset = ImageAsset.objects.create(
+            image=File(open(self.filename)),
+            creator=self.user)
+        self.block = ImageBlock.objects.create(container=container)
+
+    def test_can_be_updated_with_asset_image(self):
+        self.put(
+            reverse('fp-api:block-detail', kwargs={'uuid': self.block.uuid}),
+            params={'code': self.block.code,
+                    'container': self.block.container.uuid,
+                    'image_asset': self.image_asset.pk})
+
+        block = ImageBlock.objects.get(id=self.block.id)
+        self.assertEquals(block.image_asset.id, self.image_asset.id)
 
 
 class TestBlockRendering(test.FancyPagesWebTest):
@@ -124,8 +122,7 @@ class TestBlockRendering(test.FancyPagesWebTest):
         super(TestBlockRendering, self).setUp()
         self.prepare_template_file(
             "{% load fp_container_tags%}"
-            "{% fp_object_container page-container %}"
-        )
+            "{% fp_object_container page-container %}")
         self.page = FancyPage.add_root(name="A new page", slug='a-new-page')
         self.page.status = FancyPage.PUBLISHED
         self.page.save()
