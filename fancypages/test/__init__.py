@@ -10,6 +10,8 @@ from ..compat import get_user_model
 
 User = get_user_model()
 
+TEMP_IMAGE_DIR = tempfile.mkdtemp(suffix='_page_tests_images')
+
 
 class MockTemplateMixin(object):
 

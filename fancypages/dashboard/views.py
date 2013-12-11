@@ -1,4 +1,3 @@
-from django import http
 from django.views import generic
 from django.db.models import get_model
 from django.core.urlresolvers import reverse
