@@ -1,10 +1,10 @@
 import os
 import sys
-import tempfile
 
 from django.conf import settings
 
 import fancypages as fp
+from fancypages.test import TEMP_MEDIA_ROOT
 
 location = lambda x: os.path.join(
     os.path.dirname(os.path.realpath(__file__)), x
@@ -13,7 +13,6 @@ sandbox = lambda x: location("sandbox/%s" % x)
 
 sys.path.insert(0, location('sandbox'))
 
-TEMP_MEDIA_ROOT = tempfile.mkdtemp(suffix='_page_tests_media')
 
 
 def pytest_configure():

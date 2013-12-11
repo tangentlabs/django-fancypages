@@ -4,8 +4,8 @@ from django.core.urlresolvers import reverse
 
 from webtest import AppError
 
-from fancypages import test
 from fancypages.test import factories
+from fancypages.test import testcases
 
 PageType = get_model('fancypages', 'PageType')
 FancyPage = get_model('fancypages', 'FancyPage')
@@ -15,7 +15,7 @@ TabBlock = get_model('fancypages', 'TabBlock')
 ContentBlock = get_model('fancypages', 'ContentBlock')
 
 
-class TestTheBlockTypeApi(test.FancyPagesWebTest):
+class TestTheBlockTypeApi(testcases.FancyPagesWebTest):
     is_staff = True
 
     def setUp(self):
@@ -57,7 +57,7 @@ class TestTheBlockTypeApi(test.FancyPagesWebTest):
             self.fail('invalid container ID does not return 400 error')
 
 
-class TestTheBlockApi(test.FancyPagesWebTest):
+class TestTheBlockApi(testcases.FancyPagesWebTest):
     is_staff = True
     csrf_checks = False
 
@@ -122,7 +122,7 @@ class TestTheBlockApi(test.FancyPagesWebTest):
         ContentBlock.objects.get_subclass(pk=block_id)
 
 
-class TestTheBlockMoveApi(test.FancyPagesWebTest):
+class TestTheBlockMoveApi(testcases.FancyPagesWebTest):
     fixtures = ['page_templates.json']
     is_staff = True
     csrf_checks = False
@@ -196,7 +196,7 @@ class TestTheBlockMoveApi(test.FancyPagesWebTest):
                 pos)
 
 
-class TestThePageMoveApi(test.FancyPagesWebTest):
+class TestThePageMoveApi(testcases.FancyPagesWebTest):
     is_staff = True
     csrf_checks = False
 
@@ -284,7 +284,7 @@ class TestThePageMoveApi(test.FancyPagesWebTest):
         self.assertEquals(page.path, '00020002')
 
 
-class TestOrderedContainer(test.FancyPagesWebTest):
+class TestOrderedContainer(testcases.FancyPagesWebTest):
     is_staff = True
     csrf_checks = False
 

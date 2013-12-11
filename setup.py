@@ -17,7 +17,7 @@ setup(
     keywords="django, cms, pages, flatpages",
     license='BSD',
     platforms=['linux'],
-    packages=find_packages(exclude=["sandbox*"]),
+    packages=find_packages(exclude=["sandbox*", "tests*"]),
     include_package_data=True,
     install_requires=[
         'Django',

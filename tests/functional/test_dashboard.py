@@ -12,14 +12,14 @@ from django.template.defaultfilters import date
 
 from webtest import Upload
 
-from fancypages import test
+from fancypages.test import testcases
 from fancypages.test import TEMP_IMAGE_DIR
 
 PageType = get_model('fancypages', 'PageType')
 FancyPage = get_model('fancypages', 'FancyPage')
 
 
-class TestAStaffMember(test.FancyPagesWebTest):
+class TestAStaffMember(testcases.FancyPagesWebTest):
     is_staff = True
 
     def setUp(self):
@@ -145,7 +145,7 @@ class TestAStaffMember(test.FancyPagesWebTest):
         self.assertTrue(child_page.depth, 2)
 
 
-class TestANewPage(test.FancyPagesWebTest):
+class TestANewPage(testcases.FancyPagesWebTest):
     is_staff = True
 
     def test_displays_an_error_when_slug_already_exists(self):
@@ -165,7 +165,7 @@ class TestANewPage(test.FancyPagesWebTest):
 
 
 @pytest.mark.fp_only
-class TestAnImageForAFancyPage(test.FancyPagesWebTest):
+class TestAnImageForAFancyPage(testcases.FancyPagesWebTest):
     is_staff = True
 
     def test_can_be_added_in_the_dashboard(self):

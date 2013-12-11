@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 
 from fancypages.test import factories
-from fancypages.test import FancyPagesWebTest
+from fancypages.test.testcases import FancyPagesWebTest
 
 
 PageType = get_model('fancypages', 'PageType')

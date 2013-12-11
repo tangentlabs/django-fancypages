@@ -422,7 +422,7 @@ fancypages.editor = {
             $("a[data-behaviours~=load-modal]").click(
                 fancypages.eventHandlers.loadModal
             );
-            $("a[data-behaviours~=load-iframe-modal]").click(
+            $("a[data-behaviours~=load-asset-modal]").click(
                 fancypages.eventHandlers.loadIframeModal
             );
             $("#fullscreen-modal").on('hide', function () {

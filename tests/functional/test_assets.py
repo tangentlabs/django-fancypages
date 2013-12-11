@@ -1,10 +1,10 @@
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 
-from fancypages import test
+from fancypages.test import testcases
 
 
-class TestAnImageAsset(test.FancyPagesWebTest):
+class TestAnImageAsset(testcases.FancyPagesWebTest):
     is_staff = True
 
     def test_cannot_be_uploaded_using_get_request(self):
