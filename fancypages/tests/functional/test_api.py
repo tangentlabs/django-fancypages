@@ -5,11 +5,13 @@ from django.core.urlresolvers import reverse
 from webtest import AppError
 
 from fancypages import test
+from fancypages.test import factories
 
 PageType = get_model('fancypages', 'PageType')
 FancyPage = get_model('fancypages', 'FancyPage')
 Container = get_model('fancypages', 'Container')
 TextBlock = get_model('fancypages', 'TextBlock')
+TabBlock = get_model('fancypages', 'TabBlock')
 ContentBlock = get_model('fancypages', 'ContentBlock')
 
 
@@ -30,39 +32,29 @@ class TestTheBlockTypeApi(test.FancyPagesWebTest):
     def test_returns_a_block_type_form_for_container(self):
         page = self.get(
             reverse('fp-api:block-type-list'),
-            params={
-                'container': self.container.id,
-            }
-        )
+            params={'container': self.container.uuid})
         response = json.loads(page.content)
         self.assertIn('groupedBlocks', response)
-        #self.assertIn('test_add_block_form', response['rendered_form'])
-        #self.assertIn('two-column-layout', response['rendered_form'])
 
     def test_returns_error_when_no_container_specified(self):
         try:
             self.get(reverse('fp-api:block-type-list'))
-            self.fail(
-                'a container is required, this request should raise 400 error'
-            )
         except AppError as exc:
             self.assertIn('container ID is required', exc.message)
             self.assertIn('400', exc.args[0])
+        else:
+            self.fail(
+                'a container is required, this request should raise 400 error')
 
     def test_returns_error_when_invalid_container_is_specified(self):
         try:
             self.get(
-                reverse('fp-api:block-type-list'),
-                params={
-                    'container': 200,
-                }
-            )
-            self.fail(
-                'invalid container ID does not return 400 error'
-            )
+                reverse('fp-api:block-type-list'), params={'container': 200})
         except AppError as exc:
             self.assertIn('container ID is invalid', exc.message)
             self.assertIn('400', exc.args[0])
+        else:
+            self.fail('invalid container ID does not return 400 error')
 
 
 class TestTheBlockApi(test.FancyPagesWebTest):
@@ -109,11 +101,7 @@ class TestTheBlockApi(test.FancyPagesWebTest):
         num_blocks = container.blocks.count()
         response = self.post(
             reverse('fp-api:block-list'),
-            params={
-                'container': container.id,
-                'code': self.text_block.code,
-            },
-        )
+            params={'container': container.uuid, 'code': self.text_block.code})
 
         self.assertEquals(response.status_code, 201)
         self.assertEquals(container.blocks.count(), num_blocks + 1)
@@ -126,11 +114,7 @@ class TestTheBlockApi(test.FancyPagesWebTest):
         num_blocks = container.blocks.count()
         response = self.post(
             reverse('fp-api:block-list'),
-            params={
-                'container': container.id,
-                'code': 'image',
-            },
-        )
+            params={'container': container.uuid, 'code': 'image'})
         self.assertEquals(response.status_code, 201)
         self.assertEquals(container.blocks.count(), num_blocks + 1)
 
@@ -160,8 +144,10 @@ class TestTheBlockMoveApi(test.FancyPagesWebTest):
             slug='a-new-page',
             page_type=page_type,
         )
-        self.left_container = self.page.get_container_from_name('left-container')
-        self.main_container = self.page.get_container_from_name('main-container')
+        self.left_container = self.page.get_container_from_name(
+            'left-container')
+        self.main_container = self.page.get_container_from_name(
+            'main-container')
 
         self.left_blocks = []
         self.main_blocks = []
@@ -176,8 +162,7 @@ class TestTheBlockMoveApi(test.FancyPagesWebTest):
 
             left_block = TextBlock.objects.create(
                 container=self.left_container,
-                text="Left Column / Block #%d" % idx,
-            )
+                text="Left Column / Block #{}".format(idx))
             self.left_blocks.append(left_block)
             self.assertEquals(left_block.display_order, idx)
 
@@ -191,27 +176,24 @@ class TestTheBlockMoveApi(test.FancyPagesWebTest):
         self.app.put(
             reverse('fp-api:block-move', kwargs={
                 'uuid': self.main_blocks[1].uuid}),
-            params={'container': self.left_container.id, 'index': 1},
+            params={'container': self.left_container.uuid, 'index': 1},
             user=self.user)
 
         moved_block = TextBlock.objects.get(id=self.main_blocks[1].id)
         self.assertEquals(
             moved_block.container,
-            self.page.get_container_from_name('left-container')
-        )
+            self.page.get_container_from_name('left-container'))
         self.assertEquals(moved_block.display_order, 1)
 
         for idx, pos in [(0, 0), (1, 2), (2, 3)]:
             self.assertEquals(
                 TextBlock.objects.get(id=self.left_blocks[idx].id).display_order,
-                pos
-            )
+                pos)
 
         for idx, pos in [(0, 0), (2, 1)]:
             self.assertEquals(
                 TextBlock.objects.get(id=self.main_blocks[idx].id).display_order,
-                pos
-            )
+                pos)
 
 
 class TestThePageMoveApi(test.FancyPagesWebTest):
@@ -228,52 +210,31 @@ class TestThePageMoveApi(test.FancyPagesWebTest):
         self.first_parent.add_child(name='Another child')
         self.first_parent.add_child(name='Third child')
 
-        #self.second_parent.add_child(name='Last child')
-
     def put(self, page, params):
         return self.app.put(
-            reverse('fp-api:page-move', args=(page.id,)),
-            params=params,
-            user=self.user
-        )
+            reverse('fp-api:page-move', kwargs={'uuid': page.uuid}),
+            params=params, user=self.user)
 
     def test_can_move_second_root_above_first(self):
-        self.put(self.second_parent, {
-            'parent': 0,
-            'new_index': 0,
-            'old_index': 1,
-        })
+        self.put(self.second_parent, {'new_index': 0, 'old_index': 1})
 
         self.assertEquals(
-            self.second_parent.id,
-            FancyPage.get_first_root_node().id
-        )
+            self.second_parent.id, FancyPage.get_first_root_node().id)
 
     def test_can_move_root_page_into_parent_with_no_child(self):
         self.put(self.third_parent, {
-            'parent': self.second_parent.id,
-            'new_index': 0,
-            'old_index': 1,
-        })
+            'parent': self.second_parent.uuid, 'new_index': 0, 'old_index': 1})
         page = FancyPage.objects.get(id=self.third_parent.id)
         self.assertEquals(page.path, '00020001')
 
     def test_can_move_child_page_to_first_root(self):
-        self.put(self.a_child, {
-            'parent': 0,
-            'new_index': 0,
-            'old_index': 1,
-        })
+        self.put(self.a_child, {'new_index': 0, 'old_index': 1})
 
         page = FancyPage.objects.get(id=self.a_child.id)
         self.assertEquals(page.path, '0001')
 
     def test_can_move_child_page_to_last_root(self):
-        self.put(self.a_child, {
-            'parent': 0,
-            'new_index': 2,
-            'old_index': 1,
-        })
+        self.put(self.a_child, {'new_index': 2, 'old_index': 1})
 
         page = FancyPage.objects.get(id=self.a_child.id)
         self.assertEquals(page.path, '0004')
@@ -282,10 +243,7 @@ class TestThePageMoveApi(test.FancyPagesWebTest):
         self.second_parent.add_child(name='Last child')
 
         self.put(self.third_parent, {
-            'parent': self.second_parent.id,
-            'new_index': 0,
-            'old_index': 1,
-        })
+            'parent': self.second_parent.uuid, 'new_index': 0, 'old_index': 1})
 
         page = FancyPage.objects.get(id=self.third_parent.id)
         self.assertEquals(page.path, '00020001')
@@ -294,10 +252,7 @@ class TestThePageMoveApi(test.FancyPagesWebTest):
         child = self.second_parent.add_child(name='Last child')
 
         self.put(self.third_parent, {
-            'parent': self.second_parent.id,
-            'new_index': 1,
-            'old_index': 1,
-        })
+            'parent': self.second_parent.uuid, 'new_index': 1, 'old_index': 1})
 
         page = FancyPage.objects.get(id=self.third_parent.id)
         self.assertEquals(page.path, '00020002')
@@ -309,10 +264,7 @@ class TestThePageMoveApi(test.FancyPagesWebTest):
         second_child = self.second_parent.add_child(name='2nd child')
 
         self.put(second_child, {
-            'parent': self.second_parent.id,
-            'new_index': 0,
-            'old_index': 1,
-        })
+            'parent': self.second_parent.uuid, 'new_index': 0, 'old_index': 1})
 
         page = FancyPage.objects.get(id=first_child.id)
         self.assertEquals(page.path, '00020002')
@@ -324,12 +276,27 @@ class TestThePageMoveApi(test.FancyPagesWebTest):
         second_child = self.second_parent.add_child(name='2nd child')
 
         self.put(first_child, {
-            'parent': self.second_parent.id,
-            'new_index': 1,
-            'old_index': 0,
-        })
+            'parent': self.second_parent.uuid, 'new_index': 1, 'old_index': 0})
 
         page = FancyPage.objects.get(id=first_child.id)
         self.assertEquals(page.path, '00020003')
         page = FancyPage.objects.get(id=second_child.id)
         self.assertEquals(page.path, '00020002')
+
+
+class TestOrderedContainer(test.FancyPagesWebTest):
+    is_staff = True
+    csrf_checks = False
+
+    def test_can_be_created_with_valid_uuid(self):
+        self.block = factories.TabBlockFactory()
+        self.post(reverse('fp-api:ordered-container-list'),
+                  params={'block': self.block.uuid})
+        self.assertEquals(TabBlock.objects.count(), 1)
+        self.assertEquals(self.block.tabs.count(), 2)
+
+    def test_cannot_be_created_with_invalid_uuid(self):
+        response = self.post(reverse('fp-api:ordered-container-list'),
+                             params={'block': 'invaliduuid'}, status=404)
+        self.assertEquals(response.status_code, 404)
+        self.assertEquals(ContentBlock.objects.count(), 0)

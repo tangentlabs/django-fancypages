@@ -11,8 +11,7 @@ fancypages.eventHandlers = {
             url: $(this).data('action'),
             type: 'POST',
             data: {
-                content_type: $(this).data('content-type-id'),
-                object_id: $(this).parents('.block').data('block-id')
+                block: $(this).parents('.block').data('block-id')
             },
             beforeSend: function (xhr, settings) {
                 xhr.setRequestHeader("X-CSRFToken", fancypages.getCsrfToken());

@@ -41,7 +41,7 @@ urlpatterns = patterns(
         name='pages-select-form'
     ),
     url(
-        r'^page/(?P<pk>\d+)/move$',
+        r'^page/(?P<uuid>[{0}]+)/move$'.format(SHORTUUID_ALPHA),
         views.PageMoveView.as_view(),
         name='page-move'
     ),

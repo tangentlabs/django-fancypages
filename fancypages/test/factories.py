@@ -54,7 +54,7 @@ class PageFactory(DjangoModelFactory):
 class ContainerFactory(DjangoModelFactory):
     FACTORY_FOR = get_model('fancypages', 'Container')
 
-    name = 'test-container'
+    name = factory.Sequence(lambda n: 'test-container {}'.format(n))
 
 
 class TextBlockFactory(DjangoModelFactory):
@@ -65,3 +65,9 @@ class TextBlockFactory(DjangoModelFactory):
 
 class HorizontalSeparatorBlockFactory(DjangoModelFactory):
     FACTORY_FOR = get_model('fancypages', 'HorizontalSeparatorBlock')
+
+
+class TabBlockFactory(DjangoModelFactory):
+    FACTORY_FOR = get_model('fancypages', 'TabBlock')
+
+    container = factory.SubFactory(ContainerFactory)

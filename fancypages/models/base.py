@@ -31,6 +31,10 @@ class Container(abstract_models.AbstractContainer):
 class OrderedContainer(Container):
     display_order = models.PositiveIntegerField()
 
+    @property
+    def block_uuid(self):
+        return self.page_object.uuid
+
     def __unicode__(self):
         return u"Container #{0} '{1}' in '{2}'".format(
             self.display_order,
