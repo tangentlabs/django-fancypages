@@ -95,15 +95,15 @@ class BlockTypesView(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request):
-        container_id = request.QUERY_PARAMS.get('container')
-        if container_id is None:
+        container_uuid = request.QUERY_PARAMS.get('container')
+        if container_uuid is None:
             return Response(
                 {'detail': u'container ID is required for block list'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         try:
-            Container.objects.get(pk=container_id)
+            Container.objects.get(uuid=container_uuid)
         except Container.DoesNotExist:
             return Response(
                 {'detail': u'container ID is invalid'},
@@ -116,6 +116,7 @@ class BlockTypesView(APIView):
 
 class PageMoveView(generics.UpdateAPIView):
     model = FancyPage
+    lookup_field = 'uuid'
     serializer_class = serialisers.PageMoveSerializer
 
     authentication_classes = (SessionAuthentication,)

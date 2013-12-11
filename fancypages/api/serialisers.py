@@ -1,16 +1,27 @@
+import re
+import shortuuid
+import logging
+
+from django.http import Http404
 from django.db.models import get_model
 from django.utils.translation import ugettext as _
+from django.contrib.contenttypes.models import ContentType
 
 from rest_framework import serializers
 
 from .. import library
 
+logger = logging.getLogger('fancypages.api')
+
 FancyPage = get_model('fancypages', 'FancyPage')
 ContentBlock = get_model('fancypages', 'ContentBlock')
 OrderedContainer = get_model('fancypages', 'OrderedContainer')
 
+SHORTUUID_REGEX = re.compile(r'[{0}]+'.format(shortuuid.get_alphabet()))
+
 
 class BlockSerializer(serializers.ModelSerializer):
+    container = serializers.SlugRelatedField(slug_field='uuid')
     display_order = serializers.IntegerField(required=False, default=-1)
     code = serializers.CharField(required=True)
 
@@ -40,7 +51,7 @@ class BlockSerializer(serializers.ModelSerializer):
 
 
 class BlockMoveSerializer(serializers.ModelSerializer):
-    container = serializers.PrimaryKeyRelatedField()
+    container = serializers.SlugRelatedField(slug_field='uuid')
     index = serializers.IntegerField(source='display_order')
 
     class Meta:
@@ -49,28 +60,45 @@ class BlockMoveSerializer(serializers.ModelSerializer):
 
 
 class OrderedContainerSerializer(serializers.ModelSerializer):
-    content_type = serializers.PrimaryKeyRelatedField()
+    block = serializers.RegexField(regex=SHORTUUID_REGEX, source='block_uuid')
     title = serializers.CharField(required=False, default=_("New Tab"))
 
     def restore_object(self, attrs, instance=None):
+        block_uuid = attrs.pop('block_uuid')
+        try:
+            block = ContentBlock.objects.get_subclass(uuid=block_uuid)
+        except ContentBlock.DoesNotExist:
+            logger.info(
+                "invalid block UUID passed to serializer",
+                extra={'block_uuid': block_uuid, 'attrs': attrs})
+            raise Http404("block ID is invalid")
+
+        try:
+            content_type = ContentType.objects.get_for_model(block.__class__)
+        except ContentType.DoesNotExist:
+            logger.info(
+                "could not find content type for block",
+                extra={'block_uuid': block_uuid, 'attrs': attrs,
+                       'model': block.__class__})
+            raise Http404("block ID is invalid")
+
+        attrs.update({'object_id': block.id, 'content_type': content_type})
         instance = super(OrderedContainerSerializer, self).restore_object(
-            attrs,
-            instance
-        )
+            attrs, instance)
         if instance is not None:
             instance.display_order = instance.page_object.tabs.count()
         return instance
 
     class Meta:
         model = OrderedContainer
-        exclude = ['display_order']
+        exclude = ['display_order', 'object_id', 'content_type']
 
 
 class PageMoveSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField('get_page_title')
     is_visible = serializers.SerializerMethodField('get_visibility')
 
-    parent = serializers.IntegerField(required=True)
+    parent = serializers.CharField(required=False, default='0')
     new_index = serializers.IntegerField()
     old_index = serializers.IntegerField(required=True)
 
@@ -87,13 +115,13 @@ class PageMoveSerializer(serializers.ModelSerializer):
         else:
             position = 'right'
 
-        # if the parent ID is '0' the page will be moved to the
+        # if the parent UUID is '' the page will be moved to the
         # root level. That means we have to lookup the root node
         # that we use to relate the move to. This is the root node
         # at the position of the new_index. If it is the last node
         # the index will cause a IndexError so we insert the page
         # after the last node.
-        if not obj.parent:
+        if obj.parent == '0':
             try:
                 page = FancyPage.get_root_nodes()[obj.new_index]
             except IndexError:
@@ -105,7 +133,7 @@ class PageMoveSerializer(serializers.ModelSerializer):
         # as above and also have to insert as 'first-child' if no
         # other children are present due to different relative node
         else:
-            page = FancyPage.objects.get(id=obj.parent)
+            page = FancyPage.objects.get(uuid=obj.parent)
             if not page.numchild:
                 position = 'first-child'
             else:
