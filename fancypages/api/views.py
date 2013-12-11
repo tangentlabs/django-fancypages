@@ -44,6 +44,18 @@ class BlockDetailView(BlockAPIMixin, generics.RetrieveUpdateDestroyAPIView):
         return self.model.objects.get_subclass(
             uuid=self.kwargs.get(self.lookup_field))
 
+    def post_delete(self, obj):
+        """
+        After deleting a block, the display order of all blocks in the same
+        container is wrong (unless we removed the last block). To fix it, this
+        hook iterates over all blocks in the same container and and sets the
+        new display_order in each block.
+        """
+        blocks = obj.container.blocks.select_subclasses()
+        for idx, block in enumerate(blocks):
+            block.display_order = idx
+            block.save()
+
 
 class BlockFormView(BlockAPIMixin, generics.RetrieveAPIView):
     renderer_classes = (renderers.BlockFormRenderer,)
