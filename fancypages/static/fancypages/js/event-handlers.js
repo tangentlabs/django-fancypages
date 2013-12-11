@@ -123,7 +123,7 @@ fancypages.eventHandlers = {
         var block = $(this).parents('.block');
 
         $.ajax({
-            url: fancypages.apiBaseUrl + $(block).data('block-id'),
+            url: fancypages.apiBaseUrl + 'block/' + $(block).data('block-id'),
             type: 'DELETE',
             beforeSend: function (xhr, settings) {
                 xhr.setRequestHeader("X-CSRFToken", fancypages.getCsrfToken());
