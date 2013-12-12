@@ -13,8 +13,8 @@ class PageGroup(abstract_models.AbstractPageGroup):
         app_label = 'fancypages'
 
 
-class PageNode(abstract_models.AbstractTreeNode):
-    class Meta(abstract_models.AbstractTreeNode.Meta):
+class PageNode(abstract_models.AbstractPageNode):
+    class Meta(abstract_models.AbstractPageNode.Meta):
         swappable = 'FP_NODE_MODEL'
 
 

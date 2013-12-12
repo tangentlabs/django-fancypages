@@ -2,11 +2,11 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.contrib.contenttypes import generic
+from django.core.exceptions import ValidationError
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 from treebeard.mp_tree import MP_Node
 from shortuuidfield import ShortUUIDField
@@ -16,7 +16,7 @@ from .manager import PageManager
 from .utils import get_container_names_from_template
 
 
-class AbstractTreeNode(MP_Node):
+class AbstractPageNode(MP_Node):
     """
     Define the tree structure properties of the fancy page. This is a
     separate abstract class to make sure that it can be easily replaced
@@ -52,7 +52,7 @@ class AbstractTreeNode(MP_Node):
                 raise ValidationError(
                     _("A page with slug '%(slug)s' already exists") % {
                         'slug': self.slug})
-        super(AbstractTreeNode, self).save(*args, **kwargs)
+        super(AbstractPageNode, self).save(*args, **kwargs)
 
     def move(self, target, pos=None):
         """
@@ -61,7 +61,7 @@ class AbstractTreeNode(MP_Node):
 
         See https://tabo.pe/projects/django-treebeard/docs/1.61/api.html
         """
-        super(AbstractTreeNode, self).move(target, pos)
+        super(AbstractPageNode, self).move(target, pos)
         # Update the slugs and full names of all nodes in the new subtree.
         # We need to reload self as 'move' doesn't update the current instance,
         # then we iterate over the subtree and call save which automatically
