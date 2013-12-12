@@ -71,7 +71,7 @@ class TestTheBlockApi(testcases.FancyPagesWebTest):
             "{% fp_object_container page-container %}"
         )
 
-        self.page = factories.PageFactory(
+        self.page = factories.FancyPageFactory(
             node__name="A new page", node__slug='a-new-page')
 
         self.text_block = TextBlock.objects.create(
@@ -143,7 +143,7 @@ class TestTheBlockMoveApi(testcases.FancyPagesWebTest):
             name="Example Template",
             template_name=self.template_name,
         )
-        self.page = factories.PageFactory(
+        self.page = factories.FancyPageFactory(
             node__name="A new page", node__slug='a-new-page',
             page_type=page_type)
         self.left_container = self.page.get_container_from_name(
@@ -204,9 +204,12 @@ class TestThePageMoveApi(testcases.FancyPagesWebTest):
 
     def setUp(self):
         super(TestThePageMoveApi, self).setUp()
-        self.first_parent = factories.PageFactory(node__name="First parent")
-        self.second_parent = factories.PageFactory(node__name="Second parent")
-        self.third_parent = factories.PageFactory(node__name="Third parent")
+        self.first_parent = factories.FancyPageFactory(
+            node__name="First parent")
+        self.second_parent = factories.FancyPageFactory(
+            node__name="Second parent")
+        self.third_parent = factories.FancyPageFactory(
+            node__name="Third parent")
 
         self.a_child = self.first_parent.add_child(node__name='One child')
         self.first_parent.add_child(node__name='Another child')

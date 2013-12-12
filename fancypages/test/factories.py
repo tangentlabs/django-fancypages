@@ -58,7 +58,7 @@ class PageNodeFactory(DjangoModelFactory):
         return node
 
 
-class PageFactory(DjangoModelFactory):
+class FancyPageFactory(DjangoModelFactory):
     FACTORY_FOR = FancyPage
 
     status = FancyPage.PUBLISHED

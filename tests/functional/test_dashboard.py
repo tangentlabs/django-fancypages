@@ -54,7 +54,7 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         page_description = "The old description"
 
         now = timezone.now()
-        fancy_page = factories.PageFactory(
+        fancy_page = factories.FancyPageFactory(
             date_visible_start=now, node__name=page_name,
             node__description=page_description)
 
@@ -82,7 +82,7 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         self.assertEquals(fancy_page.description, 'Some description')
 
     def test_can_delete_a_page(self):
-        factories.PageFactory(node__name="A new page")
+        factories.FancyPageFactory(node__name="A new page")
         self.assertEquals(FancyPage.objects.count(), 1)
         page = self.get(reverse("fp-dashboard:page-list"))
         page = page.click("Delete")
@@ -91,7 +91,7 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         self.assertEquals(FancyPage.objects.count(), 0)
 
     def test_can_cancel_the_delete_of_a_page(self):
-        factories.PageFactory(node__name="A new page")
+        factories.FancyPageFactory(node__name="A new page")
 
         self.assertEquals(FancyPage.objects.count(), 1)
 
@@ -103,11 +103,10 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         self.assertContains(page, "Page Management")
 
     def test_can_delete_a_child_page(self):
-        parent_page = factories.PageFactory(node__name="A new page")
-        factories.PageFactory(node__name="Another page")
+        parent_page = factories.FancyPageFactory(node__name="A new page")
+        factories.FancyPageFactory(node__name="Another page")
 
-        child_page = factories.PageFactory(
-            node=parent_page.node.add_child(name="The child"))
+        child_page = parent_page.add_child(node__name="The child")
 
         parent = FancyPage.objects.get(id=parent_page.id)
         self.assertEquals(parent.node.numchild, 1)
@@ -124,11 +123,11 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         p = FancyPage.objects.get(id=parent_page.id)
         self.assertSequenceEqual(p.node.get_children(), [])
 
-        factories.PageFactory(node__name="3rd page")
+        factories.FancyPageFactory(node__name="3rd page")
         self.assertEquals(FancyPage.objects.count(), 3)
 
     def test_can_create_child_page(self):
-        parent_page = factories.PageFactory(node__name="A new page")
+        parent_page = factories.FancyPageFactory(node__name="A new page")
         page = self.get(reverse("fp-dashboard:page-list"))
 
         child_page_name = 'Test Page'
@@ -148,7 +147,7 @@ class TestANewPage(testcases.FancyPagesWebTest):
 
     def test_displays_an_error_when_slug_already_exists(self):
         page_title = "Home"
-        home_page = factories.PageFactory(node__name=page_title)
+        home_page = factories.FancyPageFactory(node__name=page_title)
         self.assertEquals(home_page.slug, 'home')
 
         page = self.get(reverse('fp-dashboard:page-list'))
@@ -167,7 +166,7 @@ class TestAnImageForAFancyPage(testcases.FancyPagesWebTest):
     is_staff = True
 
     def test_can_be_added_in_the_dashboard(self):
-        fancy_page = factories.PageFactory(node__name='Sample Page')
+        fancy_page = factories.FancyPageFactory(node__name='Sample Page')
         self.assertEquals(fancy_page.image, None)
 
         im = Image.new("RGB", (320, 240), "red")
