@@ -52,7 +52,7 @@ class TestATextBlock(SplinterTestCase):
 
     def setUp(self):
         super(TestATextBlock, self).setUp()
-        self.page = factories.PageFactory()
+        self.page = factories.FancyPageFactory()
 
     def test_can_be_added_to_container(self):
         self.goto(self.page.get_absolute_url())

@@ -14,22 +14,22 @@ class PageTreeMixin(object):
         self.footer_group = factories.PageGroupFactory(name="Footer")
 
         page_defaults = {'status': FancyPage.PUBLISHED}
-        self.ungrouped_page = factories.PageFactory(
+        self.ungrouped_page = factories.FancyPageFactory(
             node__name='Ungrouped Page', **page_defaults)
 
-        self.first_primnav_page = factories.PageFactory(
+        self.first_primnav_page = factories.FancyPageFactory(
             node__name="First primary navigation page", **page_defaults)
         self.first_primnav_page.groups.add(self.primary_nav_group)
 
-        self.second_primnav_page = factories.PageFactory(
+        self.second_primnav_page = factories.FancyPageFactory(
             node__name="Second primary navigation page", **page_defaults)
         self.second_primnav_page.groups.add(self.primary_nav_group)
 
-        self.footer_page = factories.PageFactory(
+        self.footer_page = factories.FancyPageFactory(
             node__name="Footer page", **page_defaults)
         self.footer_page.groups.add(self.footer_group)
 
-        self.both_groups_page = factories.PageFactory(
+        self.both_groups_page = factories.FancyPageFactory(
             node__name="Both groups page", **page_defaults)
         self.both_groups_page.groups.add(self.primary_nav_group)
         self.both_groups_page.groups.add(self.footer_group)
@@ -75,11 +75,10 @@ class TestPageTreeTag(PageTreeMixin, TestCase):
         super(TestPageTreeTag, self).setUp()
         self._create_grouped_pages()
 
-        self.primnav_child = factories.PageFactory(
-            node=self.first_primnav_page.node.add_child(
-                name="Primary Nav Child"))
-        self.footer_child = factories.PageFactory(
-            node=self.footer_page.node.add_child(name="Footer child"))
+        self.primnav_child = self.first_primnav_page.add_child(
+            node__name="Primary Nav Child")
+        self.footer_child = self.footer_page.add_child(
+            node__name="Footer child")
 
     def test_returns_full_tree_with_depth_one(self):
         with self.assertNumQueries(1):
