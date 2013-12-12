@@ -10,11 +10,12 @@ FancyPage = get_model('fancypages', 'FancyPage')
 class FancyPageDetailView(mixins.FancyPageMixin, DetailView):
     model = FancyPage
     content_object_name = 'fancypage'
+    slug_field = 'node__slug'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        response = super(FancyPageDetailView, self).get(request, *args,
-                                                        **kwargs)
+        response = super(FancyPageDetailView, self).get(
+            request, *args, **kwargs)
         if request.user.is_staff:
             return response
 

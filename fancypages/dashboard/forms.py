@@ -1,124 +1,96 @@
-from copy import copy
-
 from django import forms
 from django.db.models import get_model
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 
-FancyPage = get_model('fancypages', 'FancyPage')
+from treebeard.forms import MoveNodeForm
+
+from ..models import get_page_model, get_node_model
+
+PageNode = get_node_model()
+FancyPage = get_page_model()
 PageType = get_model('fancypages', 'PageType')
 PageGroup = get_model('fancypages', 'PageGroup')
 
 DATE_FORMAT = '%d-%m-%Y'
 
 
-class PageFormMixin(object):
-    FIELDS = [
-        'name',
-        'description',
-        'image',
-        'keywords',
-        'page_type',
-        'status',
-        'date_visible_start',
-        'date_visible_end',
-        'groups'
-    ]
-
-    def update_field_order(self):
-        # we need to specify the key order here because 'description' and
-        # 'image' are non-model fields that cause an error when added
-        # to the metaclass field attribute below
-        self.fields.keyOrder = self.FIELDS
-
-    def set_field_choices(self):
-        if 'page_type' in self.fields:
-            self.fields['page_type'].queryset = PageType.objects.all()
-        if 'groups' in self.fields:
-            self.fields['groups'].queryset = \
-                PageGroup.objects.all()
-
-
-class PageForm(PageFormMixin, forms.ModelForm):
-    image = forms.ImageField(required=False)
-    page_type = forms.ModelChoiceField(PageType.objects.none(), required=False)
-    date_visible_start = forms.DateTimeField(
-        widget=forms.DateInput(format=DATE_FORMAT),
-        input_formats=[DATE_FORMAT],
-        required=False
-    )
-    date_visible_end = forms.DateTimeField(
-        widget=forms.DateInput(format=DATE_FORMAT),
-        input_formats=[DATE_FORMAT],
-        required=False
-    )
+class PageNodeForm(forms.ModelForm):
     groups = forms.ModelMultipleChoiceField(
-        PageGroup.objects.none(),
-        widget=forms.CheckboxSelectMultiple(),
-        required=False
-    )
-
-    def __init__(self, *args, **kwargs):
-        super(PageForm, self).__init__(*args, **kwargs)
-        self.set_field_choices()
-        self.update_field_order()
+        label=_("Groups"), queryset=PageGroup.objects.none(),
+        widget=forms.CheckboxSelectMultiple(), required=False)
 
     class Meta:
         model = FancyPage
-        fields = PageFormMixin.FIELDS
-
-
-class PageCreateForm(PageFormMixin, forms.ModelForm):
-    image = forms.ImageField(required=False)
-    page_type = forms.ModelChoiceField(PageType.objects.none(), required=False)
-    date_visible_start = forms.DateTimeField(
-        widget=forms.DateInput(format=DATE_FORMAT),
-        input_formats=[DATE_FORMAT],
-        required=False
-    )
-    date_visible_end = forms.DateTimeField(
-        widget=forms.DateInput(format=DATE_FORMAT),
-        input_formats=[DATE_FORMAT],
-        required=False
-    )
-    groups = forms.ModelMultipleChoiceField(
-        PageGroup.objects.none(),
-        widget=forms.CheckboxSelectMultiple(),
-        required=False
-    )
+        exclude = ['uuid', 'node']
 
     def __init__(self, *args, **kwargs):
-        parent_id = kwargs.pop('parent_pk', None)
-        super(PageCreateForm, self).__init__(*args, **kwargs)
-        try:
-            self.parent = FancyPage.objects.get(id=parent_id)
-        except FancyPage.DoesNotExist:
-            self.parent = None
-        self.set_field_choices()
-        self.update_field_order()
+        self.parent_pk = kwargs.pop('parent_pk', None)
+        super(PageNodeForm, self).__init__(*args, **kwargs)
+
+        self.fields['groups'].queryset = PageGroup.objects.all()
+
+        # we just need to store these for later to set the key order
+        page_field_names = self.fields.keys()
+
+        self.node_field_names = []
+        for field in PageNode._meta.fields:
+            if field.name not in ['id', 'depth', 'numchild', 'path', 'slug']:
+                self.node_field_names.append(field.name)
+
+        additional_fields = forms.fields_for_model(
+            PageNode, fields=self.node_field_names)
+        self.fields.update(additional_fields)
+
+        # if we have a node instance, initialise the page-related fields
+        # with the appropriate values
+        instance = kwargs.get('instance')
+        if instance:
+            for field_name in self.node_field_names:
+                self.fields[field_name].initial = getattr(
+                    instance.node, field_name)
+
+        # update the field order for the page and node fields
+        self.fields.keyOrder = self.node_field_names + page_field_names
 
     def clean_name(self):
         name = self.cleaned_data.get('name')
+        if self.instance.id is not None:
+            return name
         try:
-            FancyPage.objects.get(slug=slugify(name))
+            FancyPage.objects.get(node__slug=slugify(name))
         except FancyPage.DoesNotExist:
             pass
         else:
             raise forms.ValidationError(
-                _("A page with this title already exists")
-            )
+                _("A page with this title already exists"))
         return name
 
     def save(self, *args, **kwargs):
-        page_kwargs = copy(self.cleaned_data)
-        page_kwargs.pop('groups')
-        if self.parent:
-            return self.parent.add_child(**page_kwargs)
-        return FancyPage.add_root(**page_kwargs)
+        page_data = {}
+        node_data = {}
+        for fname, fvalue in self.cleaned_data.iteritems():
+            if fname in self.node_field_names:
+                node_data[fname] = fvalue
+            else:
+                page_data[fname] = fvalue
 
-    class Meta:
-        model = FancyPage
-        fields = PageFormMixin.FIELDS
+        if not self.instance.id:
+            try:
+                parent = FancyPage.objects.get(pk=self.parent_pk)
+            except FancyPage.DoesNotExist:
+                parent = None
+
+            if parent:
+                self.instance.node = parent.node.add_child(**node_data)
+            else:
+                self.instance.node = PageNode.add_root(**node_data)
+        else:
+            for key, value in node_data.iteritems():
+                setattr(self.instance.node, key, value)
+            self.instance.node.save()
+
+        return super(PageNodeForm, self).save(*args, **kwargs)
 
 
 class BlockUpdateSelectForm(forms.Form):

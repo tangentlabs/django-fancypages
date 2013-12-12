@@ -43,12 +43,26 @@ class PageGroupFactory(DjangoModelFactory):
     name = factory.LazyAttribute(lambda a: PAGE_GROUPS_NAMES.next())
 
 
+class PageNodeFactory(DjangoModelFactory):
+    FACTORY_FOR = get_model('fancypages', 'PageNode')
+
+    name = factory.Sequence(lambda n: "Node {}".format(n))
+    depth = 1
+
+    @classmethod
+    def _generate(cls, create, attrs):
+        if create:
+            node = cls.FACTORY_FOR.add_root(**attrs)
+        else:
+            node = cls.FACTORY_FOR(**attrs)
+        return node
+
+
 class PageFactory(DjangoModelFactory):
     FACTORY_FOR = FancyPage
 
-    depth = 0
-    name = factory.Sequence(lambda n: 'Sample page {}'.format(n))
     status = FancyPage.PUBLISHED
+    node = factory.SubFactory(PageNodeFactory)
 
 
 class ContainerFactory(DjangoModelFactory):

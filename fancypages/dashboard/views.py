@@ -3,10 +3,13 @@ from django.db.models import get_model
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from fancypages.dashboard import forms
+from . import forms
+from ..models import get_page_model, get_node_model
 
 
-FancyPage = get_model('fancypages', 'FancyPage')
+PageNode = get_node_model()
+FancyPage = get_page_model()
+
 ContentBlock = get_model('fancypages', 'ContentBlock')
 Category = get_model('catalogue', 'Category')
 Container = get_model('fancypages', 'Container')
@@ -20,13 +23,13 @@ class PageListView(generic.ListView):
     template_name = "fancypages/dashboard/page_list.html"
 
     def get_queryset(self, queryset=None):
-        return self.model.objects.filter(depth=1)
+        return self.model.objects.top_level()
 
 
 class PageCreateView(generic.CreateView):
-    template_name = "fancypages/dashboard/page_update.html"
-    form_class = forms.PageCreateForm
     model = FancyPage
+    form_class = forms.PageNodeForm
+    template_name = "fancypages/dashboard/page_update.html"
 
     def get_form_kwargs(self):
         kwargs = super(PageCreateView, self).get_form_kwargs()
@@ -43,10 +46,10 @@ class PageCreateView(generic.CreateView):
 
 
 class PageUpdateView(generic.UpdateView):
-    template_name = "fancypages/dashboard/page_update.html"
-    form_class = forms.PageForm
-    context_object_name = 'page'
     model = FancyPage
+    form_class = forms.PageNodeForm
+    context_object_name = 'page'
+    template_name = "fancypages/dashboard/page_update.html"
 
     def get_context_data(self, **kwargs):
         ctx = super(PageUpdateView, self).get_context_data(**kwargs)

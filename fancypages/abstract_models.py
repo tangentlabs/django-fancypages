@@ -2,11 +2,11 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.contrib.contenttypes import generic
-from django.core.exceptions import ValidationError
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 from treebeard.mp_tree import MP_Node
 from shortuuidfield import ShortUUIDField
@@ -55,14 +55,12 @@ class AbstractTreeNode(MP_Node):
         super(AbstractTreeNode, self).save(*args, **kwargs)
 
     def move(self, target, pos=None):
-        #:PEP8 -E501
         """
         Moves the current node and all its descendants to a new position
         relative to another node.
 
         See https://tabo.pe/projects/django-treebeard/docs/1.61/api.html
         """
-        #:PEP8 +E501
         super(AbstractTreeNode, self).move(target, pos)
         # Update the slugs and full names of all nodes in the new subtree.
         # We need to reload self as 'move' doesn't update the current instance,
@@ -74,6 +72,7 @@ class AbstractTreeNode(MP_Node):
             node.save()
 
     class Meta:
+        app_label = 'fancypages'
         abstract = True
 
 
@@ -120,6 +119,9 @@ class AbstractPageGroup(models.Model):
 
 class AbstractFancyPage(models.Model):
     uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+    node = models.OneToOneField(
+        settings.FP_NODE_MODEL, verbose_name=_("Tree node"),
+        related_name='page')
 
     page_type = models.ForeignKey(
         'fancypages.PageType', verbose_name=_("Page type"),
@@ -153,15 +155,61 @@ class AbstractFancyPage(models.Model):
     def is_visible(self):
         if self.status != AbstractFancyPage.PUBLISHED:
             return False
-
         now = timezone.now()
         if self.date_visible_start and self.date_visible_start > now:
             return False
-
         if self.date_visible_end and self.date_visible_end < now:
             return False
-
         return True
+
+    @classmethod
+    def _split_kwargs(cls, dct, prefix="node__"):
+        prefixed = {}
+        cleaned = {}
+        for key, value in dct.iteritems():
+            if key.startswith(prefix):
+                prefixed[key.replace(prefix, '')] = value
+            else:
+                cleaned[key] = value
+        return prefixed, cleaned
+
+    def add_child(self, **kwargs):
+        node_kwargs, page_kwargs = self._split_kwargs(kwargs)
+        page_kwargs['node'] = self.node.add_child(**node_kwargs)
+        return self.__class__.objects.create(**page_kwargs)
+
+    @classmethod
+    def add_root(cls, **kwargs):
+        from .models import get_node_model
+        node_kwargs, page_kwargs = cls._split_kwargs(kwargs)
+        page_kwargs['node'] = get_node_model().add_root(**node_kwargs)
+        return cls.objects.create(**page_kwargs)
+
+    def delete(self, using=None):
+        """
+        Deletes the instance of ``FancyPage`` and makes sure that the related
+        ``PageNode`` is deleted as well. This should usually be handled by the
+        ``on_delete`` argument on the ``ForeignKey`` field but in this instance
+        it doesn't take effect. For the time being, the node object is delete
+        after the page has been removed.
+        """
+        node = self.node
+        super(AbstractFancyPage, self).delete(using)
+        node.delete()
+
+    def __getattr__(self, name):
+        """
+        Try to find
+        """
+        if name.startswith('_'):
+            raise AttributeError
+        try:
+            return getattr(self.node, name)
+        except AttributeError:
+            pass
+        raise AttributeError(
+            "neither '{}' nor '{}' have an attribute '{}".format(
+                self.__class__, self.node.__class__, name))
 
     def get_container_from_name(self, name):
         try:
@@ -186,10 +234,7 @@ class AbstractFancyPage(models.Model):
             self.slug = slugify(self.name)
         if not self.status:
             self.status = getattr(
-                settings,
-                'FP_DEFAULT_PAGE_STATUS',
-                self.DRAFT
-            )
+                settings, 'FP_DEFAULT_PAGE_STATUS', self.DRAFT)
         super(AbstractFancyPage, self).save(*args, **kwargs)
 
         try:
@@ -225,25 +270,16 @@ class AbstractContainer(models.Model):
     object_id = models.PositiveIntegerField(null=True)
     page_object = generic.GenericForeignKey('content_type', 'object_id')
 
-    @property
-    def uid(self):
-        #TODO: we should make this a proper UUID at some point
-        return "{0}-{1}".format(self.name, self.id)
-
     def clean(self):
         if self.object_id and self.content_type:
             return
 
         # Don't allow draft entries to have a pub_date.
         container_exists = self.__class__.objects.filter(
-            name=self.name,
-            object_id=None,
-            content_type=None,
-        ).exists()
+            name=self.name, object_id=None, content_type=None).exists()
         if container_exists:
             raise ValidationError(
-                "a container with name '{0}' already exists".format(self.name)
-            )
+                "a container with name '{0}' already exists".format(self.name))
 
     def get_template_names(self):
         return [self.template_name]

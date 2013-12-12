@@ -26,39 +26,30 @@ class TestAnAnonymousUser(FancyPagesWebTest):
         self.prepare_template_file(
             "{% load fp_container_tags%}"
             "{% fp_object_container main-container %}"
-            "{% fp_object_container left-column %}"
-        )
+            "{% fp_object_container left-column %}")
         page_type = PageType.objects.create(
-            name='template',
-            template_name=self.template_name
-        )
+            name='template', template_name=self.template_name)
         self.page = FancyPage.add_root(
-            name="A new page",
-            slug='a-new-page',
-            page_type=page_type,
-        )
+            node__name="A new page", node__slug='a-new-page',
+            page_type=page_type)
 
         self.left_container = self.page.get_container_from_name('left-column')
-        self.main_container = self.page.get_container_from_name('main-container')
+        self.main_container = self.page.get_container_from_name(
+            'main-container')
 
         self.main_block = TitleTextBlock.objects.create(
-            container=self.main_container,
-            title="This is the main title",
-            text="The text of the main block",
-        )
+            container=self.main_container, title="This is the main title",
+            text="The text of the main block")
 
         self.left_block = TitleTextBlock.objects.create(
-            container=self.left_container,
-            title="This is the left title",
-            text="The text of the left block",
-        )
+            container=self.left_container, title="This is the left title",
+            text="The text of the left block")
 
     def test_cannot_view_a_draft_page(self):
-        self.assertRaises(
-            AppError,
-            self.get,
-            reverse('fancypages:page-detail', args=(self.page.slug,))
-        )
+        response = self.get(
+            reverse('fancypages:page-detail', args=(self.page.slug,)),
+            status=404)
+        self.assertEquals(response.status_code, 404)
 
     def test_can_view_a_published_page(self):
         self.page.status = FancyPage.PUBLISHED
@@ -76,14 +67,14 @@ class TestAStaffUser(FancyPagesWebTest):
 
     def setUp(self):
         super(TestAStaffUser, self).setUp()
-        self.page = FancyPage.add_root(name="A new page", slug='a-new-page')
-        self.page_container = self.page.get_container_from_name('page-container')
+        self.page = FancyPage.add_root(
+            node__name="A new page", node__slug='a-new-page')
+        self.page_container = self.page.get_container_from_name(
+            'page-container')
 
         self.main_block = TitleTextBlock.objects.create(
-            container=self.page_container,
-            title="This is the main title",
-            text="The text of the main block",
-        )
+            container=self.page_container, title="This is the main title",
+            text="The text of the main block")
 
     def test_can_view_a_draft_page(self):
         url = reverse('fancypages:page-detail', args=(self.page.slug,))
@@ -94,8 +85,7 @@ class TestAStaffUser(FancyPagesWebTest):
         self.assertContains(
             page,
             ("You can only see this because you are logged in as "
-             "a user with access rights to the dashboard")
-        )
+             "a user with access rights to the dashboard"))
 
     def test_can_view_a_published_page(self):
         self.page.status = FancyPage.PUBLISHED
@@ -108,8 +98,7 @@ class TestAStaffUser(FancyPagesWebTest):
         self.assertNotContains(
             page,
             ("You can only see this because you are logged in as "
-             "a user with access rights to the dashboard")
-        )
+             "a user with access rights to the dashboard"))
 
 
 class TestTheDefaultHomepage(FancyPagesWebTest):
@@ -132,9 +121,7 @@ class TestTheDefaultHomepage(FancyPagesWebTest):
     def test_is_displaying_the_existing_home_page(self):
         page_type = factories.PageTypeFactory()
         page = FancyPage.add_root(
-            name=settings.FP_HOMEPAGE_NAME,
-            page_type=page_type
-        )
+            node__name=settings.FP_HOMEPAGE_NAME, page_type=page_type)
 
         home_page = self.get('/')
 

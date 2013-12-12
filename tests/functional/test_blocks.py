@@ -31,7 +31,8 @@ class TestABlock(testcases.FancyPagesWebTest):
             "{% load fp_container_tags%}"
             "{% fp_object_container page-container %}")
 
-        self.page = FancyPage.add_root(name="A new page", slug='a-new-page')
+        self.page = FancyPage.add_root(
+            node__name="A new page", node__slug='a-new-page')
 
         self.text_block = TextBlock.objects.create(
             container=self.page.get_container_from_name('page-container'),
@@ -60,9 +61,8 @@ class TestABlock(testcases.FancyPagesWebTest):
         response = self.get(
             reverse('fp-api:block-form', kwargs={
                 'uuid': self.third_text_block.uuid}))
-        self.assertIn(
-            '<textarea id="id_text" rows="10" cols="80" name="text">second '
-            'text</textarea>', response)
+        self.assertIn('second text', response)
+        self.assertIn('name="text"', response)
         self.assertIn(
             "data-block-id='{}'".format(self.third_text_block.uuid), response)
 
@@ -123,7 +123,8 @@ class TestBlockRendering(testcases.FancyPagesWebTest):
         self.prepare_template_file(
             "{% load fp_container_tags%}"
             "{% fp_object_container page-container %}")
-        self.page = FancyPage.add_root(name="A new page", slug='a-new-page')
+        self.page = FancyPage.add_root(
+            node__name="A new page", node__slug='a-new-page')
         self.page.status = FancyPage.PUBLISHED
         self.page.save()
 

@@ -1,5 +1,6 @@
 import os
 import mock
+import time
 import pytest
 
 from purl import URL
@@ -140,7 +141,8 @@ class SplinterTestCase(LiveServerTestCase):
                 'password': self.password,
             })
             self.browser.find_by_css("input[type='submit']").first.click()
-            self.assertIn('Log out', self.browser.html)
+            exists = self.browser.is_text_present('Log out', wait_time=2)
+            self.assertTrue(exists)
 
     def tearDown(self):
         super(SplinterTestCase, self).tearDown()
@@ -150,6 +152,9 @@ class SplinterTestCase(LiveServerTestCase):
     def goto(self, path):
         url = self.base_url.path(path)
         return self.browser.visit(url.as_string())
+
+    def wait_for_editor_reload(self):
+        time.sleep(3)
 
 
 # We need to patch the LiveServerTestCase here because the database in

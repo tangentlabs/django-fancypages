@@ -1,3 +1,5 @@
+import time
+
 from django.db.models import get_model
 
 from fancypages.test import factories
@@ -69,6 +71,7 @@ class TestATextBlock(SplinterTestCase):
             self.fail("Could not find edit button for block")
 
         self.browser.find_by_css('.edit-button').click()
+        self.wait_for_editor_reload()
 
         text_sel = 'textarea[name=text]'
         if not self.browser.is_element_present_by_css(text_sel, 2):
@@ -81,11 +84,12 @@ class TestATextBlock(SplinterTestCase):
             ibody.type(new_text)
 
         self.browser.find_by_css('button[type=submit]').click()
+        self.wait_for_editor_reload()
 
-        if not self.browser.is_text_present(new_text, 5):
+        if not self.browser.is_text_present(new_text, 2):
             self.fail("Could not find updated text")
 
         self.assertEquals(TextBlock.objects.count(), 1)
         # check for the text with an appended <br> because typing text into
         # the input box via Selenium causes a linebreak at the end.
-        self.assertEquals(TextBlock.objects.all()[0].text, new_text+'<br>')
+        self.assertEquals(TextBlock.objects.all()[0].text, new_text + '<br>')
