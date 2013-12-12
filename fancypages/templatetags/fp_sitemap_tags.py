@@ -39,11 +39,10 @@ def get_page_tree(group=None, depth=1, relative_to=None):
     if relative_to:
         depth_offset = relative_to.depth
         pages = pages.filter(
-            Q(path__startswith=relative_to.path) &
-            ~Q(path=relative_to.path)
-        )
+            Q(node__path__startswith=relative_to.path) &
+            ~Q(node__path=relative_to.path))
 
-    pages = pages.filter(depth__lte=(depth + depth_offset))
+    pages = pages.filter(node__depth__lte=(depth + depth_offset))
 
     if group:
         if isinstance(group, PageGroup):

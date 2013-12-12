@@ -10,10 +10,13 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
 
 from .. import library
+from ..models import get_page_model, get_node_model
+
 
 logger = logging.getLogger('fancypages.api')
 
-FancyPage = get_model('fancypages', 'FancyPage')
+FancyPage = get_page_model()
+PageNode= get_node_model()
 ContentBlock = get_model('fancypages', 'ContentBlock')
 OrderedContainer = get_model('fancypages', 'OrderedContainer')
 
@@ -123,26 +126,25 @@ class PageMoveSerializer(serializers.ModelSerializer):
         # after the last node.
         if obj.parent == '0':
             try:
-                page = FancyPage.get_root_nodes()[obj.new_index]
+                node = PageNode.get_root_nodes()[obj.new_index]
             except IndexError:
-                page = FancyPage.get_last_root_node()
+                node = PageNode.get_last_root_node()
                 position = 'right'
-
         # in this case the page is moved relative to a parent node.
         # we have to handle the same special case for the last node
         # as above and also have to insert as 'first-child' if no
         # other children are present due to different relative node
         else:
-            page = FancyPage.objects.get(uuid=obj.parent)
-            if not page.numchild:
+            node = PageNode.objects.get(page__uuid=obj.parent)
+            if not node.numchild:
                 position = 'first-child'
             else:
                 try:
-                    page = page.get_children()[obj.new_index]
+                    node = node.get_children()[obj.new_index]
                 except IndexError:
                     position = 'last-child'
-        obj.move(page, position)
-        return obj
+        obj.move(node, position)
+        return obj.page
 
     class Meta:
         model = FancyPage

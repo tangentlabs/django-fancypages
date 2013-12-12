@@ -12,8 +12,8 @@ from django.template.defaultfilters import date
 
 from webtest import Upload
 
-from fancypages.test import testcases
 from fancypages.test import TEMP_IMAGE_DIR
+from fancypages.test import testcases, factories
 
 PageType = get_model('fancypages', 'PageType')
 FancyPage = get_model('fancypages', 'FancyPage')
@@ -41,7 +41,7 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         self.assertRedirects(page, reverse('fp-dashboard:page-list'))
         page = page.follow()
 
-        article_page = FancyPage.objects.get(name="A new page")
+        article_page = FancyPage.objects.get(node__name="A new page")
 
         self.assertEquals(article_page.status, FancyPage.DRAFT)
         self.assertEquals(article_page.is_visible, False)
@@ -54,15 +54,13 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         page_description = "The old description"
 
         now = timezone.now()
-
-        fancy_page = FancyPage.add_root(name=page_name)
-        fancy_page.date_visible_start = now
-        fancy_page.description = page_description
-        fancy_page.save()
+        fancy_page = factories.PageFactory(
+            date_visible_start=now, node__name=page_name,
+            node__description=page_description)
 
         page = self.get(
-            reverse('fp-dashboard:page-update', args=(fancy_page.id,))
-        )
+            reverse('fp-dashboard:page-update', args=(fancy_page.id,)))
+
         self.assertContains(page, 'Update page')
         self.assertContains(page, fancy_page.name)
 
@@ -71,12 +69,12 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         self.assertEquals(form['description'].value.strip(), page_description)
         self.assertEquals(
             form['date_visible_start'].value,
-            date(now, 'd-m-Y')
+            date(now, 'Y-m-d H:i:s')
         )
 
         form['name'] = 'Another name'
         form['description'] = "Some description"
-        form['date_visible_start'] = '30-12-2012'
+        form['date_visible_start'] = '2012-12-30'
         page = form.submit()
 
         fancy_page = FancyPage.objects.get(id=fancy_page.id)
@@ -84,7 +82,7 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         self.assertEquals(fancy_page.description, 'Some description')
 
     def test_can_delete_a_page(self):
-        FancyPage.add_root(name="A new page")
+        factories.PageFactory(node__name="A new page")
         self.assertEquals(FancyPage.objects.count(), 1)
         page = self.get(reverse("fp-dashboard:page-list"))
         page = page.click("Delete")
@@ -93,7 +91,7 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         self.assertEquals(FancyPage.objects.count(), 0)
 
     def test_can_cancel_the_delete_of_a_page(self):
-        FancyPage.add_root(name="A new page")
+        factories.PageFactory(node__name="A new page")
 
         self.assertEquals(FancyPage.objects.count(), 1)
 
@@ -105,32 +103,32 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         self.assertContains(page, "Page Management")
 
     def test_can_delete_a_child_page(self):
-        parent_page = FancyPage.add_root(name="A new page")
+        parent_page = factories.PageFactory(node__name="A new page")
+        factories.PageFactory(node__name="Another page")
 
-        p = FancyPage.objects.get(id=parent_page.id)
-        self.assertEquals(p.numchild, 0)
+        child_page = factories.PageFactory(
+            node=parent_page.node.add_child(name="The child"))
 
-        FancyPage.add_root(name="Another page")
-        parent_page.add_child(name="The child")
-
-        p = FancyPage.objects.get(id=parent_page.id)
-        self.assertEquals(p.numchild, 1)
+        parent = FancyPage.objects.get(id=parent_page.id)
+        self.assertEquals(parent.node.numchild, 1)
 
         self.assertEquals(FancyPage.objects.count(), 3)
         page = self.get(reverse("fp-dashboard:page-list"))
-        page = page.click(href="/dashboard/fancypages/delete/3/")
+        page = page.click(
+            href="/dashboard/fancypages/delete/{}/".format(child_page.id))
 
-        page.forms['page-delete-form'].submit()
+        delete_page = page.forms['page-delete-form'].submit()
+        self.assertRedirects(delete_page, reverse('fp-dashboard:page-list'))
         self.assertEquals(FancyPage.objects.count(), 2)
 
         p = FancyPage.objects.get(id=parent_page.id)
-        self.assertSequenceEqual(p.get_children(), [])
+        self.assertSequenceEqual(p.node.get_children(), [])
 
-        FancyPage.add_root(name="3rd page")
+        factories.PageFactory(node__name="3rd page")
         self.assertEquals(FancyPage.objects.count(), 3)
 
     def test_can_create_child_page(self):
-        parent_page = FancyPage.add_root(name="A new page")
+        parent_page = factories.PageFactory(node__name="A new page")
         page = self.get(reverse("fp-dashboard:page-list"))
 
         child_page_name = 'Test Page'
@@ -140,9 +138,9 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
 
         self.assertRedirects(list_page, reverse('fp-dashboard:page-list'))
 
-        child_page = FancyPage.objects.get(name=child_page_name)
-        self.assertTrue(child_page.path.startswith(parent_page.path))
-        self.assertTrue(child_page.depth, 2)
+        child_node = FancyPage.objects.get(node__name=child_page_name).node
+        self.assertTrue(child_node.path.startswith(parent_page.node.path))
+        self.assertTrue(child_node.depth, 2)
 
 
 class TestANewPage(testcases.FancyPagesWebTest):
@@ -150,7 +148,7 @@ class TestANewPage(testcases.FancyPagesWebTest):
 
     def test_displays_an_error_when_slug_already_exists(self):
         page_title = "Home"
-        home_page = FancyPage.add_root(name=page_title)
+        home_page = factories.PageFactory(node__name=page_title)
         self.assertEquals(home_page.slug, 'home')
 
         page = self.get(reverse('fp-dashboard:page-list'))
@@ -169,7 +167,7 @@ class TestAnImageForAFancyPage(testcases.FancyPagesWebTest):
     is_staff = True
 
     def test_can_be_added_in_the_dashboard(self):
-        fancy_page = FancyPage.add_root(name='Sample Page')
+        fancy_page = factories.PageFactory(node__name='Sample Page')
         self.assertEquals(fancy_page.image, None)
 
         im = Image.new("RGB", (320, 240), "red")

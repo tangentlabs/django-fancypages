@@ -20,7 +20,7 @@ setup(
     packages=find_packages(exclude=["sandbox*", "tests*"]),
     include_package_data=True,
     install_requires=[
-        'Django',
+        'Django>=1.5',
         'South',
         'django-appconf',
         'django-treebeard',

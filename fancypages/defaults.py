@@ -2,6 +2,8 @@
 FP_HOMEPAGE_NAME = 'Home'
 FP_DEFAULT_TEMPLATE = 'fancypages/pages/page.html'
 FP_DEFAULT_PAGE_STATUS = 'draft'
+FP_PAGE_MODEL = 'fancypages.FancyPage'
+FP_NODE_MODEL = 'fancypages.PageNode'
 ########## END FANCYPAGES SETTINGS
 
 ########## TWITTER TAG SETTINGS
