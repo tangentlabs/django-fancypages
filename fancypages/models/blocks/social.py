@@ -1,6 +1,16 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+# To avoid that Twitter is required, we check for the library
+# and if it isn't available, we don't register the TwitterBlock
+# which means it can't be used.
+try:
+    import twitter_tag
+except ImportError:
+    TWITTER_AVAILABLE = False
+else:
+    TWITTER_AVAILABLE = False
+
 from .content import ContentBlock
 from ...library import register_content_block
 
@@ -29,7 +39,6 @@ class VideoBlock(ContentBlock):
         app_label = 'fancypages'
 
 
-@register_content_block
 class TwitterBlock(ContentBlock):
     name = _("Twitter")
     code = 'twitter'
@@ -46,3 +55,9 @@ class TwitterBlock(ContentBlock):
 
     class Meta:
         app_label = 'fancypages'
+
+
+# If the twitter client is not installed, we are not registering the
+# twitter block so that it can't be used.
+if TWITTER_AVAILABLE:
+    register_content_block(TwitterBlock)

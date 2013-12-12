@@ -29,9 +29,7 @@ setup(
         # we are using DRF routers that are only available in
         # DRF 2.3+ so we are restricting the version here
         'djangorestframework>=2.3.10',
-
-        'django-twitter-tag',
-
+        'django-compressor',
         'pillow',
         'sorl-thumbnail>=11.12',
     ],

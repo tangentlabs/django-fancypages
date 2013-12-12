@@ -23,13 +23,8 @@ def get_required_apps():
         'compressor',
         # migration handling
         'south',
-        # package used for twitter block
-        'twitter_tag',
     ]
 
 
 def get_fancypages_apps():
-    return [
-        'fancypages.assets',
-        'fancypages',
-    ]
+    return ['fancypages.assets', 'fancypages']
