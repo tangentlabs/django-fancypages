@@ -1,7 +1,6 @@
 from django.db import models
 
 from .. import abstract_models
-from ..manager import PageManager
 
 
 class PageType(abstract_models.AbstractPageType):
@@ -14,12 +13,14 @@ class PageGroup(abstract_models.AbstractPageGroup):
         app_label = 'fancypages'
 
 
-class FancyPage(abstract_models.AbstractTreeNode,
-                abstract_models.AbstractFancyPage):
-    objects = PageManager()
+class PageNode(abstract_models.AbstractTreeNode):
+    class Meta(abstract_models.AbstractTreeNode.Meta):
+        swappable = 'FP_NODE_MODEL'
 
-    class Meta:
-        app_label = 'fancypages'
+
+class FancyPage(abstract_models.AbstractFancyPage):
+    class Meta(abstract_models.AbstractFancyPage.Meta):
+        swappable = 'FP_PAGE_MODEL'
 
 
 class Container(abstract_models.AbstractContainer):
@@ -33,14 +34,14 @@ class OrderedContainer(Container):
 
     @property
     def block_uuid(self):
+        """
+        Returns the UUID of content block this container is attached to.
+        """
         return self.page_object.uuid
 
     def __unicode__(self):
         return u"Container #{0} '{1}' in '{2}'".format(
-            self.display_order,
-            self.name,
-            self.content_type
-        )
+            self.display_order, self.name, self.content_type)
 
     class Meta:
         app_label = 'fancypages'

@@ -6,9 +6,11 @@ from webtest import AppError
 
 from fancypages.test import factories
 from fancypages.test import testcases
+from fancypages.models import get_node_model, get_page_model
 
 PageType = get_model('fancypages', 'PageType')
-FancyPage = get_model('fancypages', 'FancyPage')
+PageNode = get_node_model()
+FancyPage = get_page_model()
 Container = get_model('fancypages', 'Container')
 TextBlock = get_model('fancypages', 'TextBlock')
 TabBlock = get_model('fancypages', 'TabBlock')
@@ -25,9 +27,10 @@ class TestTheBlockTypeApi(testcases.FancyPagesWebTest):
     def test_is_not_available_to_anonymous_users(self):
         try:
             self.app.get(reverse('fp-api:block-type-list'))
-            self.fail('an anonymous user should not be able to use the API')
         except AppError as exc:
             self.assertIn('403', exc.args[0])
+        else:
+            self.fail('an anonymous user should not be able to use the API')
 
     def test_returns_a_block_type_form_for_container(self):
         page = self.get(
@@ -68,7 +71,8 @@ class TestTheBlockApi(testcases.FancyPagesWebTest):
             "{% fp_object_container page-container %}"
         )
 
-        self.page = FancyPage.add_root(name="A new page", slug='a-new-page')
+        self.page = factories.PageFactory(
+            node__name="A new page", node__slug='a-new-page')
 
         self.text_block = TextBlock.objects.create(
             container=self.page.get_container_from_name('page-container'),
@@ -139,11 +143,9 @@ class TestTheBlockMoveApi(testcases.FancyPagesWebTest):
             name="Example Template",
             template_name=self.template_name,
         )
-        self.page = FancyPage.add_root(
-            name="A new page",
-            slug='a-new-page',
-            page_type=page_type,
-        )
+        self.page = factories.PageFactory(
+            node__name="A new page", node__slug='a-new-page',
+            page_type=page_type)
         self.left_container = self.page.get_container_from_name(
             'left-container')
         self.main_container = self.page.get_container_from_name(
@@ -202,13 +204,13 @@ class TestThePageMoveApi(testcases.FancyPagesWebTest):
 
     def setUp(self):
         super(TestThePageMoveApi, self).setUp()
-        self.first_parent = FancyPage.add_root(name="First parent")
-        self.second_parent = FancyPage.add_root(name="Second parent")
-        self.third_parent = FancyPage.add_root(name="Third parent")
+        self.first_parent = factories.PageFactory(node__name="First parent")
+        self.second_parent = factories.PageFactory(node__name="Second parent")
+        self.third_parent = factories.PageFactory(node__name="Third parent")
 
-        self.a_child = self.first_parent.add_child(name='One child')
-        self.first_parent.add_child(name='Another child')
-        self.first_parent.add_child(name='Third child')
+        self.a_child = self.first_parent.add_child(node__name='One child')
+        self.first_parent.add_child(node__name='Another child')
+        self.first_parent.add_child(node__name='Third child')
 
     def put(self, page, params):
         return self.app.put(
@@ -219,7 +221,7 @@ class TestThePageMoveApi(testcases.FancyPagesWebTest):
         self.put(self.second_parent, {'new_index': 0, 'old_index': 1})
 
         self.assertEquals(
-            self.second_parent.id, FancyPage.get_first_root_node().id)
+            self.second_parent.id, PageNode.get_first_root_node().id)
 
     def test_can_move_root_page_into_parent_with_no_child(self):
         self.put(self.third_parent, {
@@ -240,7 +242,7 @@ class TestThePageMoveApi(testcases.FancyPagesWebTest):
         self.assertEquals(page.path, '0004')
 
     def test_can_move_root_page_into_parent_before_child(self):
-        self.second_parent.add_child(name='Last child')
+        self.second_parent.add_child(node__name='Last child')
 
         self.put(self.third_parent, {
             'parent': self.second_parent.uuid, 'new_index': 0, 'old_index': 1})
@@ -249,7 +251,7 @@ class TestThePageMoveApi(testcases.FancyPagesWebTest):
         self.assertEquals(page.path, '00020001')
 
     def test_can_move_root_page_into_parent_after_child(self):
-        child = self.second_parent.add_child(name='Last child')
+        child = self.second_parent.add_child(node__name='Last child')
 
         self.put(self.third_parent, {
             'parent': self.second_parent.uuid, 'new_index': 1, 'old_index': 1})
@@ -260,8 +262,8 @@ class TestThePageMoveApi(testcases.FancyPagesWebTest):
         self.assertEquals(page.path, '00020001')
 
     def test_can_move_page_up_within_parent(self):
-        first_child = self.second_parent.add_child(name='first child')
-        second_child = self.second_parent.add_child(name='2nd child')
+        first_child = self.second_parent.add_child(node__name='first child')
+        second_child = self.second_parent.add_child(node__name='2nd child')
 
         self.put(second_child, {
             'parent': self.second_parent.uuid, 'new_index': 0, 'old_index': 1})
@@ -272,8 +274,8 @@ class TestThePageMoveApi(testcases.FancyPagesWebTest):
         self.assertEquals(page.path, '00020001')
 
     def test_can_move_page_down_within_parent(self):
-        first_child = self.second_parent.add_child(name='first child')
-        second_child = self.second_parent.add_child(name='2nd child')
+        first_child = self.second_parent.add_child(node__name='first child')
+        second_child = self.second_parent.add_child(node__name='2nd child')
 
         self.put(first_child, {
             'parent': self.second_parent.uuid, 'new_index': 1, 'old_index': 0})

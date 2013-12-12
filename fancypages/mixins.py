@@ -24,13 +24,11 @@ class FancyHomeMixin(FancyPageMixin):
     def get_object(self):
         slug = slugify(self.HOMEPAGE_NAME)
         try:
-            page = FancyPage.objects.get(slug=slug)
+            page = FancyPage.objects.get(node__slug=slug)
         except FancyPage.DoesNotExist:
             page = FancyPage.add_root(
-                name=self.HOMEPAGE_NAME,
-                slug=slug,
-                status=FancyPage.PUBLISHED,
-            )
+                node__name=self.HOMEPAGE_NAME, node__slug=slug,
+                status=FancyPage.PUBLISHED)
         return page
 
 
