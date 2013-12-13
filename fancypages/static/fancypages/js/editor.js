@@ -266,7 +266,7 @@ fancypages.editor = {
 
     setSelectedAsset: function (assetType, assetId, assetUrl) {
         $('#fullscreen-modal').modal('hide');
-        var assetInput = $(".fp-asset-input.editing");
+        var assetInput = $(".fp-asset-input");
         assetInput.removeClass('editing');
         $("input[name$='_id']", assetInput).attr('value', assetId);
         $("input[name$='_type']", assetInput).attr('value', assetType);
