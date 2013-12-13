@@ -4,6 +4,7 @@ from django.conf.urls import patterns, include, url
 
 import fancypages.urls
 from fancypages import views
+from asset_library.app import application as asset_library
 
 from blog.views import PostDetailView, PostListView
 
@@ -18,7 +19,7 @@ urlpatterns = patterns('',
         name="post-detail"),
 
     url(r'^admin/', include(admin.site.urls)),
-
+    url(r'^asset-library/', include(asset_library.urls)),
     url(r'^', include(fancypages.urls)),
 )
 

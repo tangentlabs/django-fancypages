@@ -12,12 +12,8 @@
     </div>
 
     {{ rendered_widgets }}
-    <a data-behaviours="load-iframe-modal"
-       data-target="#fullscreen-modal"
-       data-heading="Select or upload an image"
-       data-iframe-id="asset-manager"
-       data-iframe-src="{% url "fp-dashboard:image-list" %}"
-       class="fp-btn-danger fp-btn fp-btn-block">
+
+    <a class="image-library-button fp-btn-danger fp-btn fp-btn-block">
         {% trans "Library" %}
     </a>
 </div>

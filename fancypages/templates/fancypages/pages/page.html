@@ -18,4 +18,34 @@
 
 {% block content %}
     {% fp_object_container page-container %}
+
+    {# FIXME: asset-path #}
+    {# FIXME: hide if not editing #}
+    {% include "asset_library/partials/image_selector.html" with asset_path='asset/images/' %}
+    {% include "asset_library/partials/snippet_selector.html" %}
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'asset_library/js/jcrop/jquery.Jcrop.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'asset_library/js/lib/knockout.js' %}"></script>
+    <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+    <script type="text/javascript" src="{% static 'asset_library/js/lib/jquery.iframe-transport.js' %}"></script>
+    <script type="text/javascript" src="{% static 'asset_library/js/lib/jquery.fileupload.js' %}"></script>
+    <script type="text/javascript" src="{% static 'asset_library/js/asset_library.js' %}"></script>
+{% endblock %}
+
+{% block onbodyload %}
+    {# FIXME: convert settings to be actual settings #}
+    asset_library.init({
+        assetAPIRoot: '/asset-library/api/v2/',
+        allowedImageExtensions: ['GIF', 'JPEG', 'JPG', 'PNG'],
+        assetPath: 'asset/images/'
+    });
+
+    $('.image-library-button').on('click', function() {
+        asset_library.pickImageAsset(function(id, url, width, height) {
+            console.log('Picked image ' + url);
+        });
+    });
 {% endblock %}

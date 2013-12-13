@@ -2,6 +2,8 @@
 import os
 import fancypages as fp
 
+from asset_library.defaults import *
+
 PROJECT_DIR = os.path.dirname(__file__)
 location = lambda x: os.path.join(os.path.dirname(os.path.realpath(__file__)), "../%s" % x)
 
@@ -105,6 +107,7 @@ WSGI_APPLICATION = 'sandbox.wsgi.application'
 
 TEMPLATE_DIRS = [
     location('templates'),
+    ASSET_TEMPLATE_DIR,
 ]
 
 DJANGO_APPS = [
