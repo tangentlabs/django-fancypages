@@ -43,7 +43,7 @@
         assetPath: 'asset/images/'
     });
 
-    $('.image-library-button').on('click', function() {
+    $('body').on('click', '.image-library-button', function() {
         asset_library.pickImageAsset(function(id, url, width, height) {
             console.log('Picked image ' + url);
         });
