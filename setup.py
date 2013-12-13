@@ -29,6 +29,8 @@ setup(
         'pillow>=2.0.0,<2.1',
         'sorl-thumbnail>=11.12,<12',
         'django-compressor>=1.2,<1.4',
+        'beautifulsoup',
+        'django-asset-library',
     ],
     setup_requires=[
         'versiontools >= 1.8',
@@ -40,5 +42,5 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: Unix',
         'Programming Language :: Python',
-    ]
+    ],
 )

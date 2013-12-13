@@ -1,8 +1,8 @@
 .PHONY: dev sandbox
 
 dev:
-	pip install -e .
 	pip install -r requirements.txt
+	pip install -e .
 
 sandbox: dev
 	- rm sandbox/sandbox/db.sqlite3

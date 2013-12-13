@@ -25,6 +25,7 @@ def get_required_apps():
         'south',
         # package used for twitter block
         'twitter_tag',
+        'asset_library',
     ]
 
 

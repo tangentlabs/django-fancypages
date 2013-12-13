@@ -38,3 +38,6 @@ docutils>=0.8.1
 # Others
 Whoosh>=2.4.1
 purl==0.8
+
+# Use development version of asset library for now
+-e git://github.com/tangentlabs/django-asset-library.git#egg=django-asset-library
