@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 import os
 
 __version__ = VERSION = "0.3.0"
@@ -6,6 +8,12 @@ __version__ = VERSION = "0.3.0"
 def get_fancypages_paths(path):
     """ Get absolute paths for *path* relative to the project root """
     return [os.path.join(os.path.dirname(os.path.abspath(__file__)), path)]
+
+
+def get_oscar_fancypages_paths(path):
+    return [
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), path),
+    ] + get_fancypages_paths(path)
 
 
 def get_required_apps():
