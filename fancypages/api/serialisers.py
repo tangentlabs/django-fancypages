@@ -17,6 +17,7 @@ logger = logging.getLogger('fancypages.api')
 
 FancyPage = get_page_model()
 PageNode= get_node_model()
+Container = get_model('fancypages', 'Container')
 ContentBlock = get_model('fancypages', 'ContentBlock')
 OrderedContainer = get_model('fancypages', 'OrderedContainer')
 
@@ -51,6 +52,26 @@ class BlockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ContentBlock
+
+
+class BlockCodeSerializer(serializers.Serializer):
+    container = serializers.CharField()
+    code = serializers.CharField(required=True)
+
+    def validate_container(self, attrs, source):
+        container_uuid = attrs.get('container')
+        try:
+            container = Container.objects.get(uuid=container_uuid)
+        except Container.DoesNotExist:
+            raise serializers.ValidationError(
+                "no container could be found with ID {}".format(
+                    container_uuid))
+        attrs['container'] = container
+        return attrs
+
+    def restore_object(self, attrs, instance=None):
+        block_class = library.get_content_block(attrs.get('code'))
+        return block_class(container=attrs.get('container'))
 
 
 class BlockMoveSerializer(serializers.ModelSerializer):

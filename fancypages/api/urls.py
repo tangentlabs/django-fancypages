@@ -11,6 +11,11 @@ urlpatterns = patterns(
     '',
     url(r'^blocks$', views.BlockListView.as_view(), name='block-list'),
     url(
+        r'^block/new$',
+        views.BlockNewView.as_view(),
+        name='block-new'
+    ),
+    url(
         r'^block/(?P<uuid>[{0}]+)$'.format(SHORTUUID_ALPHA),
         views.BlockDetailView.as_view(),
         name='block-detail'

@@ -80,9 +80,38 @@ fancypages.eventHandlers = {
         var elem = $(this),
             modalElem = $(elem.data('target')),
             containerId = elem.data('container-id');
-        $('form', modalElem).attr('data-container-id', containerId);
-        $('form input[name=container]').val(containerId);
+        $('button', modalElem).attr('data-container-id', containerId);
         modalElem.modal('show');
+    },
+
+    /**
+     * Create a new block via the RESTful API. It expects a 'data-container-id'
+     * and 'data-block-code' attribute on the triggering element and submits
+     * both values as a POST call to the REST API. On success the page is
+     * reloaded, otherwise an error message is displayed to the user.
+     */
+    createNewBlock: function (elem) {
+        console.log("CREATING A NEW BLOCK", elem);
+        $.ajax({
+            url: $(elem).data('api-url'),
+            type: 'POST',
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", fancypages.getCsrfToken());
+            },
+            data: {
+                container: $(elem).data('container-id'),
+                code: $(elem).data('block-code')
+            },
+            success: function () {
+                fancypages.editor.reloadPage();
+            },
+            failure: function () {
+                fancypages.messages.error(
+                    "The new content block could not be created, please try " +
+                    "again or contact the site's admin"
+                )
+            }
+        });
     },
 
     /**
