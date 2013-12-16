@@ -4,26 +4,30 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from fancypages.models import FP_PAGE_MODEL
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        db.delete_column(u'fancypages_fancypage', u'path')
-        db.delete_column(u'fancypages_fancypage', u'depth')
-        db.delete_column(u'fancypages_fancypage', u'numchild')
-        db.delete_column(u'fancypages_fancypage', u'name')
-        db.delete_column(u'fancypages_fancypage', u'slug')
-        db.delete_column(u'fancypages_fancypage', u'image')
-        db.delete_column(u'fancypages_fancypage', u'description')
+        if FP_PAGE_MODEL == 'fancypages.FancyPage':
+            db.delete_column(u'fancypages_fancypage', u'path')
+            db.delete_column(u'fancypages_fancypage', u'depth')
+            db.delete_column(u'fancypages_fancypage', u'numchild')
+            db.delete_column(u'fancypages_fancypage', u'name')
+            db.delete_column(u'fancypages_fancypage', u'slug')
+            db.delete_column(u'fancypages_fancypage', u'image')
+            db.delete_column(u'fancypages_fancypage', u'description')
 
     def backwards(self, orm):
-        db.add_column(u'fancypages_fancypage', 'path', self.gf('django.db.models.fields.CharField')(max_length=255, unique=True))
-        db.add_column(u'fancypages_fancypage', 'depth', self.gf('django.db.models.fields.PositiveIntegerField')(default=0))
-        db.add_column(u'fancypages_fancypage', 'numchild', self.gf('django.db.models.fields.PositiveIntegerField')(default=0))
-        db.add_column(u'fancypages_fancypage', 'name', self.gf('django.db.models.fields.CharField')(max_length=255, db_index=True))
-        db.add_column(u'fancypages_fancypage', 'slug', self.gf('django.db.models.fields.SlugField')(max_length=255))
-        db.add_column(u'fancypages_fancypage', 'image', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True))
-        db.add_column(u'fancypages_fancypage', 'description', self.gf('django.db.models.fields.TextField')(blank=True))
+        if FP_PAGE_MODEL == 'fancypages.FancyPage':
+            db.add_column(u'fancypages_fancypage', 'path', self.gf('django.db.models.fields.CharField')(max_length=255, unique=True))
+            db.add_column(u'fancypages_fancypage', 'depth', self.gf('django.db.models.fields.PositiveIntegerField')(default=0))
+            db.add_column(u'fancypages_fancypage', 'numchild', self.gf('django.db.models.fields.PositiveIntegerField')(default=0))
+            db.add_column(u'fancypages_fancypage', 'name', self.gf('django.db.models.fields.CharField')(max_length=255, db_index=True))
+            db.add_column(u'fancypages_fancypage', 'slug', self.gf('django.db.models.fields.SlugField')(max_length=255))
+            db.add_column(u'fancypages_fancypage', 'image', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True))
+            db.add_column(u'fancypages_fancypage', 'description', self.gf('django.db.models.fields.TextField')(blank=True))
 
     models = {
         u'assets.imageasset': {
