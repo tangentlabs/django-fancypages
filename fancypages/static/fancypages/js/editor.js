@@ -180,6 +180,10 @@ fancypages.editor = {
             ev.preventDefault();
             fancypages.editor.submitBlockForm($(this));
         });
+        $(document).on('click', 'button[data-behaviours~=create-block]', function (ev) {
+            ev.preventDefault();
+            fancypages.eventHandlers.createNewBlock($(this));
+        });
         // Listen on modal cancel buttons and hide and remove the modal
         // when clicked.
         $(document).on('click', "button[data-behaviours~=remove-modal]", function (ev) {

@@ -57,6 +57,14 @@ class BlockDetailView(BlockAPIMixin, generics.RetrieveUpdateDestroyAPIView):
             block.save()
 
 
+class BlockNewView(generics.CreateAPIView):
+    model = ContentBlock
+    serializer_class = serialisers.BlockCodeSerializer
+
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAdminUser,)
+
+
 class BlockFormView(BlockAPIMixin, generics.RetrieveAPIView):
     renderer_classes = (renderers.BlockFormRenderer,)
 

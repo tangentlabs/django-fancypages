@@ -9,40 +9,37 @@
         <h3>Add content</h3>
     </div>
 
-    <form id="add_block_form"
-          data-behaviours='submit-block-form'
-          method="post" action="{% url "fp-api:block-list" %}" class="add-content">
-        {% csrf_token %}
-        <input name="container" value="" type="hidden"/>
-        <div class="fp-modal-body">
+    <div class="fp-modal-body">
 
-            <div class='fp-tabbable'>
-                <ul class="fp-nav-tabs">
-                {% for group in grouped_blocks %}
-                    <li {% if forloop.first %}class="active"{% endif %}>
-                        <a href="#{{ group|slugify }}" data-toggle="tab">{{ group }}</a>
-                    </li>
-                {% endfor %}
-                </ul>
-                <div class="fp-tab-content">
-                    {% for group,block_list in grouped_blocks.items %}
-                    <div class="fp-tab-pane {% if forloop.first %}active{% endif %}" id="{{ group|slugify }}">
-                        <ul class="fp-widget-list">
-                            {% for fp_block in block_list %}
-                            <li>
-                                <button type="submit" class="fp-btn" name="code" value="{{ fp_block.0 }}">
-                                    <div class="image_container">
-                                        <img src="{% static "fancypages/img/block_icons/" %}{{ fp_block.0 }}.png" class="fp-{{ fp_block.0 }}" alt="{{ fp_block.1 }}" title="{{ fp_block.1 }}">
-                                    </div>
-                                    {{ fp_block.1 }}
-                                </button>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    {% endfor %}
+        <div class='fp-tabbable'>
+            <ul class="fp-nav-tabs">
+            {% for group in grouped_blocks %}
+                <li {% if forloop.first %}class="active"{% endif %}>
+                    <a href="#{{ group|slugify }}" data-toggle="tab">{{ group }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+
+            <div class="fp-tab-content">
+                {% for group,block_list in grouped_blocks.items %}
+                <div class="fp-tab-pane {% if forloop.first %}active{% endif %}" id="{{ group|slugify }}">
+                    <ul class="fp-widget-list">
+                        {% for fp_block in block_list %}
+                        <li>
+                        <button data-api-url="{% url "fp-api:block-new" %}"
+                                data-behaviours="create-block"
+                                class="fp-btn" data-block-code="{{ fp_block.0 }}">
+                                <div class="image_container">
+                                    <img src="{% static "fancypages/img/block_icons/" %}{{ fp_block.0 }}.png" class="fp-{{ fp_block.0 }}" alt="{{ fp_block.1 }}" title="{{ fp_block.1 }}">
+                                </div>
+                                {{ fp_block.1 }}
+                            </button>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
+                {% endfor %}
             </div>
         </div>
-    </form>
+    </div>
 </div>
