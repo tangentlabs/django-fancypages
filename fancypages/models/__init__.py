@@ -5,9 +5,9 @@ from django.core.exceptions import ImproperlyConfigured
 from ..defaults import FP_PAGE_MODEL, FP_NODE_MODEL
 
 
-def _get_swappable_model(name, default=''):
+def _get_swappable_model(name):
     try:
-        app_label, model_name = getattr(settings, name, default).split('.')
+        app_label, model_name = name.split('.')
     except ValueError:
         raise ImproperlyConfigured(
             "{} must be of the form 'app_label.model_name'".format(name))
@@ -19,12 +19,16 @@ def _get_swappable_model(name, default=''):
     return model_class
 
 
+FP_NODE_MODEL = getattr(settings, 'FP_NODE_MODEL', FP_NODE_MODEL)
+FP_PAGE_MODEL = getattr(settings, 'FP_PAGE_MODEL', FP_PAGE_MODEL)
+
+
 def get_node_model():
-    return _get_swappable_model('FP_NODE_MODEL', FP_NODE_MODEL)
+    return _get_swappable_model(FP_NODE_MODEL)
 
 
 def get_page_model():
-    return _get_swappable_model('FP_PAGE_MODEL', FP_PAGE_MODEL)
+    return _get_swappable_model(FP_PAGE_MODEL)
 
 
 from .base import (
