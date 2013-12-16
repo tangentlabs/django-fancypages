@@ -119,9 +119,13 @@ class AbstractPageGroup(models.Model):
 
 class AbstractFancyPage(models.Model):
     uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+    # this field has to be NULLABLE for backwards compatibility but should
+    # never be left blank (hence, blank=False). We might be able to remove this
+    # at some point but migrations make it impossible to change without a
+    # default value. There's no sensible default, so we leave it nuu
     node = models.OneToOneField(
         settings.FP_NODE_MODEL, verbose_name=_("Tree node"),
-        related_name='page')
+        related_name='page', null=True)
 
     page_type = models.ForeignKey(
         'fancypages.PageType', verbose_name=_("Page type"),
