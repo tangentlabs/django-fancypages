@@ -1,10 +1,22 @@
 from django.core import exceptions
 from django.db import IntegrityError
+from django.db.models import get_model
 from django.template import loader, Context
 
 from fancypages import models
 from fancypages.test import testcases
 from fancypages.utils import get_container_names_from_template
+
+
+class TestSwappableModels(testcases.FancyPagesTestCase):
+
+    def test_returns_default_node(self):
+        self.assertEquals(
+            models.get_node_model(), get_model('fancypages', 'PageNode'))
+
+    def test_returns_default_page(self):
+        self.assertEquals(
+            models.get_page_model(), get_model('fancypages', 'FancyPage'))
 
 
 class TestContainerNames(testcases.FancyPagesTestCase):

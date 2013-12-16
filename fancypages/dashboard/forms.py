@@ -3,8 +3,6 @@ from django.db.models import get_model
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 
-from treebeard.forms import MoveNodeForm
-
 from ..models import get_page_model, get_node_model
 
 PageNode = get_node_model()
@@ -35,7 +33,8 @@ class PageNodeForm(forms.ModelForm):
 
         self.node_field_names = []
         for field in PageNode._meta.fields:
-            if field.name not in ['id', 'depth', 'numchild', 'path', 'slug']:
+            if field.editable and \
+               field.name not in ['id', 'depth', 'numchild', 'path', 'slug']:
                 self.node_field_names.append(field.name)
 
         additional_fields = forms.fields_for_model(
