@@ -15,25 +15,31 @@ class Migration(DataMigration):
 
     def forwards(self, orm):
         "Write your forwards methods here."
-        for page in orm.FancyPage.objects.all():
-            node, __ = orm.PageNode.objects.get_or_create(
-                depth=page.depth, description=page.description,
-                image=page.image, name=page.name, numchild=page.numchild,
-                path=page.path, slug=page.slug)
-            page.node = node
-            page.save()
+        # Skip this migration if a model other than the default models for page
+        # and node are used.
+        if FP_NODE_MODEL == 'fancypages.PageNode' and  FP_PAGE_MODEL == 'fancypages.FancyPage':
+            for page in orm.FancyPage.objects.all():
+                node, __ = orm.PageNode.objects.get_or_create(
+                    depth=page.depth, description=page.description,
+                    image=page.image, name=page.name, numchild=page.numchild,
+                    path=page.path, slug=page.slug)
+                page.node = node
+                page.save()
 
     def backwards(self, orm):
         "Write your backwards methods here."
-        for node in orm.PageNode.objects.all():
-            node.page.depth = node.depth
-            node.page.description = node.description
-            node.page.image = node.image
-            node.page.name = node.name
-            node.page.numchild = node.numchild
-            node.page.path = node.path
-            node.page.slug = node.slug
-            node.page.save()
+        # Skip this migration if a model other than the default models for page
+        # and node are used.
+        if FP_NODE_MODEL == 'fancypages.PageNode' and  FP_PAGE_MODEL == 'fancypages.FancyPage':
+            for node in orm.PageNode.objects.all():
+                node.page.depth = node.depth
+                node.page.description = node.description
+                node.page.image = node.image
+                node.page.name = node.name
+                node.page.numchild = node.numchild
+                node.page.path = node.path
+                node.page.slug = node.slug
+                node.page.save()
 
     models = {
         u'assets.imageasset': {
@@ -126,7 +132,7 @@ class Migration(DataMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'uuid': ('shortuuidfield.fields.ShortUUIDField', [], {'db_index': 'True', 'max_length': '22', 'blank': 'True'})
         },
-        FP_PAGE_MODEL: {
+        'fancypages.FancyPage': {
             'Meta': {'object_name': 'FancyPage'},
             'date_visible_end': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'date_visible_start': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
@@ -137,7 +143,7 @@ class Migration(DataMigration):
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'keywords': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'}),
-            'node': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'page'", 'unique': 'True', 'null': 'True', 'to': "orm['{}']".format(FP_NODE_MODEL)}),
+            'node': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'page'", 'unique': 'True', 'null': 'True', 'to': "orm['fancypages.PageNode']"}),
             'numchild': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'page_type': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'pages'", 'null': 'True', 'to': "orm['fancypages.PageType']"}),
             'path': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
@@ -188,7 +194,7 @@ class Migration(DataMigration):
             'depth': ('django.db.models.fields.PositiveIntegerField', [], {'default': '2'}),
             'is_relative': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
-        FP_NODE_MODEL: {
+        'fancypages.pagenode': {
             'Meta': {'object_name': 'PageNode'},
             'depth': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),

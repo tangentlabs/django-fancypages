@@ -4,35 +4,41 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from fancypages.models import FP_NODE_MODEL, FP_PAGE_MODEL
+
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'PageNode'
-        db.create_table(u'fancypages_pagenode', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('path', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
-            ('depth', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('numchild', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255, db_index=True)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=255)),
-            ('image', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
-            ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
-        ))
-        db.send_create_signal('fancypages', ['PageNode'])
+        if FP_NODE_MODEL == 'fancypages.PageNode':
+            # Adding model 'PageNode'
+            db.create_table(u'fancypages_pagenode', (
+                (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+                ('path', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
+                ('depth', self.gf('django.db.models.fields.PositiveIntegerField')()),
+                ('numchild', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
+                ('name', self.gf('django.db.models.fields.CharField')(max_length=255, db_index=True)),
+                ('slug', self.gf('django.db.models.fields.SlugField')(max_length=255)),
+                ('image', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
+                ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ))
+            db.send_create_signal('fancypages', ['PageNode'])
 
-        # Adding field 'FancyPage.node'
-        db.add_column(u'fancypages_fancypage', 'node',
-                      self.gf('django.db.models.fields.related.OneToOneField')(related_name='page', unique=True, null=True, to=orm['fancypages.PageNode']),
-                      keep_default=False)
+        if FP_PAGE_MODEL == 'fancypages.FancyPage':
+            # Adding field 'FancyPage.node'
+            db.add_column(u'fancypages_fancypage', 'node',
+                        self.gf('django.db.models.fields.related.OneToOneField')(related_name='page', unique=True, null=True, to=orm['fancypages.PageNode']),
+                        keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting model 'PageNode'
-        db.delete_table(u'fancypages_pagenode')
+        if FP_NODE_MODEL == 'fancypages.PageNode':
+            # Deleting model 'PageNode'
+            db.delete_table(u'fancypages_pagenode')
 
-        # Deleting field 'FancyPage.node'
-        db.delete_column(u'fancypages_fancypage', 'node_id')
+        if FP_PAGE_MODEL == 'fancypages.FancyPage':
+            # Deleting field 'FancyPage.node'
+            db.delete_column(u'fancypages_fancypage', 'node_id')
 
 
     models = {
