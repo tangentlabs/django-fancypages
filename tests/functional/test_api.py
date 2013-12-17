@@ -2,8 +2,6 @@ from django.db.models import get_model
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 
-from webtest import AppError
-
 from fancypages.test import factories
 from fancypages.test import testcases
 from fancypages.models import get_node_model, get_page_model
@@ -25,12 +23,7 @@ class TestTheBlockTypeApi(testcases.FancyPagesWebTest):
         self.container = Container.objects.create(name="test")
 
     def test_is_not_available_to_anonymous_users(self):
-        try:
-            self.app.get(reverse('fp-api:block-type-list'))
-        except AppError as exc:
-            self.assertIn('403', exc.args[0])
-        else:
-            self.fail('an anonymous user should not be able to use the API')
+        self.app.get(reverse('fp-api:block-type-list'), status=403)
 
     def test_returns_a_block_type_form_for_container(self):
         page = self.get(
@@ -40,24 +33,13 @@ class TestTheBlockTypeApi(testcases.FancyPagesWebTest):
         self.assertIn('groupedBlocks', response)
 
     def test_returns_error_when_no_container_specified(self):
-        try:
-            self.get(reverse('fp-api:block-type-list'))
-        except AppError as exc:
-            self.assertIn('container ID is required', exc.message)
-            self.assertIn('400', exc.args[0])
-        else:
-            self.fail(
-                'a container is required, this request should raise 400 error')
+        response = self.get(reverse('fp-api:block-type-list'), status=400)
+        self.assertIn('container ID is required', response.content)
 
     def test_returns_error_when_invalid_container_is_specified(self):
-        try:
-            self.get(
-                reverse('fp-api:block-type-list'), params={'container': 200})
-        except AppError as exc:
-            self.assertIn('container ID is invalid', exc.message)
-            self.assertIn('400', exc.args[0])
-        else:
-            self.fail('invalid container ID does not return 400 error')
+        response = self.get(reverse('fp-api:block-type-list'),
+                            params={'container': 200}, status=400)
+        self.assertIn('container ID is invalid', response.content)
 
 
 class TestTheBlockApi(testcases.FancyPagesWebTest):
@@ -93,12 +75,8 @@ class TestTheBlockApi(testcases.FancyPagesWebTest):
         self.assertEquals(self.third_text_block.display_order, 2)
 
     def test_is_not_available_to_anonymous_users(self):
-        try:
-            self.app.get(reverse('fp-api:block-list'))
-            self.fail('an anonymous user should not be able to use the API')
-        except AppError as exc:
-            #self.assertIn('You do not have permission', exc.message)
-            self.assertIn('403', exc.args[0])
+        response = self.app.get(reverse('fp-api:block-list'), status=403)
+        self.assertIn('credentials were not provided', response.content)
 
     def test_can_be_added_to_a_container(self):
         container = self.page.get_container_from_name('page-container')
