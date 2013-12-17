@@ -11,8 +11,10 @@ def get_fancypages_paths(path):
 
 
 def get_oscar_fancypages_paths(path):
+    from fancypages.contrib import oscar_fancypages
     return [
-        os.path.join(os.path.dirname(os.path.abspath(__file__)), path),
+        os.path.join(
+            os.path.dirname(os.path.abspath(oscar_fancypages.__file__)), path)
     ] + get_fancypages_paths(path)
 
 

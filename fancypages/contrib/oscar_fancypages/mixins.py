@@ -10,7 +10,7 @@ FancyPage = get_page_model()
 Container = get_model('fancypages', 'Container')
 
 
-class OscarFancyPageMixin(object):
+class OscarFancyPageMixin(mixins.FancyPageMixin):
     DEFAULT_TEMPLATE = getattr(settings, 'FP_DEFAULT_TEMPLATE')
 
     def get_template_names(self):
