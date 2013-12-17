@@ -211,6 +211,7 @@ from fancypages.defaults import *
 
 ########## FANCYPAGES SETTINGS
 FP_NODE_MODEL = 'catalogue.Category'
+FP_PAGE_DETAIL_VIEW = 'fancypages.contrib.oscar_fancypages.views.FancyPageDetailView'
 ########## END FANCYPAGES SETTINGS
 
 ########## OSCAR SETTINGS

@@ -1,25 +1,53 @@
 from django import http
 from django.conf import settings
-from django.db.models import get_model
 from django.utils import simplejson as json
 from django.utils.encoding import force_unicode
 from django.template.defaultfilters import slugify
 
-FancyPage = get_model('fancypages', 'FancyPage')
+from .models import get_page_model
+from .defaults import FP_HOMEPAGE_NAME
+
+FancyPage = get_page_model()
 
 
 class FancyPageMixin(object):
     object_attr_name = 'object'
 
+    pk_url_kwarg = 'pk'
+    slug_url_kwarg = 'slug'
+
+    page_attr_name = 'page'
+    node_attr_name = 'node'
+
+    def get_object(self):
+        try:
+            page = FancyPage.objects.select_related('node__containers').get(
+                node__slug=self.kwargs.get(self.slug_url_kwarg))
+        except FancyPage.DoesNotExist:
+            raise http.Http404()
+        return page
+
     def get_template_names(self):
-        instance = getattr(self, self.object_attr_name)
-        if not instance.page_type:
+        page = getattr(self, self.page_attr_name)
+        if not page.page_type:
             return [settings.FP_DEFAULT_TEMPLATE]
-        return [instance.page_type.template_name]
+        return [page.page_type.template_name]
+
+    def get(self, request, *args, **kwargs):
+        page = self.get_object()
+
+        if not request.user.is_staff:
+            if not page.is_visible:
+                raise http.Http404()
+
+        setattr(self, self.page_attr_name, page)
+        setattr(self, self.node_attr_name, page.node)
+
+        return super(FancyPageMixin, self).get(request, *args, **kwargs)
 
 
 class FancyHomeMixin(FancyPageMixin):
-    HOMEPAGE_NAME = getattr(settings, 'FP_DEFAULT_TEMPLATE', 'Home')
+    HOMEPAGE_NAME = getattr(settings, 'FP_HOMEPAGE_NAME', FP_HOMEPAGE_NAME)
 
     def get_object(self):
         slug = slugify(self.HOMEPAGE_NAME)

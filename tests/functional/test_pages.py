@@ -1,7 +1,3 @@
-import pytest
-
-from webtest import AppError
-
 from django.conf import settings
 from django.db.models import get_model
 from django.core.urlresolvers import reverse
@@ -117,11 +113,11 @@ class TestTheDefaultHomepage(FancyPagesWebTest):
         self.assertEquals(page.slug, self.home_slug)
         self.assertEquals(page.name, settings.FP_HOMEPAGE_NAME)
 
-    @pytest.mark.fp_only
     def test_is_displaying_the_existing_home_page(self):
         page_type = factories.PageTypeFactory()
         page = FancyPage.add_root(
-            node__name=settings.FP_HOMEPAGE_NAME, page_type=page_type)
+            node__name=settings.FP_HOMEPAGE_NAME, page_type=page_type,
+            status=FancyPage.PUBLISHED)
 
         home_page = self.get('/')
 
