@@ -118,7 +118,10 @@ following two examples:
 Installation
 ------------
 
-To use ``django-fancypages`` in your own project follow these steps:
+You can use *django-fancypages* as standalone app in your Django project or you
+can integrate it with your `django-oscar`_ shop using the included extension
+module. Most of the installation steps are exactly the same for both so let's
+go through these steps first. After you have completed them, follow the 
 
 1. Install via pip into you virtualenv (for now you have to install from
    the github repo because we haven't released it to PyPI yet)::
