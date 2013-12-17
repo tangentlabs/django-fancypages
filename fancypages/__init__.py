@@ -37,6 +37,5 @@ def get_required_apps():
 def get_fancypages_apps(use_with_oscar=False):
     apps = ['fancypages.assets', 'fancypages']
     if use_with_oscar:
-        from oscar import get_core_apps
-        apps += ['fancypages.contrib.oscar_fancypages'] + get_core_apps()
+        apps += ['fancypages.contrib.oscar_fancypages']
     return apps

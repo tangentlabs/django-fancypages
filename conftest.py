@@ -21,8 +21,8 @@ sys.path.insert(0, location(SANDBOX_MODULE))
 
 FP_OSCAR_SETTINGS = dict(
     FP_NODE_MODEL='catalogue.Category',
-    FP_PAGE_DETAIL_VIEW='fancypages.contrib.oscar_fancypages.views.FancyPageDetailView',
-    HAYSTACK_CONNECTIONS = {
+    FP_PAGE_DETAIL_VIEW='fancypages.contrib.oscar_fancypages.views.FancyPageDetailView',  # NOQA
+    HAYSTACK_CONNECTIONS={
         'default': {
             'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
         },
@@ -33,7 +33,18 @@ FP_OSCAR_SETTINGS = dict(
 def pytest_configure():
     from fancypages.defaults import FANCYPAGES_SETTINGS
 
-    ADDITIONAL_SETTINGS = {}
+    ADDITIONAL_SETTINGS = dict(
+        INSTALLED_APPS=[
+            'django.contrib.auth',
+            'django.contrib.contenttypes',
+            'django.contrib.sessions',
+            'django.contrib.sites',
+            'django.contrib.messages',
+            'django.contrib.staticfiles',
+            'django.contrib.admin',
+        ] + fp.get_required_apps() + fp.get_fancypages_apps(
+            use_with_oscar=USE_OSCAR_SANDBOX),
+    )
 
     if USE_OSCAR_SANDBOX:
         from oscar.defaults import OSCAR_SETTINGS
@@ -43,6 +54,9 @@ def pytest_configure():
 
     if USE_OSCAR_SANDBOX:
         ADDITIONAL_SETTINGS.update(FP_OSCAR_SETTINGS)
+
+        from oscar import get_core_apps
+        ADDITIONAL_SETTINGS['INSTALLED_APPS'] += get_core_apps()
 
     if not settings.configured:
         settings.configure(
@@ -85,16 +99,6 @@ def pytest_configure():
             ),
             ROOT_URLCONF='{}.sandbox.urls'.format(SANDBOX_MODULE),
             TEMPLATE_DIRS=[('templates')],
-            INSTALLED_APPS=[
-                'django.contrib.auth',
-                'django.contrib.contenttypes',
-                'django.contrib.sessions',
-                'django.contrib.sites',
-                'django.contrib.messages',
-                'django.contrib.staticfiles',
-                'django.contrib.admin',
-            ] + fp.get_required_apps() + fp.get_fancypages_apps(
-                use_with_oscar=USE_OSCAR_SANDBOX),
             AUTHENTICATION_BACKENDS=(
                 'django.contrib.auth.backends.ModelBackend',
             ),

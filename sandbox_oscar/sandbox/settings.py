@@ -7,7 +7,8 @@ import fancypages as fp
 
 
 PROJECT_DIR = os.path.dirname(__file__)
-location = lambda x: os.path.join(os.path.dirname(os.path.realpath(__file__)), "../%s" % x)
+location = lambda x: os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), "../%s" % x)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -159,7 +160,8 @@ THIRD_PARTY_APPS = [
 
 OFP_APPS = fp.get_required_apps() + fp.get_fancypages_apps(use_with_oscar=True)
 
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + OFP_APPS
+from oscar import get_core_apps
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + OFP_APPS + get_core_apps()
 
 AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.Emailbackend',
@@ -327,6 +329,5 @@ OSCAR_DASHBOARD_NAVIGATION = [
     },
 ]
 ########## END OSCAR SETTINGS
-
 
 INTERNAL_IPS = ('127.0.0.1',)
