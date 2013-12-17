@@ -1,6 +1,5 @@
 {% extends "fancypages/dashboard/layout.html" %}
 {% load i18n %}
-{% load compress %}
 {% load staticfiles %}
 {% load url from future %}
 
@@ -42,9 +41,7 @@
 {% block extrascripts %}
     {{ block.super }}
     <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-    {% compress js %}
-        <script type="text/javascript" src="{% static "fancypages/libs/jquery.mjs.nestedSortable.js" %}"></script>
-    {% endcompress %}
+    <script type="text/javascript" src="{% static "fancypages/libs/jquery.mjs.nestedSortable.js" %}"></script>
 {% endblock %}
 
 {% block onbodyload %}

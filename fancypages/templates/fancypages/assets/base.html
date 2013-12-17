@@ -1,6 +1,5 @@
 {% extends "fancypages/base.html" %}
 {% load i18n %}
-{% load compress %}
 {% load staticfiles %}
 
 {% block body_class %}{% endblock %}
@@ -22,7 +21,5 @@
 
 {% block extrastyles %}
     {{ block.super }}
-    {% compress css %}
-    <link rel='stylesheet' type='text/less' href="{% static "fancypages/less/assets.less" %}" />
-    {% endcompress %}
+    <link rel='stylesheet' type='text/css' href="{% static "fancypages/css/assets.css" %}" />
 {% endblock %}

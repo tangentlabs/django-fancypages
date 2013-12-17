@@ -1,0 +1,89 @@
+.clearfix {
+  *zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.clearfix:after {
+  clear: both;
+}
+.hide-text {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+.input-block-level {
+  display: block;
+  width: 100%;
+  min-height: 30px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.visible-editor {
+  display: none;
+}
+.block-wrapper {
+  margin-bottom: 20px;
+}
+.span1 .block-wrapper [class*="span"],
+.span2 .block-wrapper [class*="span"],
+.span3 .block-wrapper [class*="span"],
+.span4 .block-wrapper [class*="span"],
+.span1 .block-wrapper .row-fluid [class*="span"],
+.span2 .block-wrapper .row-fluid [class*="span"],
+.span3 .block-wrapper .row-fluid [class*="span"],
+.span4 .block-wrapper .row-fluid [class*="span"],
+.span1 .block-wrapper .mod-offer .products li,
+.span2 .block-wrapper .mod-offer .products li,
+.span3 .block-wrapper .mod-offer .products li,
+.span4 .block-wrapper .mod-offer .products li {
+  float: none;
+  display: block;
+  width: 100%;
+  margin-left: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+.span1 .es-carousel .products,
+.span2 .es-carousel .products,
+.span3 .es-carousel .products,
+.span4 .es-carousel .products {
+  overflow: hidden;
+}
+.fullscreen-modal {
+  position: fixed;
+  top: 5%;
+  right: 5%;
+  bottom: 100%;
+  left: 5%;
+  margin: 0;
+  width: 90%;
+  height: 90%;
+}
+.fullscreen-modal > .modal-body {
+  overflow: hidden;
+}
+/**** TO ADD IN  LATER ONCE WIDGET NAMES ARE KNOWN ****/
+/*.span4 {
+  .block-wrapper {
+    height:30px;
+    overflow:hidden;
+    &:before {
+      content: "Too large to fit here!";
+      padding:5px;
+      background:#efefef;
+      display:block;
+      text-align:center;
+      text-transform:uppercase;
+      font-size:11px;
+    }
+  }
+}*/

@@ -13,8 +13,6 @@ location = lambda x: os.path.join(
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-USE_LESS = True
-
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
@@ -75,7 +73,6 @@ STATIC_ROOT = location('public')
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -85,7 +82,6 @@ SECRET_KEY = 'sba9ti)x&amp;^fkod-g91@^_yi6y_#&amp;3mo#m5@n)i&amp;k+0h=+zsfkb'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -121,19 +117,6 @@ ROOT_URLCONF = 'sandbox.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'sandbox.wsgi.application'
 
-# Compressor and pre-compiler settings for django-compressor
-COMPRESS_ENABLED = DEBUG
-COMPRESS_OUTPUT_DIR = 'cache'
-COMPRESS_OFFLINE = False
-
-COMPRESS_PRECOMPILERS = (
-    ('text/coffeescript', 'coffee --compile --stdio'),
-    ('text/less', 'lessc {infile} {outfile}'),
-)
-
-if DEBUG:
-    COMPRESS_JS_FILTERS = []
-
 from oscar import OSCAR_MAIN_TEMPLATE_DIR
 
 TEMPLATE_DIRS = [
@@ -152,6 +135,8 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.flatpages',
     'django.contrib.admin',
+
+    'compressor',
 ]
 
 THIRD_PARTY_APPS = [
@@ -331,3 +316,5 @@ OSCAR_DASHBOARD_NAVIGATION = [
 ########## END OSCAR SETTINGS
 
 INTERNAL_IPS = ('127.0.0.1',)
+
+USE_LESS = False

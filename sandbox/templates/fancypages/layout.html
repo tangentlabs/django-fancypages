@@ -1,5 +1,4 @@
 {% extends "fancypages/base.html" %}
-{% load compress %}
 {% load staticfiles %}
 {% load url from future %}
 
@@ -23,7 +22,7 @@
             </ul>
             <div class="pull-right">
                 <ul class="nav">
-                {% if not request.user.is_authenticated %} 
+                {% if not request.user.is_authenticated %}
                       <li><a href="/admin/login/">Login</a></li>
                 {% else %}
                       <li><a href="/admin/logout/">Logout</a></li>
