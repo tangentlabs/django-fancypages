@@ -27,8 +27,6 @@ def get_required_apps():
         # that makes lookup of nested models easier. This is used
         # for the content block hierarchy.
         'model_utils',
-        # static file compression and collection
-        'compressor',
         # migration handling
         'south',
     ]

@@ -74,7 +74,6 @@ def pytest_configure():
             STATICFILES_FINDERS=(
                 'django.contrib.staticfiles.finders.FileSystemFinder',
                 'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-                'compressor.finders.CompressorFinder',
             ),
             TEMPLATE_LOADERS=(
                 'django.template.loaders.filesystem.Loader',
@@ -101,11 +100,6 @@ def pytest_configure():
             TEMPLATE_DIRS=[('templates')],
             AUTHENTICATION_BACKENDS=(
                 'django.contrib.auth.backends.ModelBackend',
-            ),
-            COMPRESS_ENABLED=True,
-            COMPRESS_OFFLINE=False,
-            COMPRESS_PRECOMPILERS=(
-                ('text/less', 'lessc {infile} {outfile}'),
             ),
             LOGIN_REDIRECT_URL='/accounts/',
             APPEND_SLASH=True,

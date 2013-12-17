@@ -1,5 +1,4 @@
 {% extends "fancypages/layout.html" %}
-{% load compress %}
 {% load staticfiles %}
 
 {% block body_class %}fancypages{% endblock %}
@@ -8,19 +7,15 @@
     {{ block.super }}
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-    {% compress css %}
-        <link rel='stylesheet' type='text/less' href="{% static "fancypages/less/page-management.less" %}" />
-    {% endcompress %}
+    <link rel='stylesheet' type='text/css' href="{% static "fancypages/css/page-management.css" %}" />
 {% endblock %}
 
 {% block extrascripts %}
     {{ block.super }}
     <script type="text/javascript" src="{% static "fancypages/libs/wysihtml5/advanced.js" %}"></script>
     <script type="text/javascript" src="{% static "fancypages/libs/wysihtml5/wysihtml5-0.3.0.min.js" %}"></script>
-    {% compress js %}
-        <script src="{% static "fancypages/libs/elastislide/jquery.elastislide.js" %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static "fancypages/libs/elastislide/jquery.elastislide.js" %}" type="text/javascript" charset="utf-8"></script>
 
-        <script src="{% static "fancypages/js/fancypages.js" %}" type="text/javascript" charset="utf-8"></script>
-        <script src="{% static "fancypages/js/dashboard.js" %}" type="text/javascript" charset="utf-8"></script>
-    {% endcompress %}
+    <script src="{% static "fancypages/js/fancypages.js" %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static "fancypages/js/dashboard.js" %}" type="text/javascript" charset="utf-8"></script>
 {% endblock %}

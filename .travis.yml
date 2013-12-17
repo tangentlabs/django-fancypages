@@ -14,12 +14,14 @@ install:
   - pip install Django$DJANGO_VERSION djangorestframework$DRF_VERSION --use-wheel
   - pip install . --use-mirrors --use-wheel
   - pip install -r requirements.txt --use-mirrors --use-wheel
-  - pip install -r requirements_oscar.txt --use-mirrors --use-wheel
   - npm -g install less
 before_script:
   - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
 script:
   - py.test --pep8
+  # we only install this here to make sure that Oscar is not available during
+  # the previous tests for standalone FP
+  - pip install -r requirements_oscar.txt --use-mirrors --use-wheel
   - USE_OSCAR_SANDBOX=true py.test --pep8 --cov fancypages
   - py.test -m integration
 after_success:

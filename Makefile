@@ -1,11 +1,11 @@
-.PHONY: dev sandbox
+.PHONY: compile-static
 
-dev:
-	pip install -e .
-	pip install -r requirements.txt
+STATIC_DIR="fancypages/static/fancypages/"
 
-sandbox: dev
-	- rm sandbox/sandbox/db.sqlite3
-	./sandbox/manage.py syncdb --noinput
-	./sandbox/manage.py migrate
-	- ./sandbox/manage.py loaddata sandbox/_fixtures/users.json
+
+compile-static:
+	- mkdir -p fancypages/css
+	lessc ${STATIC_DIR}less/page-management.less > ${STATIC_DIR}css/page-management.css
+	lessc ${STATIC_DIR}less/fancypages.less > ${STATIC_DIR}css/fancypages.css
+	lessc ${STATIC_DIR}less/assets.less > ${STATIC_DIR}css/assets.css
+	lessc ${STATIC_DIR}less/page.less > ${STATIC_DIR}css/page.css

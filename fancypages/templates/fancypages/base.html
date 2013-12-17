@@ -1,4 +1,4 @@
-{% load i18n compress %}
+{% load i18n %}
 {% load staticfiles %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html lang="{{ lang|default:"en-gb" }}" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -27,9 +27,7 @@
 
         {# Additional CSS - specific to certain pages #}
         {% block extrastyles %}
-            {% compress css %}
-                {% include "fancypages/partials/extrastyles.html" %}
-            {% endcompress %}
+            {% include "fancypages/partials/extrastyles.html" %}
         {% endblock %}
 
         {% block extrahead %}{% endblock %}
@@ -43,10 +41,6 @@
             {# This block can be used to place tracking such as Google Analytics #}
         {% endblock %}
 
-        {% comment %}
-        Scripts loaded from a CDN.  These can't be wrapped by the 'compress' tag and so we
-        use a separate block for them.
-        {% endcomment %}
         {% block cdn_scripts %}
             <!-- jQuery -->
             <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -55,11 +49,9 @@
 
         {# Local scripts #}
         {% block scripts %}
-            {% compress js %}
-                <!-- Twitter Bootstrap -->
-                <script type="text/javascript" src="{% static "fancypages/libs/bootstrap/bootstrap.min.js" %}"></script>
-                {% include "fancypages/partials/extrascripts.html" %}
-            {% endcompress %}
+            <!-- Twitter Bootstrap -->
+            <script type="text/javascript" src="{% static "fancypages/libs/bootstrap/bootstrap.min.js" %}"></script>
+            {% include "fancypages/partials/extrascripts.html" %}
         {% endblock %}
 
         {# Additional JS scripts #}

@@ -1,12 +1,9 @@
 {% extends "fancypages/base.html" %}
-{% load compress %}
 {% load staticfiles %}
 
 {% block extrastyles %}
     {{ block.super }}
-    {% compress css %}
     {% include "fancypages/partials/extrastyles.html" %}
-    {% endcompress %}
 {% endblock %}
 
 {% block navigation %}
@@ -16,7 +13,5 @@
 
 {% block extrascripts %}
     {{ block.super }}
-    {% compress js %}
     {% include "fancypages/partials/extrascripts.html" %}
-    {% endcompress %}
 {% endblock %}

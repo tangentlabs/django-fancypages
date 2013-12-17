@@ -1,0 +1,53 @@
+.fp-page-tree,
+.fp-page-tree ol {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.fp-page-tree a {
+  text-decoration: none;
+}
+.fp-page-tree ol {
+  background: url(/static/fancypages/img/vline.png) transparent repeat-y;
+  margin-left: 10px;
+}
+.fp-page-tree ol a {
+  padding-left: 10px;
+}
+.fp-page-tree ol > li {
+  padding-left: 5px 0 5px 12px;
+  margin-top: 5px;
+  line-height: 20px;
+  background: url(/static/fancypages/img/node.png) transparent no-repeat;
+  color: #369;
+}
+.fp-page-tree > li {
+  border-bottom: 1px solid #dddddd;
+  padding: 5px;
+}
+.fp-page-tree > li:first-child {
+  background: none;
+}
+.fp-page-tree ol li.last {
+  background: #ffffff url(/static/fancypages/img/lastnode.png) no-repeat;
+}
+.fp-page-tree > li {
+  border: 1px solid #dddddd;
+  border-top-width: 0;
+  cursor: move;
+}
+.fp-page-tree > li:first-child {
+  border-top-width: 1px;
+}
+.fp-page-tree h5,
+.fp-page-tree .btn-toolbar {
+  margin: 0;
+}
+.fp-page-tree h5 {
+  margin-top: 2px;
+}
+.row-actions {
+  background: #efefef;
+  padding: 5px;
+  border-top: 1px solid #d6d6d6;
+}
