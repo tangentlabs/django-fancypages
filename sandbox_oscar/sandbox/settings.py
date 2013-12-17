@@ -137,9 +137,10 @@ from oscar import OSCAR_MAIN_TEMPLATE_DIR
 
 TEMPLATE_DIRS = [
     location('templates'),
+] + fp.get_oscar_fancypages_paths('templates') + [
     os.path.join(OSCAR_MAIN_TEMPLATE_DIR, 'templates'),
     OSCAR_MAIN_TEMPLATE_DIR,
-] + fp.get_oscar_fancypages_paths('templates')
+]
 
 DJANGO_APPS = [
     'django.contrib.auth',

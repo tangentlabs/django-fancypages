@@ -14,12 +14,12 @@ class FancyPageMixin(object):
     def get_template_names(self):
         instance = getattr(self, self.object_attr_name)
         if not instance.page_type:
-            return [settings.FANCYPAGES_DEFAULT_TEMPLATE]
+            return [settings.FP_DEFAULT_TEMPLATE]
         return [instance.page_type.template_name]
 
 
 class FancyHomeMixin(FancyPageMixin):
-    HOMEPAGE_NAME = getattr(settings, 'FP_HOMEPAGE_NAME', 'Home')
+    HOMEPAGE_NAME = getattr(settings, 'FP_DEFAULT_TEMPLATE', 'Home')
 
     def get_object(self):
         slug = slugify(self.HOMEPAGE_NAME)

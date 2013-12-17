@@ -13,7 +13,10 @@ environment.sh
 *.cache/
 *.tox
 
+.ropeproject/
+
 docs/build/
 sandbox/public/
+sandbox_oscar/public/
 node_modules/
 htmlcov/
