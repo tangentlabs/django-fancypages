@@ -194,5 +194,4 @@ class TestAnImageForAFancyPage(testcases.FancyPagesWebTest):
         fancy_page = FancyPage.objects.get(id=fancy_page.id)
         self.assertEquals(
             fancy_page.image.path,
-            os.path.join(pages_path, filename.rsplit('/')[-1])
-        )
+            os.path.join(pages_path, filename.rsplit('/')[-1]))
