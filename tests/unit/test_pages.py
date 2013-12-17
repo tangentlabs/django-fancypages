@@ -1,22 +1,12 @@
 from django.core import exceptions
 from django.db import IntegrityError
-from django.db.models import get_model
 from django.template import loader, Context
 
 from fancypages import models
 from fancypages.test import testcases
-from fancypages.utils import get_container_names_from_template
+from fancypages.utils import get_container_names_from_template, get_page_model
 
-
-class TestSwappableModels(testcases.FancyPagesTestCase):
-
-    def test_returns_default_node(self):
-        self.assertEquals(
-            models.get_node_model(), get_model('fancypages', 'PageNode'))
-
-    def test_returns_default_page(self):
-        self.assertEquals(
-            models.get_page_model(), get_model('fancypages', 'FancyPage'))
+FancyPage = get_page_model()
 
 
 class TestContainerNames(testcases.FancyPagesTestCase):
@@ -57,10 +47,10 @@ class TestAPage(testcases.FancyPagesTestCase):
 """)
         page_type = models.PageType.objects.create(
             name="Example Type", template_name=self.template_name)
-        article_page = models.FancyPage.add_root(
+        article_page = FancyPage.add_root(
             node__name='This is an article', page_type=page_type)
 
-        article_page = models.FancyPage.objects.get(id=article_page.id)
+        article_page = FancyPage.objects.get(id=article_page.id)
         self.assertEquals(article_page.containers.count(), 2)
 
 
@@ -74,7 +64,7 @@ class TestContainer(testcases.FancyPagesTestCase):
 
     def test_with_page_object_is_unique(self):
         var_name = 'test-container'
-        page = models.FancyPage.add_root(node__name="Test Page")
+        page = FancyPage.add_root(node__name="Test Page")
         models.Container.objects.create(name=var_name, page_object=page)
 
         with self.assertRaises(IntegrityError):
@@ -82,9 +72,9 @@ class TestContainer(testcases.FancyPagesTestCase):
 
     def test_containers_can_have_same_name_for_different_objects(self):
         var_name = 'test-container'
-        page = models.FancyPage.add_root(node__name="Test Page")
+        page = FancyPage.add_root(node__name="Test Page")
         models.Container.objects.create(name=var_name, page_object=page)
-        other_page = models.FancyPage.add_root(node__name="Another Test Page")
+        other_page = FancyPage.add_root(node__name="Another Test Page")
         try:
             models.Container.objects.create(
                 name=var_name, page_object=other_page)
@@ -94,7 +84,7 @@ class TestContainer(testcases.FancyPagesTestCase):
 
     def test_containers_can_have_same_name_with_an_without_object(self):
         var_name = 'test-container'
-        page = models.FancyPage.add_root(node__name="Test Page")
+        page = FancyPage.add_root(node__name="Test Page")
         models.Container.objects.create(name=var_name, page_object=page)
         try:
             models.Container.objects.create(name=var_name)
@@ -113,7 +103,7 @@ class TestContainerWithObject(testcases.FancyPagesTestCase):
 
         page_type = models.PageType.objects.create(
             name="Example Type", template_name=self.template_name)
-        self.page = models.FancyPage.add_root(
+        self.page = FancyPage.add_root(
             node__name="Some Title", page_type=page_type)
         self.container_names = get_container_names_from_template(
             self.page.page_type.template_name)

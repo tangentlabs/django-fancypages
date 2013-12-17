@@ -1,7 +1,37 @@
+from django.conf import settings
+from django.db.models import get_model
 from django.core.exceptions import ImproperlyConfigured
 from django.template import loader, TemplateDoesNotExist
 
 from fancypages.templatetags import fp_container_tags
+
+from ..defaults import FP_PAGE_MODEL, FP_NODE_MODEL
+
+
+FP_NODE_MODEL = getattr(settings, 'FP_NODE_MODEL', FP_NODE_MODEL)
+FP_PAGE_MODEL = getattr(settings, 'FP_PAGE_MODEL', FP_PAGE_MODEL)
+
+
+def _get_swappable_model(name):
+    try:
+        app_label, model_name = name.split('.')
+    except ValueError:
+        raise ImproperlyConfigured(
+            "{} must be of the form 'app_label.model_name'".format(name))
+    model_class = get_model(app_label, model_name)
+    if model_class is None:
+        raise ImproperlyConfigured(
+            "{} refers to model '{}.{}' that has not been installed".format(
+                name, app_label, model_name))
+    return model_class
+
+
+def get_node_model():
+    return _get_swappable_model(FP_NODE_MODEL)
+
+
+def get_page_model():
+    return _get_swappable_model(FP_PAGE_MODEL)
 
 
 def get_container_names_from_template(page_template):

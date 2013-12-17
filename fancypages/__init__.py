@@ -5,17 +5,15 @@ import os
 __version__ = VERSION = "0.3.0"
 
 
-def get_fancypages_paths(path):
+def get_fancypages_paths(path, use_with_oscar=False):
     """ Get absolute paths for *path* relative to the project root """
-    return [os.path.join(os.path.dirname(os.path.abspath(__file__)), path)]
-
-
-def get_oscar_fancypages_paths(path):
-    from fancypages.contrib import oscar_fancypages
-    return [
-        os.path.join(
-            os.path.dirname(os.path.abspath(oscar_fancypages.__file__)), path)
-    ] + get_fancypages_paths(path)
+    paths = []
+    if use_with_oscar:
+        from fancypages.contrib import oscar_fancypages
+        base_dir = os.path.dirname(os.path.abspath(oscar_fancypages.__file__))
+        paths.append(os.path.join(base_dir, path))
+    return paths + [
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), path)]
 
 
 def get_required_apps():
@@ -36,5 +34,9 @@ def get_required_apps():
     ]
 
 
-def get_fancypages_apps():
-    return ['fancypages.assets', 'fancypages']
+def get_fancypages_apps(use_with_oscar=False):
+    apps = ['fancypages.assets', 'fancypages']
+    if use_with_oscar:
+        from oscar import get_core_apps
+        apps += ['fancypages.contrib.oscar_fancypages'] + get_core_apps()
+    return apps

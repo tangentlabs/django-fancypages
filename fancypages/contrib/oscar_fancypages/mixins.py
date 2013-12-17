@@ -8,8 +8,9 @@ class OscarFancyPageMixin(mixins.FancyPageMixin):
 
     def get_context_data(self, **kwargs):
         ctx = super(OscarFancyPageMixin, self).get_context_data(**kwargs)
+        ctx[self.context_object_name] = getattr(self, self.page_attr_name)
         if self.category:
-            ctx['object'] = ctx[self.context_object_name] = self.category
+            ctx['object'] = self.category
             for container in self.category.page.containers.all():
                 ctx[container.name] = container
         return ctx

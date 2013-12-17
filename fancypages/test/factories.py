@@ -6,12 +6,13 @@ from factory.django import DjangoModelFactory
 from django.conf import settings
 from django.db.models import get_model
 
+from fancypages.utils import get_page_model, get_node_model
 from fancypages.compat import get_user_model
 
 
 PAGE_GROUPS_NAMES = itertools.cycle(['Primary Navigation', 'Footer'])
 
-FancyPage = get_model('fancypages', 'FancyPage')
+FancyPage = get_page_model()
 
 
 class UserFactory(DjangoModelFactory):
@@ -44,7 +45,7 @@ class PageGroupFactory(DjangoModelFactory):
 
 
 class PageNodeFactory(DjangoModelFactory):
-    FACTORY_FOR = get_model('fancypages', 'PageNode')
+    FACTORY_FOR = get_node_model()
 
     name = factory.Sequence(lambda n: "Node {}".format(n))
     depth = 1

@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load fp_block_tags %}
 
-{% get_object_visibility object as is_visible %}
+{% get_object_visibility fancypage as is_visible %}
 {% if user.is_staff and request.fp_edit_mode and not is_visible %}
 <div class="alert alert-danger">
     <strong>{% trans "Note:" %}</strong>
