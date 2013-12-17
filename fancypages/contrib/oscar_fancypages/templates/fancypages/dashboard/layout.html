@@ -1,0 +1,34 @@
+{% extends 'dashboard/layout.html' %}
+{% load compress %}
+{% load staticfiles %}
+
+{% block body_class %}fancypages{% endblock %}
+
+{% block mainstyles %}
+    {{ block.super }}
+    {% compress css %}
+    <link rel='stylesheet' type='text/less' href="{% static "oscar/less/dashboard.less" %}" />
+    <link rel='stylesheet' type='text/less' href="{% static "fancypages/less/page-management.less" %}" />
+    {% endcompress %}
+{% endblock %}
+
+{% block cdn_scripts %}
+    {{ block.super }}
+    <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+{% endblock %}
+
+{% block extrascripts %}
+    {{ block.super }}
+    <script type="text/javascript" charset="utf-8" src="{% static "fancypages/libs/wysihtml5/advanced.js" %}"></script>
+    <script type="text/javascript" charset="utf-8" src="{% static "fancypages/libs/wysihtml5/wysihtml5-0.3.0.min.js" %}"></script>
+
+    {% compress js %}
+    <script type="text/javascript" charset="utf-8" src="{% static "fancypages/libs/elastislide/jquery.elastislide.js" %}"></script>
+    <script type="text/javascript" charset="utf-8" src="{% static "fancypages/libs/jquery.mjs.nestedSortable.js" %}"></script>
+    {% endcompress %}
+
+    {% compress js %}
+        <script src="{% static "fancypages/js/fancypages.js" %}" type="text/javascript" charset="utf-8"></script>
+        <script src="{% static "fancypages/js/dashboard.js" %}" type="text/javascript" charset="utf-8"></script>
+    {% endcompress %}
+{% endblock %}

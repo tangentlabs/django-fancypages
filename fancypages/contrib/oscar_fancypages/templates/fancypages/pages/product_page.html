@@ -1,0 +1,54 @@
+{% extends "catalogue/detail.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% load url from future %}
+
+{% load currency_filters %}
+{% load history_tags %}
+{% load reviews_tags %}
+{% load product_tags %}
+
+{% load fp_container_tags %}
+
+
+{% block body_class %}fp-page editor-hidden{% endblock %}
+
+{% block product_gallery %}
+    <div class="row-fluid">
+        <div class="span12">
+            {% fp_object_container content-container %}
+        </div>
+    </div>
+
+    {{ block.super }}
+{% endblock %}
+
+{% block product_description %}
+    <div class="row-fluid">
+        <div class="span12">
+            {% fp_object_container product-description-container %}
+        </div>
+    </div>
+
+    {{ block.super }}
+{% endblock %}
+
+{% block product_info %}
+    <div class="row-fluid">
+        <div class="span12">
+            {% fp_object_container product-info-container %}
+        </div>
+    </div>
+
+    {{ block.super }}
+{% endblock %}
+
+{% block product_review %}
+    <div class="row-fluid">
+        <div class="span12">
+            {% fp_object_container product-review-container %}
+        </div>
+    </div>
+
+    {{ block.super }}
+{% endblock product_review %}

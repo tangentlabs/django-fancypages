@@ -1,0 +1,59 @@
+{% extends "oscar/catalogue/browse.html" %}
+{% load i18n %}
+{% load compress %}
+{% load fp_container_tags %}
+{% load staticfiles %}
+
+{% block body_class %}fp-page editor-hidden{% endblock %}
+
+{% block column_left %}
+    {% fp_object_container left-column-top %}
+    {{ block.super }}
+    {% fp_object_container left-column-bottom %}
+{% endblock %}
+
+{% block content %}
+    <div class="sub-header">
+        <h1>{{ summary }}</h1>
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+            {% fp_object_container main-column-top %}
+        </div>
+    </div>
+
+    {% if category.description %}
+        <div class="row-fluid">
+            <div class="span9"><p>{{ category.description|safe }}</p></div>
+
+            {% if category.image %}
+                <div class="span3"><img src="{{ category.image.url }}" alt="{{ summary }}" /></div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% fp_object_container main-column-above-products %}
+
+    {% if products.count %}
+    <section>
+        <div class="mod">
+            <ol class="products four">
+                {% for product in products %}
+                <li>{% include "catalogue/partials/product.html" %}</li>
+                {% endfor %}
+            </ol>
+            {% include "partials/pagination.html" %}
+        </div>
+    </section>
+    {% else %}
+	<p class="nonefound">{% trans "No products found." %}</p>
+    {% endif %}
+
+    {% fp_object_container main-column-below-products %}
+{% endblock content %}
+
+{% block navigation %}
+    {{ block.super }}
+    {% include "fancypages/partials/draft_note_block.html" %}
+{% endblock %}

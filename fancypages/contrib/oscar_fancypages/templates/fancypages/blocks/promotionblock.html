@@ -1,0 +1,9 @@
+{% extends "fancypages/block.html" %}
+{% load fp_block_tags %}
+{% load promotion_tags %}
+
+{% block block_content %}
+{% if fp_block.promotion %}
+{% render_promotion fp_block.promotion %}
+{% endif %}
+{% endblock %}
