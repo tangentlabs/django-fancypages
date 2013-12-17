@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from . import forms
-from ..models import get_page_model, get_node_model
+from ..utils import get_page_model, get_node_model
 
 
 PageNode = get_node_model()

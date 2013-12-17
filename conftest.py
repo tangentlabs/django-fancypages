@@ -1,21 +1,48 @@
 import os
 import sys
+import fancypages as fp
 
 from django.conf import settings
 
-import fancypages as fp
 from fancypages.test import TEMP_MEDIA_ROOT
+
+USE_OSCAR_SANDBOX = bool(os.getenv('USE_OSCAR_SANDBOX', False))
+
+SANDBOX_MODULE = 'sandbox'
+if USE_OSCAR_SANDBOX:
+    SANDBOX_MODULE = 'sandbox_oscar'
 
 location = lambda x: os.path.join(
     os.path.dirname(os.path.realpath(__file__)), x)
-sandbox = lambda x: location("sandbox/%s" % x)
+sandbox = lambda x: location("{}/{}".format(SANDBOX_MODULE, x))
 
-sys.path.insert(0, location('sandbox'))
+sys.path.insert(0, location(SANDBOX_MODULE))
 
+
+FP_OSCAR_SETTINGS = dict(
+    FP_NODE_MODEL='catalogue.Category',
+    FP_PAGE_DETAIL_VIEW='fancypages.contrib.oscar_fancypages.views.FancyPageDetailView',
+    HAYSTACK_CONNECTIONS = {
+        'default': {
+            'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+        },
+    }
+)
 
 
 def pytest_configure():
     from fancypages.defaults import FANCYPAGES_SETTINGS
+
+    ADDITIONAL_SETTINGS = {}
+
+    if USE_OSCAR_SANDBOX:
+        from oscar.defaults import OSCAR_SETTINGS
+        ADDITIONAL_SETTINGS.update(OSCAR_SETTINGS)
+
+    ADDITIONAL_SETTINGS.update(FANCYPAGES_SETTINGS)
+
+    if USE_OSCAR_SANDBOX:
+        ADDITIONAL_SETTINGS.update(FP_OSCAR_SETTINGS)
 
     if not settings.configured:
         settings.configure(
@@ -28,7 +55,7 @@ def pytest_configure():
             MEDIA_ROOT=TEMP_MEDIA_ROOT,
             MEDIA_URL='/media/',
             STATIC_URL='/static/',
-            STATICFILES_DIRS=[sandbox('static/') ],
+            STATICFILES_DIRS=[sandbox('static/')],
             STATIC_ROOT=sandbox('public'),
             STATICFILES_FINDERS=(
                 'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -56,10 +83,8 @@ def pytest_configure():
                 'django.contrib.messages.middleware.MessageMiddleware',
                 'fancypages.middleware.EditorMiddleware',
             ),
-            ROOT_URLCONF='sandbox.sandbox.urls',
-            TEMPLATE_DIRS=[
-                sandbox('templates'),
-            ],
+            ROOT_URLCONF='{}.sandbox.urls'.format(SANDBOX_MODULE),
+            TEMPLATE_DIRS=[('templates')],
             INSTALLED_APPS=[
                 'django.contrib.auth',
                 'django.contrib.contenttypes',
@@ -68,8 +93,8 @@ def pytest_configure():
                 'django.contrib.messages',
                 'django.contrib.staticfiles',
                 'django.contrib.admin',
-                'blog',
-            ] + fp.get_required_apps() + fp.get_fancypages_apps(),
+            ] + fp.get_required_apps() + fp.get_fancypages_apps(
+                use_with_oscar=USE_OSCAR_SANDBOX),
             AUTHENTICATION_BACKENDS=(
                 'django.contrib.auth.backends.ModelBackend',
             ),
@@ -81,5 +106,5 @@ def pytest_configure():
             LOGIN_REDIRECT_URL='/accounts/',
             APPEND_SLASH=True,
             SITE_ID=1,
-            **FANCYPAGES_SETTINGS
+            **ADDITIONAL_SETTINGS
         )

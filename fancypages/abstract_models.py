@@ -30,6 +30,10 @@ class AbstractPageNode(MP_Node):
 
     _slug_separator = u'/'
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('fancypages:page-detail', (), {'slug': self.slug})
+
     def save(self, update_slugs=True, *args, **kwargs):
         if update_slugs:
             parent = self.get_parent()
@@ -70,6 +74,7 @@ class AbstractPageNode(MP_Node):
         subtree = self.__class__.get_tree(parent=reloaded_self)
         for node in subtree:
             node.save()
+    move.alters_data = True
 
     class Meta:
         app_label = 'fancypages'
@@ -181,10 +186,11 @@ class AbstractFancyPage(models.Model):
         node_kwargs, page_kwargs = self._split_kwargs(kwargs)
         page_kwargs['node'] = self.node.add_child(**node_kwargs)
         return self.__class__.objects.create(**page_kwargs)
+    add_child.alters_data = True
 
     @classmethod
     def add_root(cls, **kwargs):
-        from .models import get_node_model
+        from .utils import get_node_model
         node_kwargs, page_kwargs = cls._split_kwargs(kwargs)
         page_kwargs['node'] = get_node_model().add_root(**node_kwargs)
         return cls.objects.create(**page_kwargs)
@@ -200,6 +206,7 @@ class AbstractFancyPage(models.Model):
         node = self.node
         super(AbstractFancyPage, self).delete(using)
         node.delete()
+    delete.alters_data = True
 
     def __getattr__(self, name):
         """
@@ -225,10 +232,7 @@ class AbstractFancyPage(models.Model):
         if self.containers.filter(name=name).count():
             return
         self.containers.create(name=name)
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('fancypages:page-detail', (self.slug,), {})
+    create_container.alters_data = True
 
     def __unicode__(self):
         return u"FancyPage '{0}'".format(self.name)
@@ -407,6 +411,7 @@ class AbstractContentBlock(models.Model):
             for idx, block in enumerate(blocks):
                 block.display_order = self.display_order + idx + 1
                 block.save()
+    fix_block_positions.alters_data = True
 
     def __unicode__(self):
         return "Block #%s" % self.id

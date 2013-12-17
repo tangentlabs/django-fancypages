@@ -73,7 +73,7 @@ def render_block_form(context, form):
 @register.filter
 def depth_as_range(depth):
     # reduce depth by 1 as treebeard root depth is 1
-    return range(depth-1)
+    return range(depth - 1)
 
 
 @register.assignment_tag

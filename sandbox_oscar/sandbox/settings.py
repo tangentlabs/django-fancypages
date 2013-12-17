@@ -65,7 +65,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     location('static/'),
-] + fp.get_oscar_fancypages_paths('static')
+] + fp.get_fancypages_paths('static', use_with_oscar=True)
 
 STATIC_ROOT = location('public')
 
@@ -137,7 +137,7 @@ from oscar import OSCAR_MAIN_TEMPLATE_DIR
 
 TEMPLATE_DIRS = [
     location('templates'),
-] + fp.get_oscar_fancypages_paths('templates') + [
+] + fp.get_fancypages_paths('templates', use_with_oscar=True) + [
     os.path.join(OSCAR_MAIN_TEMPLATE_DIR, 'templates'),
     OSCAR_MAIN_TEMPLATE_DIR,
 ]
@@ -157,12 +157,9 @@ THIRD_PARTY_APPS = [
     'debug_toolbar',
 ]
 
-OFP_APPS = fp.get_required_apps() + fp.get_fancypages_apps() + [
-    'fancypages.contrib.oscar_fancypages',
-]
+OFP_APPS = fp.get_required_apps() + fp.get_fancypages_apps(use_with_oscar=True)
 
-from oscar import get_core_apps
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + OFP_APPS + get_core_apps()
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + OFP_APPS
 
 AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.Emailbackend',
@@ -226,6 +223,7 @@ HAYSTACK_CONNECTIONS = {
         'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
     },
 }
+
 OSCAR_DASHBOARD_NAVIGATION = [
     {
         'label': _('Dashboard'),

@@ -13,9 +13,10 @@ from webtest import Upload
 
 from fancypages.test import TEMP_IMAGE_DIR
 from fancypages.test import testcases, factories
+from fancypages.utils import get_page_model, get_node_model
 
 PageType = get_model('fancypages', 'PageType')
-FancyPage = get_model('fancypages', 'FancyPage')
+FancyPage = get_page_model()
 
 
 class TestAStaffMember(testcases.FancyPagesWebTest):
@@ -180,7 +181,16 @@ class TestAnImageForAFancyPage(testcases.FancyPagesWebTest):
 
         self.assertRedirects(list_page, reverse('fp-dashboard:page-list'))
 
-        pages_path = os.path.join(settings.MEDIA_ROOT, 'fancypages/pages')
+        # This bit is required because when using Oscar, the upload directory
+        # is defined by the category's image field and differs from the one on
+        # the PageNode.
+        upload_url = None
+        for field in get_node_model()._meta.fields:
+            if field.name == 'image':
+                upload_url = field.upload_to
+                break
+
+        pages_path = os.path.join(settings.MEDIA_ROOT, upload_url)
         fancy_page = FancyPage.objects.get(id=fancy_page.id)
         self.assertEquals(
             fancy_page.image.path,

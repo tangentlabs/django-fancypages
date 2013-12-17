@@ -86,7 +86,7 @@ class TestABlock(testcases.FancyPagesWebTest):
     def test_a_block_without_template_is_ignored(self):
         container = self.page.get_container_from_name('page-container')
         ContentBlock.objects.create(container=container)
-        self.get(reverse('fancypages:page-detail', args=(self.page.slug,)))
+        self.get(self.page.get_absolute_url())
 
 
 class TestAnAssetBlock(testcases.FancyPagesWebTest):
@@ -132,5 +132,5 @@ class TestBlockRendering(testcases.FancyPagesWebTest):
         for block_class in library.get_content_blocks().values():
             container = self.page.containers.get(name='page-container')
             block = block_class.objects.create(container=container)
-            self.get(reverse('fancypages:page-detail', args=(self.page.slug,)))
+            self.get(self.page.get_absolute_url())
             block.delete()

@@ -42,17 +42,14 @@ class TestAnAnonymousUser(FancyPagesWebTest):
             text="The text of the left block")
 
     def test_cannot_view_a_draft_page(self):
-        response = self.get(
-            reverse('fancypages:page-detail', args=(self.page.slug,)),
-            status=404)
+        response = self.get(self.page.get_absolute_url(), status=404)
         self.assertEquals(response.status_code, 404)
 
     def test_can_view_a_published_page(self):
         self.page.status = FancyPage.PUBLISHED
         self.page.save()
 
-        page = self.get(reverse('fancypages:page-detail',
-                                args=(self.page.slug,)))
+        page = self.get(self.page.get_absolute_url())
         self.assertContains(page, self.left_block.title)
         self.assertContains(page, self.main_block.title)
 
@@ -73,9 +70,7 @@ class TestAStaffUser(FancyPagesWebTest):
             text="The text of the main block")
 
     def test_can_view_a_draft_page(self):
-        url = reverse('fancypages:page-detail', args=(self.page.slug,))
-        page = self.get(url)
-
+        page = self.get(self.page.get_absolute_url())
         self.assertContains(page, self.main_block.title)
 
         self.assertContains(
@@ -87,8 +82,7 @@ class TestAStaffUser(FancyPagesWebTest):
         self.page.status = FancyPage.PUBLISHED
         self.page.save()
 
-        page = self.get(reverse('fancypages:page-detail',
-                                args=(self.page.slug,)))
+        page = self.get(self.page.get_absolute_url())
         self.assertContains(page, self.main_block.title)
 
         self.assertNotContains(

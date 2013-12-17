@@ -4,7 +4,7 @@ from django.utils import simplejson as json
 from django.utils.encoding import force_unicode
 from django.template.defaultfilters import slugify
 
-from .models import get_page_model
+from .utils import get_page_model
 from .defaults import FP_HOMEPAGE_NAME
 
 FancyPage = get_page_model()

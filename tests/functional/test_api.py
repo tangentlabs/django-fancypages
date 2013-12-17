@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 
 from fancypages.test import factories
 from fancypages.test import testcases
-from fancypages.models import get_node_model, get_page_model
+from fancypages.utils import get_node_model, get_page_model
 
 PageType = get_model('fancypages', 'PageType')
 PageNode = get_node_model()

@@ -10,13 +10,13 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
 
 from .. import library
-from ..models import get_page_model, get_node_model
+from ..utils import get_page_model, get_node_model
 
 
 logger = logging.getLogger('fancypages.api')
 
 FancyPage = get_page_model()
-PageNode= get_node_model()
+PageNode = get_node_model()
 Container = get_model('fancypages', 'Container')
 ContentBlock = get_model('fancypages', 'ContentBlock')
 OrderedContainer = get_model('fancypages', 'OrderedContainer')

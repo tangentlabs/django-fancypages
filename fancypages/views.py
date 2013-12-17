@@ -1,7 +1,7 @@
 from django.views.generic import DetailView
 
 from . import mixins
-from .models import get_page_model
+from .utils import get_page_model
 
 FancyPage = get_page_model()
 

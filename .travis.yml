@@ -3,13 +3,13 @@ python:
   - "2.7"
 env:
   global:
-      # saucelabs credentials
-      - secure: "H97tf2sZb5t6l7wlNCjQ9N8a2hcugbXbBSqgcNlXclHAFctzyl9MBeHKJ4MCfk9/SOI3ov5HTqCNliruocwgf6A9K+OkP3UJuwe9mfE4W2UwzkRMzhwYqZlAqDIISMJSpTP1fhnnNk53RpJ7zFDa394sXOxmAshAu/XVFRRByqA="
-      - secure: "m/YT5F7SbnaPgsugoM57SCIb4DySI5JJBT/54xjCprDfmxqWzlxiEmO9FBxjIlXDGyHgZloG5av51gDqpK+P6WkFBA1t3MFHgqTrcCnRWXgQuEaWxk8xCX7JGvIubURsYVBCSDxka0w44jQtlf4k46YhxaN+20ZRBYk0h7PxGc4="
+    # saucelabs credentials
+    - secure: "H97tf2sZb5t6l7wlNCjQ9N8a2hcugbXbBSqgcNlXclHAFctzyl9MBeHKJ4MCfk9/SOI3ov5HTqCNliruocwgf6A9K+OkP3UJuwe9mfE4W2UwzkRMzhwYqZlAqDIISMJSpTP1fhnnNk53RpJ7zFDa394sXOxmAshAu/XVFRRByqA="
+    - secure: "m/YT5F7SbnaPgsugoM57SCIb4DySI5JJBT/54xjCprDfmxqWzlxiEmO9FBxjIlXDGyHgZloG5av51gDqpK+P6WkFBA1t3MFHgqTrcCnRWXgQuEaWxk8xCX7JGvIubURsYVBCSDxka0w44jQtlf4k46YhxaN+20ZRBYk0h7PxGc4="
   matrix:
-      - DRF_VERSRION=">=2.3,<2.4" DJANGO_VERSION=">=1.4,<1.5"
-      - DRF_VERSRION=">=2.3,<2.4" DJANGO_VERSION=">=1.5,<1.6"
-      - DRF_VERSRION=">=2.3,<2.4" DJANGO_VERSION=">=1.6,<1.7"
+    - DRF_VERSRION=">=2.3,<2.4" DJANGO_VERSION=">=1.4,<1.5"
+    - DRF_VERSRION=">=2.3,<2.4" DJANGO_VERSION=">=1.5,<1.6"
+    - DRF_VERSRION=">=2.3,<2.4" DJANGO_VERSION=">=1.6,<1.7"
 install:
   - pip install Django$DJANGO_VERSION djangorestframework$DRF_VERSION
   - pip install . --use-mirrors
@@ -18,7 +18,8 @@ install:
 before_script:
   - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
 script:
-  - py.test --pep8 --cov fancypages
+  - py.test --pep8
+  - USE_OSCAR_SANDBOX=true py.test --pep8 --cov fancypages
   - py.test -m integration
 after_success:
   - coveralls
