@@ -19,24 +19,24 @@ class TestTheEditorPanel(SplinterTestCase):
         body_tag = self.browser.find_by_css('body').first
         self.assertTrue(body_tag.has_class('editor-hidden'))
 
-        self.browser.find_by_css('#editor-handle').click()
+        self.find_and_click_by_css(self.browser, '#editor-handle')
         self.assertFalse(body_tag.has_class('editor-hidden'))
         self.assertIn('fpEditorOpened', self._get_cookie_names())
 
     def test_can_be_closed_by_clicking_the_x(self):
         self.goto(self.home_page_url)
-        self.browser.find_by_css('#editor-handle').click()
+        self.find_and_click_by_css(self.browser, '#editor-handle')
         body_tag = self.browser.find_by_css('body').first
         self.assertFalse(body_tag.has_class('editor-hidden'))
 
-        self.browser.find_by_css('#editor-close').click()
+        self.find_and_click_by_css(self.browser, '#editor-close')
         body_tag = self.browser.find_by_css('body').first
         self.assertTrue(body_tag.has_class('editor-hidden'))
         self.assertNotIn('fpEditorOpened', self._get_cookie_names())
 
     def test_remains_opened_when_reloading_the_page(self):
         self.goto(self.home_page_url)
-        self.browser.find_by_css('#editor-handle').click()
+        self.find_and_click_by_css(self.browser, '#editor-handle')
         body_tag = self.browser.find_by_css('body').first
         self.assertFalse(body_tag.has_class('editor-hidden'))
 
@@ -56,10 +56,12 @@ class TestATextBlock(SplinterTestCase):
 
     def test_can_be_added_to_container(self):
         self.goto(self.page.get_absolute_url())
-        self.browser.find_by_css('#editor-handle').click()
+        self.find_and_click_by_css(self.browser, '#editor-handle')
 
-        self.browser.find_by_css("div[class=block-add-control]>a").click()
-        self.browser.find_by_css("button[name=code][value=text]").click()
+        self.find_and_click_by_css(
+            self.browser, "div[class=block-add-control]>a")
+        self.find_and_click_by_css(
+            self.browser, "button[data-block-code=text]")
 
         default_text = 'Your text goes here'
         if not self.browser.is_text_present(default_text, 2):
@@ -68,7 +70,7 @@ class TestATextBlock(SplinterTestCase):
         if not self.browser.is_element_present_by_css('.edit-button', 2):
             self.fail("Could not find edit button for block")
 
-        self.browser.find_by_css('.edit-button').click()
+        self.find_and_click_by_css(self.browser, '.edit-button')
         self.wait_for_editor_reload()
 
         text_sel = 'textarea[name=text]'
@@ -81,7 +83,7 @@ class TestATextBlock(SplinterTestCase):
             ibody.type('\b' * (len(default_text) + 1))
             ibody.type(new_text)
 
-        self.browser.find_by_css('button[type=submit]').click()
+        self.find_and_click_by_css(self.browser, 'button[type=submit]')
         self.wait_for_editor_reload()
 
         if not self.browser.is_text_present(new_text, 2):

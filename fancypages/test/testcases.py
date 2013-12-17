@@ -14,6 +14,8 @@ from django.db import connections, DEFAULT_DB_ALIAS
 from django.test import TestCase, LiveServerTestCase
 
 from splinter import Browser
+from splinter.element_list import ElementList
+
 from django_webtest import WebTest
 
 from fancypages.test import factories
@@ -119,10 +121,7 @@ class SplinterTestCase(LiveServerTestCase):
         self.user = None
         self.base_url = URL(self.live_server_url)
 
-        if os.environ.get('CI'):
-            self.browser = self.get_remote_browser()
-        else:
-            self.browser = self.get_local_browser()
+        self.browser = self.get_local_browser()
 
         if self.is_anonymous and not self.is_staff:
             return
@@ -156,8 +155,18 @@ class SplinterTestCase(LiveServerTestCase):
     def wait_for_editor_reload(self):
         time.sleep(3)
 
+    def ensure_element(self, element_or_list, index=0):
+        if isinstance(element_or_list, ElementList):
+            return element_or_list[index]
+        return element_or_list
 
-# We need to patch the LiveServerTestCase here because the database in
+    def find_and_click_by_css(self, browser, selector, wait_time=5):
+        browser.is_element_not_present_by_css(selector, wait_time)
+        elem = self.ensure_element(browser.find_by_css(selector))
+        return elem.click()
+
+
+# We need to patch the LiveServerTestCase here because the ORM in
 # Django < 1.5.x doesn't clean up the database properly.
 if DJANGO_VERSION[1] < 5:
     def _fixture_teardown(self):
