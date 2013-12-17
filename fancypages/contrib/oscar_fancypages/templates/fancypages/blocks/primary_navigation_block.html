@@ -1,0 +1,9 @@
+{% extends "fancypages/block.html" %}
+{% load i18n %}
+{% load fp_block_tags %}
+{% load fp_sitemap_tags %}
+
+{% block content_block %}
+    {% get_page_tree depth=2 as categories %}
+    {% include "partials/nav_primary.html" %}
+{% endblock %}

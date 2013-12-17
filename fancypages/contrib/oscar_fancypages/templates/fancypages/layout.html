@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% load compress %}
+{% load staticfiles %}
+
+{% block extrastyles %}
+    {{ block.super }}
+    {% compress css %}
+    {% include "fancypages/partials/extrastyles.html" %}
+    {% endcompress %}
+{% endblock %}
+
+{% block navigation %}
+    {{ block.super }}
+    {% include "fancypages/partials/draft_note_block.html" %}
+{% endblock %}
+
+{% block extrascripts %}
+    {{ block.super }}
+    {% compress js %}
+    {% include "fancypages/partials/extrascripts.html" %}
+    {% endcompress %}
+{% endblock %}

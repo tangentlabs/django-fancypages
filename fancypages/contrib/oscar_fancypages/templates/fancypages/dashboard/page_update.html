@@ -1,0 +1,53 @@
+{% extends 'fancypages/dashboard/layout.html' %}
+{% load i18n %}
+{% load url from future %}
+
+{% block title %}
+{{ title }} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+    <li>
+        <a href="{% url "dashboard:index" %}">{% trans "Dashboard" %}</a>
+        <span class="divider">/</span>
+    </li>
+    <li>
+        <a href="{% url "fp-dashboard:page-list" %}">
+            {% trans "Pages" %}
+        </a>
+        <span class="divider">/</span>
+    </li>
+    <li class="active">
+        {% if page.pk %}{{ page.title }}{% else %}Create new page{% endif %}
+    </li>
+</ul>
+{% endblock %}
+
+{% block header %}
+<div class="page-header">
+    <h1>{{ title }}</h1>
+</div>
+{% endblock header %}
+
+{% block dashboard_content %}
+<form class="form" action="." method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="well well-blank">
+        <div class="subheader">
+            <h2>Page settings</h2>
+        </div>
+        {{ form }}
+    </div>
+
+    <hr />
+
+    <div class="control-group pull-right">
+        <div class="controls">
+            <button type='submit' class="btn btn-primary btn-large">{% trans "Save" %}</button>
+            {% trans "or" %}
+            <a href="{% url "fp-dashboard:page-list" %}" class="btn btn-large">{% trans "Cancel" %}</a>
+        </div>
+    </div>
+</form>
+{% endblock dashboard_content %}

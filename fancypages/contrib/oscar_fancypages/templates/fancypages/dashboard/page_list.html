@@ -1,0 +1,49 @@
+{% extends 'fancypages/dashboard/layout.html' %}
+{% load i18n %}
+{% load compress %}
+{% load staticfiles %}
+{% load url from future %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+    <li>
+        <a href="{% url "dashboard:index" %}">{% trans "Dashboard" %}</a>
+        <span class="divider">/</span>
+    </li>
+    <li class="active">{% trans "Pages" %}</li>
+</ul>
+{% endblock %}
+
+{% block header %}
+<div class="page-header">
+    <a href="{% url "fp-dashboard:page-create" %}" class="btn btn-primary btn-large pull-right">{% trans "Create new top-level page" %}</a>
+    <h1>{% trans "Page Management" %}</h1>
+</div>
+{% endblock header %}
+
+{% block dashboard_content %}
+
+{% if page_list|length %}
+<form action="." method="post">
+    {% csrf_token %}
+    <div class="table-header">
+        <i class="icon-shopping-cart icon-large"></i>{% trans "Page Management" %}
+        <a href="{% url "fp-dashboard:page-create" %}" class="btn pull-right"><i class="icon-shopping-cart icon-large"></i>{% trans "Create new top-level page" %}</a>
+    </div>
+    {% if page_list|length %}
+    <ol id="pages-sortable" class="fp-page-tree">
+        {% include "fancypages/dashboard/partials/page_list_item.html" with page_list=page_list %}
+    </ol>
+    {% else %}
+    <p>{% trans "No pages found." %}</p>
+    {% endif %}
+</form>
+{% else %}
+    <p>{% trans "No pages found." %}</p>
+{% endif %}
+{% endblock dashboard_content %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    fancypages.dashboard.pages.init();
+{% endblock %}
