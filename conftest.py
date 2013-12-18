@@ -8,15 +8,15 @@ from fancypages.test import TEMP_MEDIA_ROOT
 
 USE_OSCAR_SANDBOX = bool(os.getenv('USE_OSCAR_SANDBOX', False))
 
-SANDBOX_MODULE = 'sandbox'
+SANDBOX_MODULE = 'fancypages'
 if USE_OSCAR_SANDBOX:
-    SANDBOX_MODULE = 'sandbox_oscar'
+    SANDBOX_MODULE = 'oscar_fancypages'
 
 location = lambda x: os.path.join(
     os.path.dirname(os.path.realpath(__file__)), x)
-sandbox = lambda x: location("{}/{}".format(SANDBOX_MODULE, x))
+sandbox = lambda x: location("sandboxes/{}/{}".format(SANDBOX_MODULE, x))
 
-sys.path.insert(0, location(SANDBOX_MODULE))
+sys.path.insert(0, sandbox('.'))
 
 
 FP_OSCAR_SETTINGS = dict(
@@ -96,7 +96,7 @@ def pytest_configure():
                 'django.contrib.messages.middleware.MessageMiddleware',
                 'fancypages.middleware.EditorMiddleware',
             ),
-            ROOT_URLCONF='{}.sandbox.urls'.format(SANDBOX_MODULE),
+            ROOT_URLCONF='sandboxes.{}.sandbox.urls'.format(SANDBOX_MODULE),
             TEMPLATE_DIRS=[('templates')],
             AUTHENTICATION_BACKENDS=(
                 'django.contrib.auth.backends.ModelBackend',
