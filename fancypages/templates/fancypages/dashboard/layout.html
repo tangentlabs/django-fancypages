@@ -3,6 +3,10 @@
 
 {% block body_class %}fancypages{% endblock %}
 
+{% block content %}
+    {% block dashboard_content %}{% endblock %}
+{% endblock %}
+
 {% block mainstyles %}
     {{ block.super }}
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">

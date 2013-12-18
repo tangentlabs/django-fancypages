@@ -7,9 +7,11 @@
 {% block title %}
     {{ fancypage.name }} | {{ block.super }}
 {% endblock %}
+
 {% if fancypage.description %}
     {% block description %}{{ fancypage.description }}{% endblock %}
 {% endif %}
+
 {% if fancypage.keywords %}
     {% block keywords %}{{ fancypage.keywords }}{% endblock %}
 {% endif %}
