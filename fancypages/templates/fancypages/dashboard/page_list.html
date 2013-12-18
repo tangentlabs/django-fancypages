@@ -20,7 +20,7 @@
 </div>
 {% endblock header %}
 
-{% block content %}
+{% block dashboard_content %}
     {% if page_list|length %}
     <form action="." method="post">
         {% csrf_token %}
@@ -36,7 +36,7 @@
     {% else %}
         <p>{% trans "No pages found." %}</p>
     {% endif %}
-{% endblock content %}
+{% endblock dashboard_content %}
 
 {% block extrascripts %}
     {{ block.super }}

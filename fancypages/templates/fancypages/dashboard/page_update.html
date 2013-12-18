@@ -30,7 +30,7 @@
 </div>
 {% endblock header %}
 
-{% block content %}
+{% block dashboard_content %}
 <form class="form" action="." method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="well well-blank">
@@ -50,4 +50,4 @@
         </div>
     </div>
 </form>
-{% endblock content %}
+{% endblock dashboard_content %}
