@@ -16,7 +16,7 @@ environment.sh
 .ropeproject/
 
 docs/build/
-sandbox/public/
-sandbox_oscar/public/
+sandboxes/fancypages/public/
+sandboxes/oscar_fancypages/public/
 node_modules/
 htmlcov/
