@@ -12,6 +12,7 @@ from treebeard.mp_tree import MP_Node
 from shortuuidfield import ShortUUIDField
 from model_utils.managers import InheritanceManager
 
+from . import mixins
 from .manager import PageManager
 from .utils import get_container_names_from_template
 
@@ -260,7 +261,7 @@ class AbstractFancyPage(models.Model):
         abstract = True
 
 
-class AbstractContainer(models.Model):
+class AbstractContainer(mixins.TemplateNamesModelMixin, models.Model):
     template_name = 'fancypages/container.html'
 
     uuid = ShortUUIDField(_("Unique ID"), db_index=True)
@@ -281,16 +282,12 @@ class AbstractContainer(models.Model):
     def clean(self):
         if self.object_id and self.content_type:
             return
-
         # Don't allow draft entries to have a pub_date.
         container_exists = self.__class__.objects.filter(
             name=self.name, object_id=None, content_type=None).exists()
         if container_exists:
             raise ValidationError(
                 "a container with name '{0}' already exists".format(self.name))
-
-    def get_template_names(self):
-        return [self.template_name]
 
     @classmethod
     def get_container_by_name(cls, name, obj=None):
@@ -333,13 +330,16 @@ class AbstractContainer(models.Model):
         app_label = 'fancypages'
 
 
-class AbstractContentBlock(models.Model):
+class AbstractContentBlock(mixins.TemplateNamesModelMixin, models.Model):
     name = None
     code = None
     group = None
     template_name = None
     renderer_class = None
     form_class = None
+
+    default_template_names = [
+        "fancypages/blocks/{module_name}.html", "blocks/{module_name}.html"]
 
     uuid = ShortUUIDField(_("Unique ID"), db_index=True)
 
@@ -357,14 +357,6 @@ class AbstractContentBlock(models.Model):
     @classmethod
     def get_form_class(cls):
         return cls.form_class
-
-    def get_template_names(self):
-        if self.template_name:
-            return [self.template_name]
-        return [
-            "fancypages/blocks/%s.html" % self._meta.module_name,
-            "blocks/%s.html" % self._meta.module_name,
-        ]
 
     def get_renderer_class(self):
         from fancypages.renderers import BlockRenderer
