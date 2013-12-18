@@ -10,8 +10,17 @@ compile-static:
 	lessc ${STATIC_DIR}less/assets.less > ${STATIC_DIR}css/assets.css
 	lessc ${STATIC_DIR}less/page.less > ${STATIC_DIR}css/page.css
 
-test:
+test: test-fancypages test-oscar-fancypages
+
+travis:
+	${MAKE} test-fancypages
+	pip install -r requirements_oscar.txt
+	${MAKE} test-oscar-fancypages
+
+test-fancypages:
 	py.test --pep8
-	USE_OSCAR_SANDBOX=true py.test --pep8 --cov fancypages
 	py.test -m integration
+
+test-oscar-fancypages:
+	USE_OSCAR_SANDBOX=true py.test --pep8 --cov fancypages
 	USE_OSCAR_SANDBOX=true py.test -m integration
