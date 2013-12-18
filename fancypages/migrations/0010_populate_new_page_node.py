@@ -8,7 +8,7 @@ from django.db import models
 # to make sure that we can migrate data over even when other models than the
 # default ones are used. This should only impact a very narrow set of people
 # who are migration from an older verion of FP.
-from fancypages.models import FP_NODE_MODEL, FP_PAGE_MODEL
+from fancypages.utils import FP_NODE_MODEL, FP_PAGE_MODEL
 
 
 class Migration(DataMigration):

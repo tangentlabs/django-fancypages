@@ -4,7 +4,7 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
-from fancypages.models import FP_NODE_MODEL, FP_PAGE_MODEL
+from fancypages.utils import FP_NODE_MODEL, FP_PAGE_MODEL
 
 
 class Migration(SchemaMigration):
