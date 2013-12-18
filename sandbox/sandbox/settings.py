@@ -138,15 +138,6 @@ AUTHENTICATION_BACKENDS = (
 
 LOGIN_URL = '/admin/login/'
 
-########## COMPRESSOR SETTINGS
-COMPRESS_ENABLED = True
-COMPRESS_OFFLINE = False
-
-COMPRESS_PRECOMPILERS = (
-    ('text/less', 'lessc {infile} {outfile}'),
-)
-########## END COMPRESSOR SETTINGS
-
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.

@@ -10,7 +10,9 @@ from blog.views import PostDetailView, PostListView
 admin.autodiscover()
 
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
+
     url(r'^$', views.HomeView.as_view(), name='home'),
 
     url(r'^posts/$', PostListView.as_view(), name="post-list"),
@@ -23,8 +25,6 @@ urlpatterns = patterns('',
 )
 
 if settings.DEBUG:
-    urlpatterns += patterns('',
-        url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
-            'document_root': settings.MEDIA_ROOT,
-        }),
-    )
+    urlpatterns += patterns(
+        '', url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
+                {'document_root': settings.MEDIA_ROOT}))
