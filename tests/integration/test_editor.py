@@ -60,6 +60,9 @@ class TestATextBlock(SplinterTestCase):
 
         self.find_and_click_by_css(
             self.browser, "div[class=block-add-control]>a")
+
+        self.find_and_click_by_css(self.browser, "a[href='#content']")
+
         self.find_and_click_by_css(
             self.browser, "button[data-block-code=text]")
 

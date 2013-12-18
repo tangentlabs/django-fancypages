@@ -156,11 +156,22 @@ class SplinterTestCase(LiveServerTestCase):
         time.sleep(3)
 
     def ensure_element(self, element_or_list, index=0):
+        """
+        Selects either the element with *index* from the list of elements given
+        in *element_or_list* or returns the single element if it is not a list.
+        This make it possible to handle an element and a list of elements where
+        only a single element is required.
+
+        :param element: ``Element`` instance or ``ElementList``.
+        :parem int index: Index of element to be returned if a list.
+            (Default: 0)
+        :rtype: Element
+        """
         if isinstance(element_or_list, ElementList):
             return element_or_list[index]
         return element_or_list
 
-    def find_and_click_by_css(self, browser, selector, wait_time=5):
+    def find_and_click_by_css(self, browser, selector, wait_time=3):
         browser.is_element_not_present_by_css(selector, wait_time)
         elem = self.ensure_element(browser.find_by_css(selector))
         return elem.click()
