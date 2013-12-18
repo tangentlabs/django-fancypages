@@ -12,6 +12,12 @@ Models
 .. automodule:: fancypages.abstract_models
     :members:
 
+Mixins
+------
+
+.. automodule:: fancypages.mixins
+    :members:
+
 
 Blocks
 ------

@@ -33,6 +33,12 @@ TIME_ZONE = 'Australia/Melbourne'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-gb'
 
+LANGUAGES = (
+    ('de-de', 'German'),
+    ('en-gb', 'British English'),
+    ('en-us', 'American English'),
+)
+
 SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
