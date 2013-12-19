@@ -1,6 +1,7 @@
 from django import template
 from django.db.models import get_model
 from django.template.base import token_kwargs
+from django.utils.translation import get_language
 
 
 register = template.Library()
@@ -65,15 +66,17 @@ class ContainerNodeMixin(object):
             return self.container_name.resolve(context)
         except template.VariableDoesNotExist:
             pass
+
         # container variable is not in the context. we have to look
         # up the container from the variable name and - if the object
         # is not None - the object the container is attached to.
         try:
-            return Container.get_container_by_name(
-                name=self.container_name.var, obj=self.object)
+            ctn = Container.get_container_by_name(
+                name=self.container_name.var, obj=self.object,
+                language_code=self.language_code)
         except KeyError:
-            pass
-        return None
+            ctn = None
+        return ctn
 
     def render(self, context):
         """
@@ -88,7 +91,6 @@ class ContainerNodeMixin(object):
 
         if not self.container:
             return u''
-
         from fancypages.renderers import ContainerRenderer
         renderer = ContainerRenderer(self.container, context)
         return renderer.render()
@@ -99,6 +101,7 @@ class FancyContainerNode(ContainerNodeMixin, template.Node):
     def __init__(self, container_name, language=None):
         self.container_name = template.Variable(container_name)
         self.object_name = None
+        self.language_code = language or get_language()
 
 
 class FancyObjectContainerNode(ContainerNodeMixin, template.Node):
@@ -106,6 +109,7 @@ class FancyObjectContainerNode(ContainerNodeMixin, template.Node):
     def __init__(self, container_name, object_name=None, language=None):
         self.container_name = template.Variable(container_name)
         self.object_name = template.Variable(object_name or 'object')
+        self.language_code = language or get_language()
 
 
 @register.tag

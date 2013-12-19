@@ -300,17 +300,19 @@ class AbstractContainer(mixins.TemplateNamesModelMixin, models.Model):
         assumes that *obj* has a ``containers`` attribute and returns
         the container with *name* or ``None`` if it cannot be found.
         """
+        filters = {
+            'name': name, 'language_code': language_code or get_language()}
         if not obj:
-            container, __ = cls.objects.get_or_create(
-                content_type=None, name=name, object_id=None)
+            container, __ = cls.objects.get_or_create(**filters)
             return container
 
         object_type = ContentType.objects.get_for_model(obj)
         if object_type is None:
             return None
 
-        ctn, __ = cls.objects.get_or_create(
-            content_type=object_type, name=name, object_id=obj.id)
+        filters['content_type'] = object_type
+        filters['object_id'] = obj.id
+        ctn, __ = cls.objects.get_or_create(**filters)
         return ctn
 
     def save(self, *args, **kwargs):
@@ -321,7 +323,8 @@ class AbstractContainer(mixins.TemplateNamesModelMixin, models.Model):
         return super(AbstractContainer, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return u"Container '%s' in '%s'" % (self.name, self.content_type)
+        return u"Container '{}' in '{}' [{}]".format(
+            self.name, self.content_type, self.language_code)
 
     class Meta:
         abstract = True

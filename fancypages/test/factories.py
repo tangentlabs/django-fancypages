@@ -78,6 +78,7 @@ class TextBlockFactory(DjangoModelFactory):
     FACTORY_FOR = get_model('fancypages', 'TextBlock')
 
     text = 'This is a sample text in a text block.'
+    container = factory.SubFactory(ContainerFactory)
 
 
 class TitleTextBlockFactory(DjangoModelFactory):
