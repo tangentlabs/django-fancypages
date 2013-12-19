@@ -8,7 +8,6 @@ from fancypages.mixins import JSONResponseMixin
 
 
 ImageAsset = get_model('assets', 'ImageAsset')
-print ImageAsset
 
 
 class ImageListView(generic.ListView):

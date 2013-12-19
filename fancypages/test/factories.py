@@ -80,6 +80,13 @@ class TextBlockFactory(DjangoModelFactory):
     text = 'This is a sample text in a text block.'
 
 
+class TitleTextBlockFactory(DjangoModelFactory):
+    FACTORY_FOR = get_model('fancypages', 'TitleTextBlock')
+
+    title = 'The title'
+    text = 'This is a sample text in a text block.'
+
+
 class HorizontalSeparatorBlockFactory(DjangoModelFactory):
     FACTORY_FOR = get_model('fancypages', 'HorizontalSeparatorBlock')
 

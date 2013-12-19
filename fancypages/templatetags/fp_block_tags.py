@@ -39,8 +39,9 @@ def render_attribute(context, attr_name, *args):
     if not user.is_staff:
         return unicode(value)
 
-    wrapped_attr = u'<span id="block-%d-%s">%s</span>'
-    return wrapped_attr % (block.id, attr_name, unicode(value))
+    wrapped_attr = u'<span id="block-{uuid}-{attr_name}">{value}</span>'
+    return wrapped_attr.format(
+        uuid=block.uuid, attr_name=attr_name, value=unicode(value))
 
 
 @register.assignment_tag(takes_context=True)
@@ -58,15 +59,11 @@ def render_block_form(context, form):
     model_name = model.__name__.lower()
     template_names = [
         "%s/%s_form.html" % (model._meta.app_label, model_name),
-        "fancypages/blocks/%s_form.html" % model_name,
-        form.template_name,
-    ]
+        "fancypages/blocks/%s_form.html" % model_name, form.template_name]
     tmpl = loader.select_template(template_names)
 
     context['missing_image_url'] = "%s/%s" % (
-        settings.MEDIA_URL,
-        getattr(settings, "OSCAR_MISSING_IMAGE_URL", '')
-    )
+        settings.MEDIA_URL, getattr(settings, "OSCAR_MISSING_IMAGE_URL", ''))
     return tmpl.render(context)
 
 
