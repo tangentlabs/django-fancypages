@@ -1,8 +1,49 @@
 from django import template
 from django.db.models import get_model
+from django.template.base import token_kwargs
 
 
 register = template.Library()
+
+
+def parse_arguments(parser, token, params=None):
+    """
+    Parse positional arguments and keyword arguments into a dictionary for the
+    known arguments given in *params* in the given order. If the number of
+    arguments in *token* is greater than the known number of arguments, a
+    ``TemplateSyntaxError`` is raised. The same is true if no tokens are
+    provided.
+
+    :param parser: Parser as passed into the template tag.
+    :param token: Token object as passed into the template tag.
+    :param params: List of expected arguments in the order in which they appear
+        when not using keyword arguments. Default to ['container_name',
+        'object_name', 'language'].
+    :rtype dict: containing the parsed content for the arguments above.
+    """
+    bits = token.split_contents()[1:]
+    if not params:
+        params = ['container_name', 'object_name', 'language']
+
+    if len(bits) > len(params):
+        raise template.TemplateSyntaxError(
+            "{} arguments specified but only {} are allowed".format(
+                len(bits), len(params)))
+
+    if not bits:
+        raise template.TemplateSyntaxError(
+            "%r tag requires container name as first argument and "
+            " optionally object" % token.contents.split()[0])
+
+    parsed_kwargs = {}
+    for idx, bit in enumerate(bits):
+        kwarg = token_kwargs([bit], parser)
+        if kwarg:
+            param, value = list(kwarg.iteritems())[0]
+            parsed_kwargs[param] = value.var
+        else:
+            parsed_kwargs[params[idx]] = bit
+    return parsed_kwargs
 
 
 class ContainerNodeMixin(object):
@@ -29,9 +70,7 @@ class ContainerNodeMixin(object):
         # is not None - the object the container is attached to.
         try:
             return Container.get_container_by_name(
-                name=self.container_name.var,
-                obj=self.object,
-            )
+                name=self.container_name.var, obj=self.object)
         except KeyError:
             pass
         return None
@@ -57,58 +96,50 @@ class ContainerNodeMixin(object):
 
 class FancyContainerNode(ContainerNodeMixin, template.Node):
 
-    def __init__(self, container_name):
+    def __init__(self, container_name, language=None):
         self.container_name = template.Variable(container_name)
         self.object_name = None
 
 
 class FancyObjectContainerNode(ContainerNodeMixin, template.Node):
 
-    def __init__(self, container_name, object_name):
+    def __init__(self, container_name, object_name=None, language=None):
         self.container_name = template.Variable(container_name)
         self.object_name = template.Variable(object_name or 'object')
 
 
 @register.tag
 def fp_container(parser, token):
-    # split_contents() knows not to split quoted strings.
-    args = token.split_contents()
-
-    if len(args) != 2:
-        raise template.TemplateSyntaxError(
-            "{0} tag expects a single argument container".format(
-                token.contents.split()[0]
-            )
-        )
-
-    tag_name, args = args[:1], args[1:]
-    container_name = args.pop(0)
-    return FancyContainerNode(container_name)
-
-
-def _parse_object_token(token):
-    # split_contents() knows not to split quoted strings.
-    args = token.split_contents()
-
-    if len(args) < 2 or len(args) > 4:
-        raise template.TemplateSyntaxError(
-            "%r tag requires container name as first argument and "
-            " optionally object" % token.contents.split()[0]
-        )
-
-    tag_name, args = args[:1], args[1:]
-    container_name = args.pop(0)
-    try:
-        object_name = args.pop(0)
-    except IndexError:
-        object_name = None
-    return container_name, object_name
+    params = ['container_name', 'language']
+    return FancyContainerNode(**parse_arguments(parser, token, params))
 
 
 @register.tag
 def fp_object_container(parser, token):
-    container_name, object_name = _parse_object_token(token)
-    return FancyObjectContainerNode(container_name, object_name)
+    """
+    Template tag specifying a fancypages container to be rendered in the
+    template at the given location. It takes up to three arguments. The first
+    argument is the name of the container which is mandatory. The object that
+    this tag is attached to is the second argument and is optional. If it is
+    not specified, the 'object' variable in the current context is used. The
+    third argument is an optional language code that specify the language that
+    should be used for the container. Without a language code specified, the
+    current language is retrieved using Django's internationalisation helpers.
+
+    Valid template tags are::
+
+        {% fp_object_container container-name %}
+
+    and with a specific object::
+
+        {% fp_object_container container-name my_object %}
+
+    and with a language code::
+
+        {% fp_object_container container-name my_object "de-de" %}
+        {% fp_object_container container-name object_name=my_object language="de-de" %}
+    """
+    return FancyObjectContainerNode(**parse_arguments(parser, token))
 
 
 @register.tag
@@ -120,5 +151,6 @@ def fp_block_container(parser, token):
 
         {% fp_object_container some-name fp_block %}
     """
-    container_name, __ = _parse_object_token(token)
-    return FancyObjectContainerNode(container_name, u'fp_block')
+    parsed_kwargs = parse_arguments(parser, token)
+    parsed_kwargs['object_name'] = 'fp_block'
+    return FancyObjectContainerNode(**parsed_kwargs)
