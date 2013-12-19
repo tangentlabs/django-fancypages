@@ -115,7 +115,7 @@ class CarouselBlock(ContentBlock):
     def get_images_and_links(self):
         results = {}
         query = models.Q()
-        for idx in range(1, self.num_images+1):
+        for idx in range(1, self.num_images + 1):
             image_id = getattr(self, "%s_id" % (self.image_field_name % idx))
             link_field_name = self.link_field_name % idx
             if image_id:

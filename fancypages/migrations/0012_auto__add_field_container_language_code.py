@@ -8,14 +8,28 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Removing unique constraint on 'Container', fields ['name', 'content_type', 'object_id']
+        db.delete_unique(u'fancypages_container', ['name', 'content_type_id', 'object_id'])
+
         # Adding field 'Container.language_code'
         db.add_column(u'fancypages_container', 'language_code',
                       self.gf('django.db.models.fields.CharField')(default='', max_length=7, blank=True),
                       keep_default=False)
 
+        # Adding unique constraint on 'Container', fields ['name', 'content_type', 'object_id', 'language_code']
+        db.create_unique(u'fancypages_container', ['name', 'content_type_id', 'object_id', 'language_code'])
+
+
     def backwards(self, orm):
+        # Removing unique constraint on 'Container', fields ['name', 'content_type', 'object_id', 'language_code']
+        db.delete_unique(u'fancypages_container', ['name', 'content_type_id', 'object_id', 'language_code'])
+
         # Deleting field 'Container.language_code'
         db.delete_column(u'fancypages_container', 'language_code')
+
+        # Adding unique constraint on 'Container', fields ['name', 'content_type', 'object_id']
+        db.create_unique(u'fancypages_container', ['name', 'content_type_id', 'object_id'])
+
 
     models = {
         u'assets.imageasset': {
@@ -61,6 +75,18 @@ class Migration(SchemaMigration):
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
+        u'catalogue.category': {
+            'Meta': {'ordering': "['full_name']", 'object_name': 'Category'},
+            'depth': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'full_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'}),
+            'numchild': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
+            'path': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'})
+        },
         u'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -93,7 +119,7 @@ class Migration(SchemaMigration):
             'link_url_9': ('django.db.models.fields.CharField', [], {'max_length': '500', 'null': 'True', 'blank': 'True'})
         },
         'fancypages.container': {
-            'Meta': {'unique_together': "(('name', 'content_type', 'object_id'),)", 'object_name': 'Container'},
+            'Meta': {'unique_together': "(('name', 'content_type', 'object_id', 'language_code'),)", 'object_name': 'Container'},
             'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']", 'null': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'language_code': ('django.db.models.fields.CharField', [], {'max_length': '7', 'blank': 'True'}),
@@ -116,7 +142,7 @@ class Migration(SchemaMigration):
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'pages'", 'symmetrical': 'False', 'to': "orm['fancypages.PageGroup']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'keywords': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'node': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'page'", 'unique': 'True', 'null': 'True', 'to': "orm['fancypages.PageNode']"}),
+            'node': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'page'", 'unique': 'True', 'null': 'True', 'to': u"orm['catalogue.Category']"}),
             'page_type': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'pages'", 'null': 'True', 'to': "orm['fancypages.PageType']"}),
             'status': ('django.db.models.fields.CharField', [], {'max_length': '15', 'blank': 'True'}),
             'uuid': ('shortuuidfield.fields.ShortUUIDField', [], {'db_index': 'True', 'max_length': '22', 'blank': 'True'})
@@ -163,17 +189,6 @@ class Migration(SchemaMigration):
             u'contentblock_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['fancypages.ContentBlock']", 'unique': 'True', 'primary_key': 'True'}),
             'depth': ('django.db.models.fields.PositiveIntegerField', [], {'default': '2'}),
             'is_relative': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
-        },
-        'fancypages.pagenode': {
-            'Meta': {'object_name': 'PageNode'},
-            'depth': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'}),
-            'numchild': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
-            'path': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'})
         },
         'fancypages.pagetype': {
             'Meta': {'object_name': 'PageType'},
