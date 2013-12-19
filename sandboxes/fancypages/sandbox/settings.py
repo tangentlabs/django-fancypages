@@ -34,9 +34,8 @@ TIME_ZONE = 'Australia/Melbourne'
 LANGUAGE_CODE = 'en-gb'
 
 LANGUAGES = (
-    ('de-de', 'German'),
-    ('en-gb', 'British English'),
-    ('en-us', 'American English'),
+    ('de', 'German'),
+    ('en', 'English'),
 )
 
 SITE_ID = 1
@@ -93,14 +92,14 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
-
-    #'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'fancypages.middleware.EditorMiddleware',
 )
 
