@@ -70,6 +70,7 @@ class TestATextBlock(SplinterTestCase):
 
         self.find_and_click_by_css(
             self.browser, "button[data-block-code=text]")
+        self.wait_for_editor_reload()
 
         default_text = 'Your text goes here'
         if not self.browser.is_text_present(default_text, 2):
@@ -119,6 +120,7 @@ class TestATextBlock(SplinterTestCase):
             self.fail("Could not find edit button for block")
 
         self.find_and_click_by_css(self.browser, '.edit-button')
+        self.wait_for_editor_reload()
 
         title_update = " Is Now New"
         self.browser.find_by_css('input[name=title]').type(title_update)
@@ -162,6 +164,7 @@ class TestImageBlock(SplinterTestCase):
 
         self.find_and_click_by_css(
             self.browser, "button[data-block-code=image]")
+        self.wait_for_editor_reload()
 
         default_image_text = 'Add An Image'
         if not self.browser.is_text_present(default_image_text, 2):
