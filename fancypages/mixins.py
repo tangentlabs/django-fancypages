@@ -142,6 +142,15 @@ class TemplateNamesModelMixin(object):
     default_template_names = []
 
     def get_template_names(self, **kwargs):
+        """
+        Get a list of template names in order of precedence as used by the
+        Django template engine. Keyword argument passed in are used during
+        string formatting of the template names. This fails silently if a
+        argument is specified in a template name but is not present in
+        ``kwargs``.
+
+        :rtype list: A list of template names (unicode).
+        """
         if not self.template_name and not self.default_template_names:
             raise ImproperlyConfigured(
                 _("No template name and default templates specified."))
