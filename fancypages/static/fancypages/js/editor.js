@@ -198,18 +198,23 @@ fancypages.editor = {
             var src = $(this).data('src');
             $(target).val(src);
         });
+
         // attach update listener to all regular input field
         $(document).on('change keyup', 'div[data-behaviours~=field-live-update]', function (ev) {
             ev.preventDefault();
 
-            var fieldElem = $('input', this);
-            if (!fieldElem || (typeof fieldElem.id === 'undefined')) {
+            var fieldElem = $('input', this),
+                blockId = null,
+                fieldName = null,
+                previewField = null;
+
+            if (!fieldElem || fieldElem.attr('id', undefined) === 'undefined') {
                 return false;
             }
-            var blockId = $(this).parents('form').data('block-id');
-            var fieldName = $(fieldElem).attr('id').replace('id_', '');
 
-            var previewField = $('#block-' + blockId + '-' + fieldName);
+            blockId = $(this).parents('form').data('block-id');
+            fieldName = $(fieldElem).attr('id').replace('id_', '');
+            previewField = $('#block-' + blockId + '-' + fieldName);
             previewField.html($(fieldElem).val());
         });
     },

@@ -122,7 +122,7 @@ DJANGO_APPS = [
     'django.contrib.flatpages',
     'django.contrib.admin',
 
-    #'debug_toolbar',
+    'debug_toolbar',
     'django_extensions',
     'blog',
 ]

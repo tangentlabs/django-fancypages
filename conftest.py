@@ -35,10 +35,10 @@ def pytest_configure():
     from fancypages.defaults import FANCYPAGES_SETTINGS
 
     ADDITIONAL_SETTINGS = dict(
-        LANGUAGE='en-gb',
+        LANGUAGE_CODE='en-gb',
         LANGUAGES=(
             ('de', _('German')),
-            ('en', _("English")),
+            ('en-gb', _("English")),
         ),
         INSTALLED_APPS=[
             'django.contrib.auth',
