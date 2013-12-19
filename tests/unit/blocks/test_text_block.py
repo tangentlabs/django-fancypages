@@ -21,7 +21,5 @@ class TestTextBlock(TestCase):
         block_html = renderer.render()
 
         self.assertIn(
-            "block-{0}-{1}".format(block.id, block.code),
-            block_html,
-        )
+            "block-{0}-{1}".format(block.uuid, block.code), block_html)
         self.assertIn(block.text, block_html)
