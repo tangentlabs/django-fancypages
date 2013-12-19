@@ -5,15 +5,15 @@ from django.contrib.contenttypes import generic
 from django.core.exceptions import ValidationError
 from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
+from django.utils.translation import get_language, ugettext_lazy as _
 
 from treebeard.mp_tree import MP_Node
 from shortuuidfield import ShortUUIDField
 from model_utils.managers import InheritanceManager
 
 from . import mixins
-from .manager import PageManager
+from .managers import PageManager, ContainerManager
 from .utils import get_container_names_from_template
 
 
@@ -270,6 +270,8 @@ class AbstractContainer(mixins.TemplateNamesModelMixin, models.Model):
     # e.g. {% fancypages-container var-name %}
     name = models.SlugField(_("Variable name"), max_length=50, blank=True)
     title = models.CharField(_("Title"), max_length=100, blank=True)
+    language_code = models.CharField(
+        _("Language"), max_length=7, default=get_language())
 
     # this allows for assigning a container to any type of model. This
     # field is nullable as a container does not have to be assigned to a
@@ -278,6 +280,8 @@ class AbstractContainer(mixins.TemplateNamesModelMixin, models.Model):
     content_type = models.ForeignKey(ContentType, null=True)
     object_id = models.PositiveIntegerField(null=True)
     page_object = generic.GenericForeignKey('content_type', 'object_id')
+
+    objects = ContainerManager()
 
     def clean(self):
         if self.object_id and self.content_type:
@@ -290,7 +294,7 @@ class AbstractContainer(mixins.TemplateNamesModelMixin, models.Model):
                 "a container with name '{0}' already exists".format(self.name))
 
     @classmethod
-    def get_container_by_name(cls, name, obj=None):
+    def get_container_by_name(cls, name, obj=None, language_code=u''):
         """
         Get container of *obj* with the specified variable *name*. It
         assumes that *obj* has a ``containers`` attribute and returns
@@ -298,10 +302,7 @@ class AbstractContainer(mixins.TemplateNamesModelMixin, models.Model):
         """
         if not obj:
             container, __ = cls.objects.get_or_create(
-                content_type=None,
-                name=name,
-                object_id=None,
-            )
+                content_type=None, name=name, object_id=None)
             return container
 
         object_type = ContentType.objects.get_for_model(obj)
@@ -309,10 +310,7 @@ class AbstractContainer(mixins.TemplateNamesModelMixin, models.Model):
             return None
 
         ctn, __ = cls.objects.get_or_create(
-            content_type=object_type,
-            name=name,
-            object_id=obj.id
-        )
+            content_type=object_type, name=name, object_id=obj.id)
         return ctn
 
     def save(self, *args, **kwargs):
@@ -353,6 +351,14 @@ class AbstractContentBlock(mixins.TemplateNamesModelMixin, models.Model):
     display_order = models.PositiveIntegerField()
 
     objects = InheritanceManager()
+
+    @property
+    def language_code(self):
+        try:
+            return self.container.language_code
+        except AbstractContainer.DoesNotExist:
+            pass
+        return u''
 
     @classmethod
     def get_form_class(cls):

@@ -26,7 +26,8 @@ class FancyPage(abstract_models.AbstractFancyPage):
 class Container(abstract_models.AbstractContainer):
     class Meta:
         app_label = 'fancypages'
-        unique_together = (('name', 'content_type', 'object_id'),)
+        unique_together = (('name', 'content_type', 'object_id',
+                            'language_code'),)
 
 
 class OrderedContainer(Container):

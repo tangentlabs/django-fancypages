@@ -5,6 +5,7 @@ from factory.django import DjangoModelFactory
 
 from django.conf import settings
 from django.db.models import get_model
+from django.utils.translation import get_language
 
 from fancypages.utils import get_page_model, get_node_model
 from fancypages.compat import get_user_model
@@ -70,6 +71,7 @@ class ContainerFactory(DjangoModelFactory):
     FACTORY_FOR = get_model('fancypages', 'Container')
 
     name = factory.Sequence(lambda n: 'test-container {}'.format(n))
+    language_code = get_language()
 
 
 class TextBlockFactory(DjangoModelFactory):
