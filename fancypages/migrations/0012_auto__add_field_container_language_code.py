@@ -13,7 +13,7 @@ class Migration(SchemaMigration):
 
         # Adding field 'Container.language_code'
         db.add_column(u'fancypages_container', 'language_code',
-                      self.gf('django.db.models.fields.CharField')(default='', max_length=7, blank=True),
+                      self.gf('django.db.models.fields.CharField')(default='en-us', max_length=7),
                       keep_default=False)
 
         # Adding unique constraint on 'Container', fields ['name', 'content_type', 'object_id', 'language_code']
@@ -23,10 +23,8 @@ class Migration(SchemaMigration):
     def backwards(self, orm):
         # Removing unique constraint on 'Container', fields ['name', 'content_type', 'object_id', 'language_code']
         db.delete_unique(u'fancypages_container', ['name', 'content_type_id', 'object_id', 'language_code'])
-
         # Deleting field 'Container.language_code'
         db.delete_column(u'fancypages_container', 'language_code')
-
         # Adding unique constraint on 'Container', fields ['name', 'content_type', 'object_id']
         db.create_unique(u'fancypages_container', ['name', 'content_type_id', 'object_id'])
 
@@ -122,7 +120,7 @@ class Migration(SchemaMigration):
             'Meta': {'unique_together': "(('name', 'content_type', 'object_id', 'language_code'),)", 'object_name': 'Container'},
             'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']", 'null': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'language_code': ('django.db.models.fields.CharField', [], {'max_length': '7', 'blank': 'True'}),
+            'language_code': ('django.db.models.fields.CharField', [], {'default': "'en-us'", 'max_length': '7'}),
             'name': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'blank': 'True'}),
             'object_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),

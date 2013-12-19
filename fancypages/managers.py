@@ -1,4 +1,6 @@
 ﻿from django.db import models
+from django.conf import settings
+from django.utils.translation import get_language
 
 from .queryset import PageQuerySet
 
@@ -38,3 +40,27 @@ class PageManager(models.Manager):
 
     def visible_in(self, group):
         return self.get_select_related_queryset().visible_in(group=group)
+
+
+class ContainerManager(models.Manager):
+
+    def get_language_query_set(self, **kwargs):
+        if 'language_code' not in kwargs:
+            kwargs['language_code'] = get_language()
+        return self.get_query_set().filter(**kwargs)
+
+    def all(self):
+        return self.get_language_query_set()
+
+    def filter(self, **kwargs):
+        return self.get_language_query_set(**kwargs)
+
+    def create(self, **kwargs):
+        if 'language_code' not in kwargs:
+            kwargs['language_code'] = get_language()
+        return super(ContainerManager, self).create(**kwargs)
+
+    def get_or_create(self, **kwargs):
+        if 'language_code' not in kwargs:
+            kwargs['language_code'] = get_language()
+        return self.get_query_set().get_or_create(**kwargs)

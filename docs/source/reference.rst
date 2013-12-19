@@ -32,6 +32,13 @@ Blocks
     :members:
 
 
+Template Tags
+-------------
+
+.. automodule:: fancypages.templatetags.fp_container_tags
+    :members:
+
+
 Editor Middleware
 -----------------
 
