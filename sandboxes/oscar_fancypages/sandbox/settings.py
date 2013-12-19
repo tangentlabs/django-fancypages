@@ -1,10 +1,8 @@
 # Django settings for sandbox project.
 import os
-
-from django.utils.translation import ugettext_lazy as _
-
 import fancypages as fp
 
+from django.utils.translation import ugettext_lazy as _
 
 PROJECT_DIR = os.path.dirname(__file__)
 location = lambda x: os.path.join(
@@ -37,6 +35,11 @@ TIME_ZONE = 'Australia/Melbourne'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-gb'
+
+LANGUAGES = (
+    ('de', 'German'),
+    ('en', 'English'),
+)
 
 SITE_ID = 1
 
@@ -101,8 +104,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',

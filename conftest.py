@@ -3,6 +3,7 @@ import sys
 import fancypages as fp
 
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 from fancypages.test import TEMP_MEDIA_ROOT
 
@@ -34,6 +35,11 @@ def pytest_configure():
     from fancypages.defaults import FANCYPAGES_SETTINGS
 
     ADDITIONAL_SETTINGS = dict(
+        LANGUAGE='en-gb',
+        LANGUAGES=(
+            ('de', _('German')),
+            ('en', _("English")),
+        ),
         INSTALLED_APPS=[
             'django.contrib.auth',
             'django.contrib.contenttypes',
@@ -89,8 +95,9 @@ def pytest_configure():
                 "django.contrib.messages.context_processors.messages",
             ),
             MIDDLEWARE_CLASSES=(
-                'django.middleware.common.CommonMiddleware',
                 'django.contrib.sessions.middleware.SessionMiddleware',
+                'django.middleware.locale.LocaleMiddleware',
+                'django.middleware.common.CommonMiddleware',
                 'django.middleware.csrf.CsrfViewMiddleware',
                 'django.contrib.auth.middleware.AuthenticationMiddleware',
                 'django.contrib.messages.middleware.MessageMiddleware',
