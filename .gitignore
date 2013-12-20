@@ -3,6 +3,7 @@
 *.sw[po]
 *.py[co]
 *.sqlite3
+*.sqlite
 *.vagrant
 *.coverage
 
