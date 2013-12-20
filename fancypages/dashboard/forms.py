@@ -1,8 +1,8 @@
 from django import forms
 from django.db.models import get_model
-from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 
+from ..utils import unicode_slugify as slugify
 from ..utils import get_page_model, get_node_model
 
 PageNode = get_node_model()

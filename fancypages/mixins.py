@@ -2,12 +2,12 @@ from django import http
 from django.conf import settings
 from django.utils import simplejson as json
 from django.utils.encoding import force_unicode
-from django.template.defaultfilters import slugify
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 
 from .utils import get_page_model
 from .defaults import FP_HOMEPAGE_NAME
+from .utils import unicode_slugify as slugify
 
 
 class FancyPageMixin(object):
