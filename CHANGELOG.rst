@@ -60,6 +60,36 @@ Changelog
   saucelabs to make sure that the UI is working consistently on the most common
   browsers.
 
+* Integrate `django-oscar-fancypages`_ as ``contrib`` package into fancypages.
+  The main reasons for this decision was to ease maintainability for both
+  projects and to avoid duplication between the two projects. The official
+  integration of fancypages with Oscar now lives in
+  ``fancypages.contrib.oscar_fancypages`` and should be used instead of the
+  external package. As a result the configuration required to use fancypages
+  in a standalone or an Oscar project has changed and will need to be updated
+  when migrating from a previous installation. We have tried to provide full 
+  backwards compatibility but there might be potential hickups in moving to
+  this version of fancypages. If you come across any issues or use cases that
+  we haven't anticipated, please open an issue on github.
+
+* Containers in fancypages are now language aware by having a ``language_code``
+  attribute that is available on the model. The language code **has** to be
+  set and default to the ``LANGUAGE_CODE`` setting of your project. The main
+  principle for dealing with multi-language sites is to have a separate
+  container for each available language to allow total flexibility in setting
+  up content for different languages. This might seem like a lot of additional
+  work but there is a good reason for it. Different languages come with
+  different cutural habits and experiences, e.g. what people in Britain might
+  find hilarious might not work in the same way for people from Germany.
+  Therefore, the content addressed to users speaking different languages often
+  has to be adapted to work in the same or similar way. As a result we decided
+  to allow complete freedom in the way the "same" content is presented for
+  users speaking different languages. More details on this will be available in
+  the docs.
+
+
+.. _`django-oscar-fancypages`: https://github.com/tangentlabs/django-oscar-fancypages
+
 
 0.1.0
 -----
