@@ -4,6 +4,7 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+from fancypages.utils import FP_NODE_MODEL
 from fancypages.compat import AUTH_USER_MODEL, AUTH_USER_MODEL_NAME
 
 class Migration(SchemaMigration):
@@ -141,7 +142,7 @@ class Migration(SchemaMigration):
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'pages'", 'symmetrical': 'False', 'to': "orm['fancypages.PageGroup']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'keywords': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'node': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'page'", 'unique': 'True', 'null': 'True', 'to': u"orm['catalogue.Category']"}),
+            'node': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'page'", 'unique': 'True', 'null': 'True', 'to': "orm['{}']".format(FP_NODE_MODEL)}),
             'page_type': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'pages'", 'null': 'True', 'to': "orm['fancypages.PageType']"}),
             'status': ('django.db.models.fields.CharField', [], {'max_length': '15', 'blank': 'True'}),
             'uuid': ('shortuuidfield.fields.ShortUUIDField', [], {'db_index': 'True', 'max_length': '22', 'blank': 'True'})
@@ -188,6 +189,17 @@ class Migration(SchemaMigration):
             u'contentblock_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['fancypages.ContentBlock']", 'unique': 'True', 'primary_key': 'True'}),
             'depth': ('django.db.models.fields.PositiveIntegerField', [], {'default': '2'}),
             'is_relative': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+        },
+        FP_NODE_MODEL: {
+            'Meta': {'object_name': FP_NODE_MODEL.split('.')[1]},
+            'depth': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'}),
+            'numchild': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
+            'path': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'})
         },
         'fancypages.pagetype': {
             'Meta': {'object_name': 'PageType'},
