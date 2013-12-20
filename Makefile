@@ -26,5 +26,4 @@ test-oscar-fancypages:
 	USE_OSCAR_SANDBOX=true py.test -m integration
 
 test-migration-sqlite:
-	- rm sandboxes/oscar_fancypages/sandbox/migration_test.sqlite
 	./sandboxes/oscar_fancypages/manage.py syncdb --noinput --migrate --settings=sandbox.settings_migration_sqlite
