@@ -144,7 +144,7 @@ class Migration(DataMigration):
             'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'keywords': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'}),
-            'node': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'page'", 'unique': 'True', 'null': 'True', 'to': "orm['fancypages.PageNode']"}),
+            'node': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'page'", 'unique': 'True', 'null': 'True', 'to': "orm['{}']".format(FP_NODE_MODEL)}),
             'numchild': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'page_type': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'pages'", 'null': 'True', 'to': "orm['fancypages.PageType']"}),
             'path': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
@@ -195,8 +195,8 @@ class Migration(DataMigration):
             'depth': ('django.db.models.fields.PositiveIntegerField', [], {'default': '2'}),
             'is_relative': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
-        'fancypages.pagenode': {
-            'Meta': {'object_name': 'PageNode'},
+        FP_NODE_MODEL: {
+            'Meta': {'object_name': FP_NODE_MODEL.split('.')[1]},
             'depth': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
