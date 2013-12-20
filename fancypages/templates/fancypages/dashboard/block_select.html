@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load fp_filters %}
 {% load staticfiles %}
 {% load url from future %}
 
@@ -15,14 +16,14 @@
             <ul class="fp-nav-tabs">
             {% for group in grouped_blocks %}
                 <li {% if forloop.first %}class="active"{% endif %}>
-                    <a href="#{{ group|slugify }}" data-toggle="tab">{{ group }}</a>
+                    <a href="#{{ group|fp_slugify }}" data-toggle="tab">{{ group }}</a>
                 </li>
             {% endfor %}
             </ul>
 
             <div class="fp-tab-content">
                 {% for group,block_list in grouped_blocks.items %}
-                <div class="fp-tab-pane {% if forloop.first %}active{% endif %}" id="{{ group|slugify }}">
+                <div class="fp-tab-pane {% if forloop.first %}active{% endif %}" id="{{ group|fp_slugify }}">
                     <ul class="fp-widget-list">
                         {% for fp_block in block_list %}
                         <li>

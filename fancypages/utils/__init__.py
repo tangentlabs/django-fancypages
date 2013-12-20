@@ -7,7 +7,6 @@ from fancypages.templatetags import fp_container_tags
 
 from ..defaults import FP_PAGE_MODEL, FP_NODE_MODEL
 
-
 FP_NODE_MODEL = getattr(settings, 'FP_NODE_MODEL', FP_NODE_MODEL)
 FP_PAGE_MODEL = getattr(settings, 'FP_PAGE_MODEL', FP_PAGE_MODEL)
 
@@ -75,3 +74,13 @@ def loaddata(orm, fixture_name):
     with patch('django.core.serializers.python._get_model', _get_model):
         from django.core.management import call_command
         call_command("loaddata", fixture_name)
+
+
+try:
+    from oscar.core.utils import slugify as unicode_slugify
+except ImportError:
+    from unidecode import unidecode
+    from django.template.defaultfilters import slugify
+
+    def unicode_slugify(value):
+        return slugify(unidecode(value))

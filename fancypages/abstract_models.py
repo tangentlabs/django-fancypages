@@ -3,7 +3,6 @@ from django.conf import settings
 from django.utils import timezone
 from django.contrib.contenttypes import generic
 from django.core.exceptions import ValidationError
-from django.template.defaultfilters import slugify
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import get_language, ugettext_lazy as _
@@ -13,6 +12,7 @@ from shortuuidfield import ShortUUIDField
 from model_utils.managers import InheritanceManager
 
 from . import mixins
+from .utils import unicode_slugify as slugify
 from .managers import PageManager, ContainerManager
 from .utils import get_container_names_from_template
 
