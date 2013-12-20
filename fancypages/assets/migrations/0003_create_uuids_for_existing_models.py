@@ -5,6 +5,9 @@ from south.db import db
 from south.v2 import DataMigration
 from django.db import models
 
+from fancypages.compat import AUTH_USER_MODEL, AUTH_USER_MODEL_NAME
+
+
 class Migration(DataMigration):
 
     def forwards(self, orm):
@@ -19,7 +22,7 @@ class Migration(DataMigration):
     models = {
         'assets.imageasset': {
             'Meta': {'object_name': 'ImageAsset'},
-            'creator': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
+            'creator': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['{}']".format(AUTH_USER_MODEL)}),
             'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'default': "''"}),
@@ -44,8 +47,8 @@ class Migration(DataMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
-        'auth.user': {
-            'Meta': {'object_name': 'User'},
+        AUTH_USER_MODEL: {
+            'Meta': {'object_name': AUTH_USER_MODEL_NAME},
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
