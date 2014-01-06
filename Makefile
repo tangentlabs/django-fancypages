@@ -1,4 +1,4 @@
-.PHONY: compile-static test
+.PHONY: compile-static test messages compiledmessages travis test-fancypages test-oscar-fancypages test-migration-sqlite
 
 STATIC_DIR="fancypages/static/fancypages/"
 
@@ -11,6 +11,14 @@ compile-static:
 	lessc ${STATIC_DIR}less/page.less > ${STATIC_DIR}css/page.css
 
 test: test-fancypages test-oscar-fancypages test-migration-sqlite
+
+messages:
+	# Create the .po files used for i18n
+	cd fancypages; django-admin.py makemessages -a
+
+compiledmessages:
+	# Compile the gettext files
+	cd fancypages; django-admin.py compilemessages
 
 travis:
 	${MAKE} test-fancypages

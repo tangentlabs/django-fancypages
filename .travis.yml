@@ -2,6 +2,9 @@ language: python
 python:
   - '2.7'
 env:
+  global:
+    # $TRANSIFEX_PASSWORD for oscar_bot (used in transifex.sh)
+    secure: FuIlzEsGJiAwhaIRBmRNsq9eXmuzs25fX6BChknW4lDyVAySWMp0+Zps9Bd0JgfFYUG3Ip+OTmksYIoTUsG25ZJS9cq1IFt3QKUAN70YCI/4ZBLeIdICPEyxq+Km179+NeEXmBUug17RLMLxh3MWfO+RKUHK9yHIPNNpq0dNyoo=
   matrix:
     - DRF_VERSRION=">=2.3,<2.4" DJANGO_VERSION=">=1.4,<1.5"
     - DRF_VERSRION=">=2.3,<2.4" DJANGO_VERSION=">=1.5,<1.6"
@@ -19,3 +22,4 @@ script:
   - make travis
 after_success:
   - coveralls
+  - ./transifex.sh

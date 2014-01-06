@@ -36,3 +36,6 @@ docutils>=0.8.1
 # Others
 Whoosh>=2.4.1
 purl==0.8
+
+# Translation
+transifex-client==0.10

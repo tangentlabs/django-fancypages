@@ -1,0 +1,522 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-06 15:46+1100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: abstract_models.py:26 abstract_models.py:87 abstract_models.py:110
+#: assets/models.py:14
+msgid "Name"
+msgstr "Name"
+
+#: abstract_models.py:27 abstract_models.py:88 abstract_models.py:111
+msgid "Slug"
+msgstr ""
+
+#: abstract_models.py:28 assets/models.py:32 models/blocks/content.py:59
+msgid "Image"
+msgstr ""
+
+#: abstract_models.py:30 assets/models.py:19
+msgid "Description"
+msgstr ""
+
+#: abstract_models.py:58
+#, python-format
+msgid "A page with slug '%(slug)s' already exists"
+msgstr ""
+
+#: abstract_models.py:86 abstract_models.py:109 abstract_models.py:127
+#: abstract_models.py:267 abstract_models.py:345 assets/models.py:12
+msgid "Unique ID"
+msgstr ""
+
+#: abstract_models.py:89
+msgid "Template name"
+msgstr ""
+
+#: abstract_models.py:133
+msgid "Tree node"
+msgstr ""
+
+#: abstract_models.py:137
+msgid "Page type"
+msgstr ""
+
+#: abstract_models.py:140
+msgid "Keywords"
+msgstr ""
+
+#: abstract_models.py:146
+msgid "Published"
+msgstr ""
+
+#: abstract_models.py:147
+msgid "Draft"
+msgstr ""
+
+#: abstract_models.py:148
+msgid "Archived"
+msgstr ""
+
+#: abstract_models.py:151
+msgid "Status"
+msgstr ""
+
+#: abstract_models.py:154
+msgid "Visible from"
+msgstr ""
+
+#: abstract_models.py:156
+msgid "Visible until"
+msgstr ""
+
+#: abstract_models.py:158 dashboard/forms.py:18
+msgid "Groups"
+msgstr ""
+
+#: abstract_models.py:271
+msgid "Variable name"
+msgstr ""
+
+#: abstract_models.py:272 models/blocks/content.py:46
+msgid "Title"
+msgstr ""
+
+#: abstract_models.py:274
+msgid "Language"
+msgstr ""
+
+#: abstract_models.py:351
+msgid "Container"
+msgstr ""
+
+#: library.py:14
+msgid "you have to specify a unique code for this content_block"
+msgstr ""
+
+#: library.py:18
+msgid "you need to specify a name for this widget"
+msgstr ""
+
+#: library.py:22
+msgid "a content_block with code {0} is already registered"
+msgstr ""
+
+#: library.py:55
+msgid "Ungrouped"
+msgstr ""
+
+#: mixins.py:156
+msgid "No template name and default templates specified."
+msgstr ""
+
+#: api/serialisers.py:88 models/blocks/layouts.py:35
+msgid "New Tab"
+msgstr ""
+
+#: assets/models.py:16
+msgid "Date created"
+msgstr ""
+
+#: assets/models.py:17
+msgid "Date modified"
+msgstr ""
+
+#: assets/models.py:20
+msgid "Creator"
+msgstr ""
+
+#: assets/models.py:33
+msgid "Width"
+msgstr ""
+
+#: assets/models.py:34
+msgid "Height"
+msgstr ""
+
+#: assets/models.py:35
+msgid "Size"
+msgstr ""
+
+#: assets/views.py:27
+msgid "It is not possible to upload images using a get request."
+msgstr ""
+
+#: contrib/oscar_fancypages/models.py:13 contrib/oscar_fancypages/models.py:19
+msgid "Single Product"
+msgstr ""
+
+#: contrib/oscar_fancypages/models.py:15 contrib/oscar_fancypages/models.py:31
+#: contrib/oscar_fancypages/models.py:48 contrib/oscar_fancypages/models.py:65
+msgid "Catalogue"
+msgstr ""
+
+#: contrib/oscar_fancypages/models.py:29 contrib/oscar_fancypages/models.py:36
+msgid "Hand Picked Products Promotion"
+msgstr ""
+
+#: contrib/oscar_fancypages/models.py:46 contrib/oscar_fancypages/models.py:53
+msgid "Automatic Products Promotion"
+msgstr ""
+
+#: contrib/oscar_fancypages/models.py:63
+msgid "Offer Products"
+msgstr ""
+
+#: contrib/oscar_fancypages/models.py:69
+msgid "Offer"
+msgstr ""
+
+#: contrib/oscar_fancypages/models.py:86
+msgid "Primary Navigation"
+msgstr ""
+
+#: contrib/oscar_fancypages/models.py:88 models/blocks/content.py:27
+#: models/blocks/content.py:43 models/blocks/content.py:61
+#: models/blocks/content.py:82 models/blocks/content.py:111
+#: models/blocks/content.py:143
+msgid "Content"
+msgstr ""
+
+#: contrib/oscar_fancypages/templates/fancypages/blocks/offerblock.html:27
+#: contrib/oscar_fancypages/templates/fancypages/pages/product_list_page.html:49
+msgid "No products found."
+msgstr ""
+
+#: contrib/oscar_fancypages/templates/fancypages/blocks/productblock.html:9
+msgid "Click to add a single product"
+msgstr ""
+
+#: dashboard/forms.py:65
+msgid "A page with this title already exists"
+msgstr ""
+
+#: dashboard/forms.py:96
+msgid "Edit block:"
+msgstr ""
+
+#: dashboard/forms.py:141
+msgid "Proportion of columns"
+msgstr ""
+
+#: dashboard/forms.py:155
+msgid "Tab title"
+msgstr ""
+
+#: dashboard/views.py:41
+msgid "Create new page"
+msgstr ""
+
+#: dashboard/views.py:56
+msgid "Update page"
+msgstr ""
+
+#: models/mixins.py:9
+msgid "Image title"
+msgstr ""
+
+#: models/mixins.py:11
+msgid "Alternative text"
+msgstr ""
+
+#: models/mixins.py:13
+msgid "Link URL"
+msgstr ""
+
+#: models/mixins.py:26
+msgid "Link"
+msgstr ""
+
+#: models/mixins.py:27
+msgid "Link title"
+msgstr ""
+
+#: models/blocks/base.py:21
+#, python-format
+msgid "Image %d"
+msgstr ""
+
+#: models/blocks/base.py:39
+#, python-format
+msgid "Link URL %d"
+msgstr ""
+
+#: models/blocks/content.py:25 models/blocks/content.py:30
+#: models/blocks/content.py:48 models/blocks/content.py:92
+msgid "Text"
+msgstr ""
+
+#: models/blocks/content.py:41
+msgid "Title and text"
+msgstr ""
+
+#: models/blocks/content.py:64 models/blocks/content.py:87
+msgid "Image asset"
+msgstr ""
+
+#: models/blocks/content.py:80
+msgid "Image and text"
+msgstr ""
+
+#: models/blocks/content.py:92
+msgid "Your text goes here."
+msgstr ""
+
+#: models/blocks/content.py:109
+msgid "Image carousel"
+msgstr ""
+
+#: models/blocks/content.py:141
+msgid "Page Navigation"
+msgstr ""
+
+#: models/blocks/content.py:147
+msgid "Navigation depth"
+msgstr ""
+
+#: models/blocks/content.py:152
+msgid "Is navigation relative to this page?"
+msgstr ""
+
+#: models/blocks/content.py:159
+msgid "Navigation depth has to be greater than 0"
+msgstr ""
+
+#: models/blocks/layouts.py:21
+msgid "Tabbed block"
+msgstr ""
+
+#: models/blocks/layouts.py:23 models/blocks/layouts.py:46
+#: models/blocks/layouts.py:72 models/blocks/layouts.py:83
+#: models/blocks/layouts.py:94
+msgid "Layout"
+msgstr ""
+
+#: models/blocks/layouts.py:44
+msgid "Two column layout"
+msgstr ""
+
+#: models/blocks/layouts.py:50
+msgid "Left Width"
+msgstr ""
+
+#: models/blocks/layouts.py:70
+msgid "Three column layout"
+msgstr ""
+
+#: models/blocks/layouts.py:81
+msgid "Four column layout"
+msgstr ""
+
+#: models/blocks/layouts.py:92
+msgid "Horizontal separator"
+msgstr ""
+
+#: models/blocks/social.py:20
+msgid "Video"
+msgstr ""
+
+#: models/blocks/social.py:22 models/blocks/social.py:45
+msgid "Media"
+msgstr ""
+
+#: models/blocks/social.py:27
+msgid "YouTube video"
+msgstr ""
+
+#: models/blocks/social.py:30
+msgid "Video Type"
+msgstr ""
+
+#: models/blocks/social.py:31
+msgid "Video Code"
+msgstr ""
+
+#: models/blocks/social.py:43
+msgid "Twitter"
+msgstr ""
+
+#: models/blocks/social.py:48
+msgid "Twitter username"
+msgstr ""
+
+#: models/blocks/social.py:49
+msgid "Maximum tweets"
+msgstr ""
+
+#: templates/fancypages/base.html:68
+msgid "Version:"
+msgstr ""
+
+#: templates/fancypages/container.html:43
+msgid "Add content"
+msgstr ""
+
+#: templates/fancypages/api/block_form.html:18
+#: templates/fancypages/dashboard/page_update.html:49
+#: templates/fancypages/editor/body.html:28
+msgid "Cancel"
+msgstr ""
+
+#: templates/fancypages/api/block_form.html:21
+#: templates/fancypages/dashboard/page_update.html:47
+#: templates/fancypages/editor/body.html:31
+msgid "Save"
+msgstr ""
+
+#: templates/fancypages/assets/image_list.html:18
+msgid "Upload new image"
+msgstr ""
+
+#: templates/fancypages/assets/forms/asset_widget.html:21
+msgid "Libary"
+msgstr ""
+
+#: templates/fancypages/blocks/page_navigation_block.html:18
+msgid "Browse pages"
+msgstr ""
+
+#: templates/fancypages/blocks/tabbedblockblock.html:20
+msgid "Add tab"
+msgstr ""
+
+#: templates/fancypages/blocks/video.html:12
+msgid "Add a video"
+msgstr ""
+
+#: templates/fancypages/blocks/partials/image_thumbnail.html:11
+msgid "Add an image"
+msgstr ""
+
+#: templates/fancypages/dashboard/page_delete.html:6
+#: templates/fancypages/dashboard/page_delete.html:30
+#, python-format
+msgid "Delete page '%(title)s'?"
+msgstr ""
+
+#: templates/fancypages/dashboard/page_delete.html:13
+#: templates/fancypages/dashboard/page_list.html:9
+#: templates/fancypages/dashboard/page_update.html:12
+msgid "Dashboard"
+msgstr ""
+
+#: templates/fancypages/dashboard/page_delete.html:17
+#: templates/fancypages/dashboard/page_list.html:12
+#: templates/fancypages/dashboard/page_update.html:17
+msgid "Pages"
+msgstr ""
+
+#: templates/fancypages/dashboard/page_delete.html:24
+msgid "Delete?"
+msgstr ""
+
+#: templates/fancypages/dashboard/page_delete.html:39
+#, python-format
+msgid ""
+"\n"
+"        Delete page <strong>%(title)s</strong> - are you sure?\n"
+"        "
+msgstr ""
+
+#: templates/fancypages/dashboard/page_delete.html:44
+#: templates/fancypages/dashboard/partials/page_list_item.html:30
+msgid "Delete"
+msgstr ""
+
+#: templates/fancypages/dashboard/page_delete.html:45
+#: templates/fancypages/dashboard/page_update.html:48
+msgid "or"
+msgstr ""
+
+#: templates/fancypages/dashboard/page_delete.html:46
+msgid "cancel"
+msgstr ""
+
+#: templates/fancypages/dashboard/page_list.html:18
+msgid "Create new top-level page"
+msgstr ""
+
+#: templates/fancypages/dashboard/page_list.html:19
+msgid "Page Management"
+msgstr ""
+
+#: templates/fancypages/dashboard/page_list.html:33
+#: templates/fancypages/dashboard/page_list.html:37
+msgid "No pages found."
+msgstr ""
+
+#: templates/fancypages/dashboard/partials/nav_editor.html:7
+#: templates/fancypages/editor/body.html:11
+msgid "Settings"
+msgstr ""
+
+#: templates/fancypages/dashboard/partials/nav_editor.html:12
+msgid "Close editor"
+msgstr ""
+
+#: templates/fancypages/dashboard/partials/page_list_item.html:17
+msgid "visible"
+msgstr ""
+
+#: templates/fancypages/dashboard/partials/page_list_item.html:19
+msgid "not visible"
+msgstr ""
+
+#: templates/fancypages/dashboard/partials/page_list_item.html:28
+msgid "View page"
+msgstr ""
+
+#: templates/fancypages/dashboard/partials/page_list_item.html:29
+msgid "Add child page"
+msgstr ""
+
+#: templates/fancypages/dashboard/partials/page_list_item.html:31
+msgid "Edit page settings"
+msgstr ""
+
+#: templates/fancypages/editor/body.html:21
+msgid "Page Settings"
+msgstr ""
+
+#: templates/fancypages/editor/body.html:38
+msgid ""
+"\n"
+"                        Hover over a widget and click\n"
+"                        <big>&quot;<i class=\"glyphicon-edit glyphicon-white"
+"\"></i> edit&quot;</big>\n"
+"                        to see editable properties.\n"
+"                    "
+msgstr ""
+
+#: templates/fancypages/partials/draft_note_block.html:7
+msgid "Note:"
+msgstr ""
+
+#: templates/fancypages/partials/draft_note_block.html:8
+msgid ""
+"You can only see this because you are logged in as a user with access rights "
+"to the dashboard."
+msgstr ""
+
+#: templates/fancypages/partials/wysihtml5_toolbar.html:47
+msgid "Create link"
+msgstr ""
+
+#: utils/decorators.py:43
+msgid "You must log in to access this page"
+msgstr ""
