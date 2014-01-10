@@ -34,11 +34,11 @@
 
     {% fp_object_container main-column-above-products %}
 
-    {% if products.count %}
+    {% if object_list|length %}
     <section>
         <div class="mod">
             <ol class="products four">
-                {% for product in products %}
+                {% for product in object_list %}
                 <li>{% include "catalogue/partials/product.html" %}</li>
                 {% endfor %}
             </ol>
