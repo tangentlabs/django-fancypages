@@ -2,4 +2,5 @@ include *.rst
 include LICENSE
 recursive-include fancypages/templates *.txt *.html
 recursive-include fancypages/static *
+recursive-include fancypages/contrib/oscar_fancypages/templates *.txt *.html
 recursive-include fancypages *.json
