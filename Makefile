@@ -1,4 +1,4 @@
-.PHONY: compile-static test
+.PHONY: compile-static tests
 
 STATIC_DIR="fancypages/static/fancypages/"
 
@@ -17,7 +17,7 @@ compile-static:
 	lessc ${STATIC_DIR}less/assets.less > ${STATIC_DIR}css/assets.css
 	lessc ${STATIC_DIR}less/page.less > ${STATIC_DIR}css/page.css
 
-test: test-fancypages test-oscar-fancypages test-migration-sqlite
+tests: test-fancypages test-oscar-fancypages test-migration-sqlite
 
 travis:
 	${MAKE} test-fancypages
