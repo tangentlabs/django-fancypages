@@ -21,13 +21,13 @@
 {% endblock header %}
 
 {% block dashboard_content %}
-    {% if page_list|length %}
+    {% if fancypage_list|length %}
     <form action="." method="post">
         {% csrf_token %}
 
-        {% if page_list|length %}
+        {% if fancypage_list|length %}
             <ol id="pages-sortable" class="fp-page-tree">
-                {% include "fancypages/dashboard/partials/page_list_item.html" with page_list=page_list %}
+                {% include "fancypages/dashboard/partials/page_list_item.html" with fancypage_list=fancypage_list %}
             </ol>
         {% else %}
             <p>{% trans "No pages found." %}</p>
