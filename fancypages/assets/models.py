@@ -3,9 +3,7 @@ from django.utils.translation import ugettext as _
 
 from shortuuidfield import ShortUUIDField
 
-from ..compat import get_user_model
-
-User = get_user_model()
+from ..compat import AUTH_USER_MODEL
 
 
 class AbstractAsset(models.Model):
@@ -17,7 +15,7 @@ class AbstractAsset(models.Model):
     date_modified = models.DateTimeField(_("Date modified"), auto_now=True)
 
     description = models.TextField(_("Description"), default="")
-    creator = models.ForeignKey(User, verbose_name=_("Creator"))
+    creator = models.ForeignKey(AUTH_USER_MODEL, verbose_name=_("Creator"))
 
     def __unicode__(self):
         return self.name
