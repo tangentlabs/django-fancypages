@@ -111,5 +111,6 @@ def pytest_configure():
             LOGIN_REDIRECT_URL='/accounts/',
             APPEND_SLASH=True,
             SITE_ID=1,
+            USE_OSCAR_SANDBOX=USE_OSCAR_SANDBOX,
             **ADDITIONAL_SETTINGS
         )
