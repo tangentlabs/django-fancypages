@@ -6,7 +6,7 @@
  *
  *    <a href="http://foobar.com">foo</a>
  *    ... becomes ...
- *    <a href="http://foobar.com" target="_blank" rel="nofollow">foo</a>
+ *    <a href="http://foobar.com" rel="nofollow">foo</a>
  *
  *    <img align="left" src="http://foobar.com/image.png">
  *    ... becomes ...
@@ -184,7 +184,6 @@ var wysihtml5ParserRules = {
             },
             "set_attributes": {
                 "rel": "nofollow",
-                "target": "_blank"
             }
         },
         "img": {

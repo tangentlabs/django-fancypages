@@ -15,7 +15,7 @@
 
 {% block extrascripts %}
     {{ block.super }}
-    <script type="text/javascript" src="{% static "fancypages/libs/wysihtml5/advanced.js" %}"></script>
+    <script type="text/javascript" src="{% static "fancypages/libs/wysihtml5/wysihtml5-config.min.js" %}"></script>
     <script type="text/javascript" src="{% static "fancypages/libs/wysihtml5/wysihtml5-0.3.0.min.js" %}"></script>
     {% compress js %}
         <script src="{% static "fancypages/libs/elastislide/jquery.elastislide.js" %}" type="text/javascript" charset="utf-8"></script>

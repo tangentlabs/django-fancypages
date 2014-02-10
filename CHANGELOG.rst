@@ -2,6 +2,18 @@
 Changelog
 =========
 
+
+0.3.1
+-----
+
+* Remove the ``target="_blank"`` attribute that used to be added by
+  ``wysihtml5`` when sanitising link tags.
+* Rename the ``advance.js`` config file for ``wysihtml5`` to
+  ``wysihtml5-config.js``.
+* Minify ``wysihtml5-config.js`` used for customising ``wyshtmls5`` to
+  reduce size.
+
+
 0.3.0
 -----
 
