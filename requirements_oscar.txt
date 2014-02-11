@@ -1,1 +1,1 @@
-git+git://github.com/tangentlabs/django-oscar.git@0.6-beta-1#egg=django-oscar-0.6
+django-oscar>=0.6.3
