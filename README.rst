@@ -8,8 +8,14 @@ Fancy CMS-style page editing for Django
 .. image:: https://coveralls.io/repos/tangentlabs/django-fancypages/badge.png?branch=master
     :target: https://coveralls.io/r/tangentlabs/django-fancypages?branch=master
 
+.. image:: https://requires.io/github/tangentlabs/django-fancypages/requirements.png?branch=refactoring
+   :target: https://requires.io/github/tangentlabs/django-fancypages/requirements/?branch=refactoring
+   :alt: Requirements Status
+
+
 .. note: This is a work in progress and part of this project will likely change
     and could potentially break things. Be careful with using it.
+
 
 Fancypages provides an easy way to edit content in your Django project.
 
