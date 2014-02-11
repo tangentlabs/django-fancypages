@@ -1,0 +1,13 @@
+-r requirements.txt
+
+# development tools
+Werkzeug>=0.6.2
+django-debug-toolbar>=0.9.4
+
+# python shell & debugger
+pudb>=2013.3.4
+bpython>=0.12
+
+# documentation
+Sphinx>=1.2
+docutils>=0.8.1
