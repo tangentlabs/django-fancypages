@@ -9,25 +9,25 @@ bpython>=0.12
 
 # Testing dependencies
 mock==1.0.1
-WebTest==2.0.11
-django-webtest==1.7.5
-tox==1.6.1
-factory-boy==2.1.1
-pytest==2.5.1
+WebTest==2.0.14
+django-webtest==1.7.6
+tox==1.7.0
+factory-boy==2.3.1
+pytest==2.5.2
 pytest-cache==1.0
 pytest-cov==1.6
-pytest-django==2.5
+pytest-django==2.6
 pytest-pep8==1.0.5
 
 # Browser testing deps
-selenium==2.38.3
-splinter==0.5.4
+selenium==2.39.0
+splinter==0.6.0
 
 # Code style and coverage
 flake8>=0.8
-coverage==3.5.1
+coverage==3.7.1
 pyflakes>=0.5.0
-coveralls==0.4
+coveralls==0.4.1
 
 # documentation
 Sphinx>=1.2
