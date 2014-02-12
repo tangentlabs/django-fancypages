@@ -57,7 +57,8 @@ def get_block_form(model):
 
     if model_name in _block_forms:
         form_class = import_string(_block_forms[model_name])
-        if hasattr(form_class, 'Meta') and not form_class.Meta.model:
+        if hasattr(form_class, 'Meta') \
+           and not getattr(form_class.Meta, 'model', None):
             form_class.Meta.model = model
         logger.debug(
             "Found registered form '{}' for model '{}'".format(
@@ -74,7 +75,8 @@ def get_block_form(model):
         if not form_class:
             form_class = modelform_factory(model, form=forms.BlockForm)
 
-    if hasattr(form_class, 'Meta') and not form_class.Meta.model:
+    if hasattr(form_class, 'Meta') \
+       and not getattr(form_class.Meta, 'model', None):
         form_class.Meta.model = model
 
     _imported_form_cache[model_name] = form_class
