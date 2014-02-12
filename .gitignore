@@ -3,13 +3,19 @@
 *.sw[po]
 *.py[co]
 *.sqlite3
-*.vagrant
 *.coverage
+env*.sh
+
+.tox/
+.vagrant/
+.ropeproject/
 
 local_settings.py
 
 *.egg-info/
 *.cache/
 
+htmlcov/
 docs/build/
+node_modules/
 sandbox/public/
