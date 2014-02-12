@@ -13,8 +13,8 @@ Fancy CMS-style page editing for Django
    :alt: Requirements Status
 
 
-.. note: This is a work in progress and part of this project will likely change
-    and could potentially break things. Be careful with using it.
+**Note:** This is a work in progress and part of this project will likely
+change and could potentially break things. Be careful with using it.
 
 
 Fancypages provides an easy way to edit content in your Django project.
@@ -27,6 +27,10 @@ The way this Django app works is inspired by `django-frontend-admin`_,
 `django-content-blocks`_ and other similar apps. Especially, the use of
 template tags to define customisable sections in a Django template is
 based on the ideas in the two apps mentioned above.
+
+**Warning:** There's currently an issue with *django-model-utils* 2.0+ and
+Django 1.5.5. Until this is resolved, we advise to use **version 1.5** with
+that specific version of Django.
 
 .. _`django-frontend-admin`: https://github.com/bartTC/django-frontendadmin
 .. _`django-content-blocks`: https://github.com/KevinBrolly/django-content-blocks

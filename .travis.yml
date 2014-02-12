@@ -3,16 +3,16 @@ python:
   - '2.7'
 env:
   matrix:
-    - DRF_VERSRION=">=2.3,<2.4" DJANGO_VERSION=">=1.4,<1.5"
-    - DRF_VERSRION=">=2.3,<2.4" DJANGO_VERSION=">=1.5,<1.6"
-    - DRF_VERSRION=">=2.3,<2.4" DJANGO_VERSION=">=1.6,<1.7"
+    - DRF_VERSRION=">=2.3,<2.4" DJANGO_VERSION=">=1.4,<1.5" MODEL_UTILS_VERSION=">2.0"
+    - DRF_VERSRION=">=2.3,<2.4" DJANGO_VERSION=">=1.5,<1.6" MODEL_UTILS_VERSION="==1.5"
+    - DRF_VERSRION=">=2.3,<2.4" DJANGO_VERSION=">=1.6,<1.7" MODEL_UTILS_VERSION=">2.0"
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
 install:
   - pip install wheel setuptools -U
-  - pip install Django$DJANGO_VERSION djangorestframework$DRF_VERSION --use-wheel
+  - pip install Django$DJANGO_VERSION djangorestframework$DRF_VERSION django-model-utils$MODEL_UTILS_VERSION --use-wheel 
   - pip install . --use-mirrors --use-wheel
   - pip install -r requirements.txt --use-mirrors --use-wheel
 script:
