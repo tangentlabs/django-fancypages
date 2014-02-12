@@ -2,10 +2,10 @@ from django import http
 from django.views import generic
 from django.db.models import get_model
 from django.core.urlresolvers import reverse
-from django.forms.models import modelform_factory
 from django.utils.translation import ugettext_lazy as _
 
-from fancypages.dashboard import forms
+from ..dashboard import forms
+from ..library import get_block_form
 
 
 FancyPage = get_model('fancypages', 'FancyPage')
@@ -103,17 +103,7 @@ class BlockUpdateView(generic.UpdateView, FancypagesMixin):
         return kwargs
 
     def get_form_class(self):
-        model = self.object.__class__
-        get_form_class = getattr(model, 'get_form_class')
-        if get_form_class and get_form_class():
-            return modelform_factory(model, form=get_form_class())
-
-        form_class = getattr(
-            forms,
-            "%sForm" % model.__name__,
-            forms.BlockForm
-        )
-        return modelform_factory(model, form=form_class)
+        return get_block_form(self.object.__class__)
 
     def form_invalid(self, form):
         if self.request.is_ajax():

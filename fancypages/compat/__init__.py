@@ -3,7 +3,7 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 else:
-    User = get_user_model()
+    User = get_user_model()  # noqa
 
 
 def get_user_model():

@@ -2,6 +2,15 @@
 Changelog
 =========
 
+0.3.2
+-----
+
+* Add more flexible way of dealing with forms by adding a form library and a
+  register function that allows for registering an arbitrary form for a content
+  block. As part of this feature and to avoid circular imports between models
+  and forms, the forms can now be specified as import paths such as
+  ``fancypages.dashboard.forms.BlockForm`` and are only imported when the form
+  class for a block is requested for the first time.
 
 0.3.1
 -----

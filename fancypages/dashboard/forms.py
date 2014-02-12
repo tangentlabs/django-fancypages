@@ -5,6 +5,8 @@ from django.db.models import get_model
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 
+from .. import models
+
 FancyPage = get_model('fancypages', 'FancyPage')
 PageType = get_model('fancypages', 'PageType')
 PageGroup = get_model('fancypages', 'PageGroup')
@@ -139,27 +141,25 @@ class BlockForm(forms.ModelForm):
 
     class Meta:
         exclude = ('container',)
-        widgets = {
-            'display_order': forms.HiddenInput()
-        }
+        widgets = {'display_order': forms.HiddenInput()}
 
 
 class TextBlockForm(BlockForm):
     class Meta:
+        model = get_model('fancypages', 'TextBlock')
         exclude = ('container',)
         widgets = {
             'display_order': forms.HiddenInput(),
-            'text': forms.Textarea(attrs={'cols': 80, 'rows': 10}),
-        }
+            'text': forms.Textarea(attrs={'cols': 80, 'rows': 10})}
 
 
 class TitleTextBlockForm(BlockForm):
     class Meta:
+        model = get_model('fancypages', 'TitleTextBlock')
         exclude = ('container',)
         widgets = {
             'display_order': forms.HiddenInput(),
-            'text': forms.Textarea(attrs={'cols': 80, 'rows': 10}),
-        }
+            'text': forms.Textarea(attrs={'cols': 80, 'rows': 10})}
 
 
 class TwoColumnLayoutBlockForm(BlockForm):
@@ -170,11 +170,16 @@ class TwoColumnLayoutBlockForm(BlockForm):
             # max value there so this is the way to pass it through
             'data-max': 12,
         }),
-        label=_("Proportion of columns")
-    )
+        label=_("Proportion of columns"))
+
+    class Meta(BlockForm.Meta):
+        model = get_model('fancypages', 'TwoColumnLayoutBlock')
 
 
 class TabBlockForm(BlockForm):
+
+    class Meta(BlockForm.Meta):
+        model = get_model('fancypages', 'TabBlockForm')
 
     def __init__(self, *args, **kwargs):
         super(TabBlockForm, self).__init__(*args, **kwargs)

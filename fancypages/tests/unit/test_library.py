@@ -1,6 +1,6 @@
 import mock
 
-from django.forms import Form
+from django.forms import ModelForm
 from django.test import TestCase
 from django.forms.models import modelform_factory
 
@@ -9,7 +9,7 @@ from fancypages.models import ContentBlock, TitleTextBlock
 from fancypages.models.blocks.content import ImageBlock
 
 
-class SampleSuperForm(Form):
+class SampleSuperForm(ModelForm):
     pass
 
 
