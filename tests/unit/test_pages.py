@@ -2,8 +2,8 @@ from django.core import exceptions
 from django.db import IntegrityError
 
 from fancypages import models
-from fancypages.test import testcases
 from fancypages.utils import get_page_model
+from fancypages.test import testcases, factories
 
 FancyPage = get_page_model()
 
@@ -25,6 +25,17 @@ class TestAPage(testcases.FancyPagesTestCase):
 
         article_page = FancyPage.objects.get(id=article_page.id)
         self.assertEquals(article_page.containers.count(), 2)
+
+    def test_returns_child_pagtest_returns_child_page_querysete_queryset(self):
+        parent = factories.FancyPageFactory()
+
+        children = [
+            parent.add_child(node__name='first child'),
+            parent.add_child(node__name='second child')]
+
+        with self.assertNumQueries(1):
+            pages = parent.get_children()
+            self.assertItemsEqual(pages, children)
 
 
 class TestContainer(testcases.FancyPagesTestCase):

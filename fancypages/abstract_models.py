@@ -196,6 +196,17 @@ class AbstractFancyPage(models.Model):
         page_kwargs['node'] = get_node_model().add_root(**node_kwargs)
         return cls.objects.create(**page_kwargs)
 
+    def get_children(self):
+        """
+        Get all child pages as a queryset. It uses the related node's
+        ``get_children`` method from ``treebeard`` but returning a queryset of
+        <FancyPage fancypages.models.FancyPage> objects instead of their nodes.
+
+        :return: Queryset of <FancyPage fancypages.models.FancyPage> objects.
+        """
+        nodes = self.node.get_children()
+        return self.__class__.objects.filter(node__in=nodes)
+
     def delete(self, using=None):
         """
         Deletes the instance of ``FancyPage`` and makes sure that the related

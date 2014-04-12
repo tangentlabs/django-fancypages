@@ -35,7 +35,7 @@
     {% if fancypage.node.numchild %}
     <ol id="{{ fancypage.id }}-tree" class="collapse">
         {% with filename="fancypages/dashboard/partials/page_list_item.html" %}
-        {% include filename with fancypage_list=fancypage.node.get_children %}
+        {% include filename with fancypage_list=fancypage.get_children %}
         {% endwith %}
     </ol>
     {% endif %}
