@@ -8,8 +8,8 @@ Fancy CMS-style page editing for Django
 .. image:: https://coveralls.io/repos/tangentlabs/django-fancypages/badge.png?branch=master
     :target: https://coveralls.io/r/tangentlabs/django-fancypages?branch=master
 
-.. image:: https://requires.io/github/tangentlabs/django-fancypages/requirements.png?branch=refactoring
-   :target: https://requires.io/github/tangentlabs/django-fancypages/requirements/?branch=refactoring
+.. image:: https://requires.io/github/tangentlabs/django-fancypages/requirements.png?branch=master
+   :target: https://requires.io/github/tangentlabs/django-fancypages/requirements/?branch=master
    :alt: Requirements Status
 
 
