@@ -3,7 +3,7 @@
 {% load url from future %}
 
 {% for fancypage in fancypage_list %}
-<li id="page-{{ fancypage.id }}" class="sortable {% if forloop.last %}last{% endif %}" data-page-id="{{ fancypage.id }}">
+<li id="page-{{ fancypage.uuid }}" class="sortable {% if forloop.last %}last{% endif %}" data-page-id="{{ fancypage.uuid }}">
     <div class="row-fluid" >
         <h5 class="span10">
             {% if fancypage.numchild %}

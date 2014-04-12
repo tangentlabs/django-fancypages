@@ -221,9 +221,6 @@ class AbstractFancyPage(models.Model):
     delete.alters_data = True
 
     def __getattr__(self, name):
-        """
-        Try to find
-        """
         if name.startswith('_'):
             raise AttributeError
         try:
@@ -250,22 +247,45 @@ class AbstractFancyPage(models.Model):
         return u"FancyPage '{0}'".format(self.name)
 
     def save(self, update_slugs=True, *args, **kwargs):
+        """
+        Saving this page has several additional responsibilities to ensure
+        the consistency of the data. Before actually saving the model to the
+        database, it is ensured that *slug* and *status* are set on the page
+        if either of them is not defined. If not set, the slug is generated
+        from the page name. If the status is not set, the default status
+        defined in ``FP_DEFAULT_PAGE_STATUS`` is used.
+        After saving, all containers specified in the template for this page
+        that don't exist are created. Using the current language code used in
+        the overall context of this model.
+        """
         if not self.slug:
             self.slug = slugify(self.name)
         if not self.status:
             self.status = getattr(
                 settings, 'FP_DEFAULT_PAGE_STATUS', self.DRAFT)
+
         super(AbstractFancyPage, self).save(*args, **kwargs)
+
+        language_code = get_language()
+        for cname in self._get_missing_containers(language_code=language_code):
+            self.containers.create(
+                page_object=self, name=cname, language_code=language_code)
+
+    def _get_missing_containers(self, language_code=None):
+        language_code = language_code or get_language()
 
         try:
             template_name = self.page_type.template_name
         except AttributeError:
             template_name = settings.FANCYPAGES_DEFAULT_TEMPLATE
 
-        existing_containers = [c.name for c in self.containers.all()]
+        cnames = self.containers.filter(
+            language_code=language_code).values_list('name')
+        existing_containers = [i[0] for i in cnames]
+
         for cname in get_container_names_from_template(template_name):
             if cname not in existing_containers:
-                self.containers.create(page_object=self, name=cname)
+                yield cname
 
     class Meta:
         app_label = 'fancypages'

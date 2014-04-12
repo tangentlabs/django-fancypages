@@ -12,6 +12,14 @@ Changelog
   ``wysihtml5-config.js``.
 * Minify ``wysihtml5-config.js`` used for customising ``wyshtmls5`` to
   reduce size.
+* Fixes #25 (1): getting the child pages of a ``FancyPage`` used the
+  ``PageNode``'s method ``get_children`` which would return a queryset
+  of ``PageNode`` instances. ``FancyPage`` now provides its own
+  ``get_children`` method that returns the corresponding queryset of
+  ``FancyPage`` instances.
+* Fixes #25 (2): using the API to move pages in the hierarchy failed with
+  an internal server error caused by changes during refactoring. The calls
+  to the API are now using the UUID as expected instead of the model's PK.
 
 
 0.3.0

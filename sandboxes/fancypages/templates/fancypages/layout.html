@@ -1,4 +1,6 @@
 {% extends "fancypages/base.html" %}
+
+{% load i18n %}
 {% load staticfiles %}
 {% load url from future %}
 
@@ -17,15 +19,17 @@
         <div class="container-fluid">
           <div class="brand">Fancy Sandbox</div>
             <ul class="nav">
-              <li><a href="/">Home</a></li>
-              <li><a href="{% url "post-list" %}">Blog</a></li>
+                <li><a href="/">{% trans "Home" %}</a></li>
+                <li><a href="{% url "post-list" %}">{% trans "Blog" %}</a></li>
             </ul>
+            {% url "fancypages:page-list" as dashboard_url %}
             <div class="pull-right">
                 <ul class="nav">
                 {% if not request.user.is_authenticated %}
-                      <li><a href="/admin/login/">Login</a></li>
+                    <li><a href="/admin/login/?next={{ dashboard_url }}">{% trans "Login" %}</a></li>
                 {% else %}
-                      <li><a href="/admin/logout/">Logout</a></li>
+                    <li><a href="{{ dashboard_url }}">{% trans "Dashboard" %}</a></li>
+                    <li><a href="/admin/logout/">{% trans "Logout" %}</a></li>
                 {% endif %}
                 </ul>
             </div>
