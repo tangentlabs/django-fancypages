@@ -34,3 +34,6 @@ test-oscar-fancypages:
 
 test-migration-sqlite:
 	./sandboxes/oscar_fancypages/manage.py syncdb --noinput --migrate --settings=sandbox.settings_migration_sqlite
+
+docs:
+	${MAKE} -C docs html
