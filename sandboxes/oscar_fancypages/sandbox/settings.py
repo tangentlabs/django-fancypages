@@ -66,7 +66,6 @@ MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    location('static/'),
 ] + fp.get_fancypages_paths('static', use_with_oscar=True)
 
 STATIC_ROOT = location('public')

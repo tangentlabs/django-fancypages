@@ -61,7 +61,7 @@ MEDIA_ROOT = location('public/media')
 MEDIA_URL = '/media/'
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (location('static/'),)
+# STATICFILES_DIRS = (location('static/'),)
 STATIC_ROOT = location('public')
 
 # List of finder classes that know how to find static files in
