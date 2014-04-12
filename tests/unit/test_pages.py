@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 from django.core import exceptions
 from django.db import IntegrityError
 
@@ -8,9 +9,11 @@ from fancypages.test import testcases, factories
 FancyPage = get_page_model()
 
 
-class TestAPage(testcases.FancyPagesTestCase):
+class TestAPageWithTemplate(testcases.FancyPagesTestCase):
 
-    def test_creates_containers_when_saved(self):
+    def setUp(self):
+        super(TestAPageWithTemplate, self).setUp()
+
         self.prepare_template_file("""{% load fp_container_tags %}
 {% block main-content %}
 {% fp_object_container first-container %}
@@ -18,13 +21,18 @@ class TestAPage(testcases.FancyPagesTestCase):
 {% templatetag opencomment %}
 {% endblock %}
 """)
-        page_type = models.PageType.objects.create(
+        self.page_type = models.PageType.objects.create(
             name="Example Type", template_name=self.template_name)
+
+    def test_creates_containers_when_saved(self):
         article_page = FancyPage.add_root(
-            node__name='This is an article', page_type=page_type)
+            node__name='This is an article', page_type=self.page_type)
 
         article_page = FancyPage.objects.get(id=article_page.id)
         self.assertEquals(article_page.containers.count(), 2)
+
+
+class TestAPage(testcases.FancyPagesTestCase):
 
     def test_returns_child_pagtest_returns_child_page_querysete_queryset(self):
         parent = factories.FancyPageFactory()

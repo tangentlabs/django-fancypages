@@ -1,5 +1,4 @@
-﻿from django.db import models
-from django.conf import settings
+from django.db import models
 from django.utils.translation import get_language
 
 from .queryset import PageQuerySet
