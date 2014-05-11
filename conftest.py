@@ -62,7 +62,9 @@ def pytest_configure():
         ADDITIONAL_SETTINGS.update(FP_OSCAR_SETTINGS)
 
         from oscar import get_core_apps
-        ADDITIONAL_SETTINGS['INSTALLED_APPS'] += get_core_apps()
+        ADDITIONAL_SETTINGS['INSTALLED_APPS'] += [
+            'django.contrib.flatpages',
+        ] + get_core_apps()
 
     if not settings.configured:
         settings.configure(
