@@ -131,7 +131,7 @@ go through these steps first. After you have completed them, follow the
 2. Add the required apps to your ``INSTALLED_APPS`` by simply using the
    convenience function ``get_apps`` in the ``fancypages`` module::
 
-    from fancyages import get_required_apps, get_fancypages_apps
+    from fancypages import get_required_apps, get_fancypages_apps
 
     YOUR_OTHER_APPS = [
         ...
