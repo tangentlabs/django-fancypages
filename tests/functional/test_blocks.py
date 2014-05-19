@@ -61,10 +61,17 @@ class TestABlock(testcases.FancyPagesWebTest):
         response = self.get(
             reverse('fp-api:block-form', kwargs={
                 'uuid': self.third_text_block.uuid}))
-        self.assertIn('second text', response)
-        self.assertIn('name="text"', response)
+
+        data = response.json
+        self.assertSequenceEqual(
+            data.keys(),
+            [u'code', u'container', u'uuid', u'form', u'display_order', u'id'])
+
+        self.assertIn('second text', data.get('form'))
+        self.assertIn('name="text"', data.get('form'))
         self.assertIn(
-            "data-block-id='{}'".format(self.third_text_block.uuid), response)
+            "data-block-id='{}'".format(self.third_text_block.uuid),
+            data.get('form'))
 
     def test_can_be_deleted_and_remaining_blocks_are_reordered(self):
         self.assertEquals(TextBlock.objects.count(), 3)

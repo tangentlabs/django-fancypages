@@ -4,12 +4,15 @@ import logging
 
 from django.http import Http404
 from django.db.models import get_model
+from django.forms.models import modelform_factory
 from django.utils.translation import ugettext as _
+from django.template.loader import render_to_string
 from django.contrib.contenttypes.models import ContentType
 
 from rest_framework import serializers
 
 from .. import library
+from ..dashboard import forms
 from ..utils import get_page_model, get_node_model
 
 
@@ -49,6 +52,32 @@ class BlockSerializer(serializers.ModelSerializer):
         if 'code' in attrs:
             del attrs['code']
         return super(BlockSerializer, self).restore_object(attrs, instance)
+
+    class Meta:
+        model = ContentBlock
+
+
+class BlockFormSerializer(serializers.ModelSerializer):
+    template_name = "fancypages/api/block_form.html"
+
+    container = serializers.SlugRelatedField(slug_field='uuid')
+    code = serializers.CharField(required=True)
+    form = serializers.SerializerMethodField('get_model_form')
+
+    def get_form_class(self, obj):
+        model = obj.__class__
+        get_form_class = getattr(model, 'get_form_class')
+        if get_form_class and get_form_class():
+            return modelform_factory(model, form=get_form_class())
+
+        form_class = getattr(
+            forms, "%sForm" % model.__name__, forms.BlockForm)
+        return modelform_factory(model, form=form_class)
+
+    def get_model_form(self, obj):
+        form = self.get_form_class(obj)(instance=obj)
+        context = {'form': form, 'block': obj}
+        return render_to_string(self.template_name, context).encode('utf-8')
 
     class Meta:
         model = ContentBlock

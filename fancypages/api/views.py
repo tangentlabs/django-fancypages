@@ -66,7 +66,7 @@ class BlockNewView(generics.CreateAPIView):
 
 
 class BlockFormView(BlockAPIMixin, generics.RetrieveAPIView):
-    renderer_classes = (renderers.BlockFormRenderer,)
+    serializer_class = serialisers.BlockFormSerializer
 
     def get_object(self):
         return self.model.objects.get_subclass(
