@@ -53,9 +53,9 @@ def get_grouped_content_blocks():
                 "a block model has to provide a 'name' and 'code' attributes"
             )
         group = getattr(block, 'group', _('Ungrouped'))
-        blocks.setdefault(unicode(group), []).append((
-            block.code,
-            unicode(block.name)
-        ))
+        blocks.setdefault(unicode(group), []).append({
+            'code': block.code,
+            'name': unicode(block.name)
+        })
     # we now have to sort the the groups alphabetically
     return SortedDict([(g, blocks[g]) for g in sorted(blocks.keys())])
