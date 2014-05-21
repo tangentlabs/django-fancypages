@@ -81,6 +81,7 @@ class BlockFormSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ContentBlock
+        fields = ('uuid', 'display_order', 'code', 'form', 'container')
 
 
 class BlockCodeSerializer(serializers.Serializer):

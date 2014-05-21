@@ -63,9 +63,9 @@ class TestABlock(testcases.FancyPagesWebTest):
                 'uuid': self.third_text_block.uuid}))
 
         data = response.json
-        self.assertSequenceEqual(
+        self.assertItemsEqual(
             data.keys(),
-            [u'code', u'container', u'uuid', u'form', u'display_order', u'id'])
+            [u'code', u'container', u'uuid', u'form', u'display_order'])
 
         self.assertIn('second text', data.get('form'))
         self.assertIn('name="text"', data.get('form'))
