@@ -7,7 +7,7 @@ FancypageApp.module('Api', function (Api, FancypageApp, Backbone, Marionette, $,
      * Get the CSRF token from the session to submit POST data.
      */
     Api.getCsrfToken = function () {
-        var allCookies = document.cookies.split(';'),
+        var allCookies = document.cookie.split(';'),
             csrfToken = null,
             cookieParts = null;
 
