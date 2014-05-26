@@ -8,7 +8,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from rest_framework.authentication import SessionAuthentication
 
-from . import renderers
 from . import serialisers
 from ..library import get_grouped_content_blocks
 
@@ -86,6 +85,14 @@ class BlockMoveView(BlockAPIMixin, generics.UpdateAPIView):
 class OrderedContainerListView(generics.ListCreateAPIView):
     model = OrderedContainer
     serializer_class = serialisers.OrderedContainerSerializer
+
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAdminUser,)
+
+
+class OrderedContainerDestroyView(generics.DestroyAPIView):
+    model = OrderedContainer
+    lookup_field = 'uuid'
 
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAdminUser,)
