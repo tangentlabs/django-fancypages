@@ -115,6 +115,7 @@ class BlockMoveSerializer(serializers.ModelSerializer):
 
 class OrderedContainerSerializer(serializers.ModelSerializer):
     block = serializers.RegexField(regex=SHORTUUID_REGEX, source='block_uuid')
+    language_code = serializers.CharField(required=True)
     title = serializers.CharField(required=False, default=_("New Tab"))
 
     def restore_object(self, attrs, instance=None):
@@ -137,6 +138,7 @@ class OrderedContainerSerializer(serializers.ModelSerializer):
             raise Http404("block ID is invalid")
 
         attrs.update({'object_id': block.id, 'content_type': content_type})
+
         instance = super(OrderedContainerSerializer, self).restore_object(
             attrs, instance)
         if instance is not None:
