@@ -1,0 +1,77 @@
+//
+// Labels
+// --------------------------------------------------
+
+.fp-label {
+  display: inline;
+  padding: .2em .6em .3em;
+  font-size: 75%;
+  font-weight: bold;
+  line-height: 1;
+  color: @label-color;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25em;
+
+  // Add hover effects, but only for links
+  a& {
+    &:hover,
+    &:focus {
+      color: @label-link-hover-color;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  }
+
+  // Empty labels collapse automatically (not available in IE8)
+  &:empty {
+    display: none;
+  }
+
+  // Quick fix for labels in buttons
+  .btn & {
+    position: relative;
+    top: -1px;
+  }
+}
+
+// Colors
+// Contextual variations (linked labels get darker on :hover)
+.fp-label-variant(@color) {
+  background-color: @color;
+  
+  &[href] {
+    &:hover,
+    &:focus {
+      background-color: darken(@color, 10%);
+    }
+  }
+}
+
+.fp-label-default {
+  .fp-label-variant(@label-default-bg);
+}
+
+.fp-label-primary {
+  .fp-label-variant(@label-primary-bg);
+}
+
+.fp-label-success,
+.fp-label-lang {
+  .fp-label-variant(@label-success-bg);
+}
+
+.fp-label-info {
+  .fp-label-variant(@label-info-bg);
+}
+
+.fp-label-warning,
+.fp-label-block,
+.fp-label-container {
+  .fp-label-variant(@label-warning-bg);
+}
+
+.fp-label-danger {
+  .fp-label-variant(@label-danger-bg);
+}

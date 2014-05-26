@@ -54,7 +54,9 @@
   .edit-button.fp-btn,
   .block-move-delete,
   .block-add-control,
-  .no-asset.edit-button {
+  .no-asset.edit-button,
+  .fp-add-tab,
+  .fp-delete-tab {
     display:none;
   }
 }
@@ -243,5 +245,14 @@
 .fp-page-tree {
   a {
     color:#08c;
+  }
+}
+// debug output in blocks
+.block-debug {
+  opacity: 0;
+}
+.block.block-hover {
+  .block-debug {
+    .opacity(100);
   }
 }
