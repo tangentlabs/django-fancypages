@@ -79,6 +79,9 @@ class AbstractPageNode(MP_Node):
             node.save()
     move.alters_data = True
 
+    def __unicode__(self):
+        return "{0} ({1})".format(self.name, self.slug)
+
     class Meta:
         app_label = 'fancypages'
         abstract = True
