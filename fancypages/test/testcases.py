@@ -117,8 +117,8 @@ class SplinterTestCase(LiveServerTestCase):
         caps = {
             'name': getattr(self, 'name', self.__class__.__name__),
             'browser': 'firefox',
-            'platform': "OSX 10.6",
-            'version': "25"}
+            'platform': "Linux",
+            'version': "29"}
 
         if os.getenv('TRAVIS', False):
             caps['tunnel-identifier'] = os.environ['TRAVIS_JOB_NUMBER']

@@ -18,9 +18,6 @@ class TestTheEditorPanel(SplinterTestCase):
     is_logged_in = True
     home_page_url = '/'
 
-    def _get_cookie_names(self):
-        return [c.get('name') for c in self.browser.cookies.all()]
-
     def test_can_be_opened_by_clicking_the_handle(self):
         self.goto(self.home_page_url)
         body_tag = self.browser.find_by_css('body').first
@@ -28,10 +25,17 @@ class TestTheEditorPanel(SplinterTestCase):
 
         self.find_and_click_by_css(self.browser, '#editor-handle')
         self.assertFalse(body_tag.has_class('editor-hidden'))
-        self.assertIn('fpEditorOpened', self._get_cookie_names())
+
+        try:
+            value = self.browser.driver.get_cookie('fpEditorOpened')['value']
+        except (KeyError, TypeError):
+            self.fail("could not find cookie 'fpEditorOpened' but expected")
+
+        self.assertEqual(value, 'true')
 
     def test_can_be_closed_by_clicking_the_x(self):
-        self.assertNotIn('fpEditorOpened', self._get_cookie_names())
+        self.assertEqual(
+            self.browser.driver.get_cookie('fpEditorOpened'), None)
 
         self.goto(self.home_page_url)
         self.find_and_click_by_css(self.browser, '#editor-handle')
@@ -41,7 +45,13 @@ class TestTheEditorPanel(SplinterTestCase):
         self.find_and_click_by_css(self.browser, '#editor-close')
         body_tag = self.browser.find_by_css('body').first
         self.assertTrue(body_tag.has_class('editor-hidden'))
-        self.assertEqual(self.browser.cookies['fpEditorOpened'], u'false')
+
+        try:
+            value = self.browser.driver.get_cookie('fpEditorOpened')['value']
+        except (KeyError, TypeError):
+            self.fail("could not find cookie 'fpEditorOpened' but expected")
+
+        self.assertEqual(value, u'false')
 
     def test_remains_opened_when_reloading_the_page(self):
         self.goto(self.home_page_url)
