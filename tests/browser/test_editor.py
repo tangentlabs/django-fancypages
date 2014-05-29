@@ -139,6 +139,25 @@ class TestATextBlock(SplinterTestCase):
         self.browser.is_text_present(text + text_update)
         self.browser.is_text_present(title + title_update)
 
+    def test_can_be_deleted_from_a_container(self):
+        title = "Sample Title"
+        text = "This is an amazing piece of text"
+        factories.TitleTextBlockFactory(
+            container=self.page.containers.all()[0], title=title, text=text)
+
+        self.goto(self.page.get_absolute_url())
+
+        self.browser.is_text_present(title)
+        self.browser.is_text_present(text)
+
+        self.open_editor_panel()
+
+        self.find_and_click_by_css(self.browser, 'div.delete')
+        self.wait_for_editor_reload()
+
+        self.assertEqual(
+            factories.TitleTextBlockFactory.FACTORY_FOR.objects.count(), 0)
+
     def open_editor_panel(self):
         self.find_and_click_by_css(self.browser, '#editor-handle')
 
