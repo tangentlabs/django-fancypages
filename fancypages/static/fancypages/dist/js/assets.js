@@ -24,16 +24,5 @@ fancypages.assets = {
                 $('.bar', uploadProgress).css('width', '0%');
             }
         });
-
-        $(document).on('click', "[data-behaviours~=selectable-asset]", function (ev) {
-            ev.preventDefault();
-            parent.fancypages.editor.setSelectedAsset(
-                $(this).data('asset-type'),
-                $(this).data('asset-id'),
-                //FIXME: this should probably be the actual image url
-                $('img', this).attr('src')
-            );
-        });
-
     }
 };

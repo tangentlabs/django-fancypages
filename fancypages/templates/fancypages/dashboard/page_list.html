@@ -40,6 +40,7 @@
 
 {% block extrascripts %}
     {{ block.super }}
+    {# FIXME: switch to the new jquery-sortable #}
     <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script type="text/javascript" src="{% static "fancypages/libs/jquery.mjs.nestedSortable.js" %}"></script>
 {% endblock %}

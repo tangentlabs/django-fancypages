@@ -23,15 +23,22 @@
 .block.editing {
   border-color:#000;
 }
-.ui-sortable-placeholder { 
+
+body.dragging, body.dragging * {
+  cursor: move !important;
+}
+.sortable .placeholder { 
   border: 1px dotted black; 
   visibility: visible !important; 
   height: 50px !important;
   background:#efefef; 
 }
-.ui-sortable-placeholder * { 
-  visibility: hidden; 
+.dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000;
 }
+
 .block-move {
   .block-hover {
     border-color:transparent;
@@ -47,6 +54,7 @@
     min-height: 100px;
   }
 }
+
 .block-move-delete {
   position: absolute;
   top: 5px;

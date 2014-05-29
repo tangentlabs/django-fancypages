@@ -9,11 +9,6 @@
     <link rel='stylesheet' type='text/css' href="{% static "fancypages/css/page-management.css" %}" />
 {% endblock %}
 
-{% block cdn_scripts %}
-    {{ block.super }}
-    <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-{% endblock %}
-
 {% block extrascripts %}
     {{ block.super }}
     <script type="text/javascript" charset="utf-8" src="{% static "fancypages/libs/wysihtml5/advanced.js" %}"></script>

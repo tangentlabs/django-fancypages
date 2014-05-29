@@ -3,21 +3,22 @@
 {% load fp_container_tags %}
 {% load url from future %}
 
-<div class="tabbable">
+<div class="fp-tabbable">
     <ul class="nav nav-tabs">
         {% for tab in fp_block.tabs.all %}
         <li {% if forloop.first %}class="active"{% endif %}>
-            <a href="#tab-{{ fp_block.id }}-{{ forloop.counter }}" data-toggle="tab">{{ tab.title }}</a>
+            <a href="#tab-{{ fp_block.uuid }}-{{ forloop.counter }}" data-toggle="tab">
+                {{ tab.title }}
+                <i class='fp-delete-tab glyphicon-trash' data-block-id="{{ tab.uuid }}"></i>
+            </a>
         </li>
         {% endfor %}
 
         {% if request.fp_edit_mode %}
         <li>
             {% get_content_type fp_block as content_type %}
-            <a data-action="{% url "fp-api:ordered-container-list" %}"
-               data-behaviours="add-tab"
-               data-content-type-id="{{ content_type.id }}">
-                <i class="icon-plus"></i>{% trans "Add tab" %}
+            <a class="fp-add-tab" title="{% trans "Add tab" %}">
+                <i class="glyphicon-plus"></i>
             </a>
         </li>
         {% endif %}
@@ -26,7 +27,7 @@
     <div class="tab-content">
     {% for tab in fp_block.tabs.all %}
         <div class="tab-pane {% if forloop.first %}active{% endif %}"
-             id="tab-{{ fp_block.id }}-{{ forloop.counter }}">
+             id="tab-{{ fp_block.uuid }}-{{ forloop.counter }}">
             {% fp_block_container tab %}
         </div>
     {% endfor %}
