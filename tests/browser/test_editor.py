@@ -66,7 +66,8 @@ class TestATextBlock(SplinterTestCase):
                                 "putting text into WYSIWYG editor textarea"))
     def test_can_be_added_to_container(self):
         self.goto(self.page.get_absolute_url())
-        self.find_and_click_by_css(self.browser, '#editor-handle')
+
+        self.open_editor_panel()
 
         self.find_and_click_by_css(
             self.browser, "div[class=block-add-control]>a")
@@ -119,10 +120,7 @@ class TestATextBlock(SplinterTestCase):
         self.browser.is_text_present(title)
         self.browser.is_text_present(text)
 
-        self.find_and_click_by_css(self.browser, '#editor-handle')
-
-        if not self.browser.is_element_present_by_css('.edit-button', 2):
-            self.fail("Could not find edit button for block")
+        self.open_editor_panel()
 
         self.find_and_click_by_css(self.browser, '.edit-button')
         self.wait_for_editor_reload()
@@ -138,6 +136,12 @@ class TestATextBlock(SplinterTestCase):
             ibody.type(text_update)
         self.browser.is_text_present(text + text_update)
         self.browser.is_text_present(title + title_update)
+
+    def open_editor_panel(self):
+        self.find_and_click_by_css(self.browser, '#editor-handle')
+
+        if not self.browser.is_element_present_by_css('.edit-button', 2):
+            self.fail("Could not find edit button for block")
 
 
 class TestImageBlock(SplinterTestCase):
