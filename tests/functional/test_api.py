@@ -1,6 +1,7 @@
 from django.db.models import get_model
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
+from django.utils.translation import get_language
 
 from fancypages.test import factories
 from fancypages.test import testcases
@@ -148,10 +149,8 @@ class TestTheBlockMoveApi(testcases.FancyPagesWebTest):
 
     def test_moves_a_block_up_within_a_container(self):
         for idx, pos in [(0, 0), (1, 1), (2, 2)]:
-            self.assertEquals(
-                TextBlock.objects.get(id=self.left_blocks[idx].id).display_order,
-                pos
-            )
+            block = TextBlock.objects.get(id=self.left_blocks[idx].id)
+            self.assertEquals(block.display_order, pos)
 
         self.app.put(
             reverse('fp-api:block-move', kwargs={
@@ -166,14 +165,12 @@ class TestTheBlockMoveApi(testcases.FancyPagesWebTest):
         self.assertEquals(moved_block.display_order, 1)
 
         for idx, pos in [(0, 0), (1, 2), (2, 3)]:
-            self.assertEquals(
-                TextBlock.objects.get(id=self.left_blocks[idx].id).display_order,
-                pos)
+            block = TextBlock.objects.get(id=self.left_blocks[idx].id)
+            self.assertEquals(block.display_order, pos)
 
         for idx, pos in [(0, 0), (2, 1)]:
-            self.assertEquals(
-                TextBlock.objects.get(id=self.main_blocks[idx].id).display_order,
-                pos)
+            block = TextBlock.objects.get(id=self.main_blocks[idx].id)
+            self.assertEquals(block.display_order, pos)
 
 
 class TestThePageMoveApi(testcases.FancyPagesWebTest):
@@ -273,13 +270,19 @@ class TestOrderedContainer(testcases.FancyPagesWebTest):
 
     def test_can_be_created_with_valid_uuid(self):
         self.block = factories.TabBlockFactory()
-        self.post(reverse('fp-api:ordered-container-list'),
-                  params={'block': self.block.uuid})
+
+        params = {
+            'block': self.block.uuid,
+            'language_code': get_language()}
+
+        self.post(reverse('fp-api:ordered-container-list'), params=params)
         self.assertEquals(TabBlock.objects.count(), 1)
         self.assertEquals(self.block.tabs.count(), 2)
 
     def test_cannot_be_created_with_invalid_uuid(self):
+        params = {'block': 'invaliduuid', 'language_code': get_language()}
+
         response = self.post(reverse('fp-api:ordered-container-list'),
-                             params={'block': 'invaliduuid'}, status=404)
+                             params=params, status=404)
         self.assertEquals(response.status_code, 404)
         self.assertEquals(ContentBlock.objects.count(), 0)
