@@ -31,6 +31,8 @@ class TestTheEditorPanel(SplinterTestCase):
         self.assertIn('fpEditorOpened', self._get_cookie_names())
 
     def test_can_be_closed_by_clicking_the_x(self):
+        self.assertNotIn('fpEditorOpened', self._get_cookie_names())
+
         self.goto(self.home_page_url)
         self.find_and_click_by_css(self.browser, '#editor-handle')
         body_tag = self.browser.find_by_css('body').first
@@ -39,7 +41,7 @@ class TestTheEditorPanel(SplinterTestCase):
         self.find_and_click_by_css(self.browser, '#editor-close')
         body_tag = self.browser.find_by_css('body').first
         self.assertTrue(body_tag.has_class('editor-hidden'))
-        self.assertNotIn('fpEditorOpened', self._get_cookie_names())
+        self.assertEqual(self.browser.cookies['fpEditorOpened'], u'false')
 
     def test_remains_opened_when_reloading_the_page(self):
         self.goto(self.home_page_url)
@@ -189,7 +191,7 @@ class TestImageBlock(SplinterTestCase):
             self.browser, 'a[data-behaviours=load-asset-modal]')
         self.wait_for_editor_reload()
 
-        with self.browser.get_iframe('asset-manager') as iframe:
+        with self.browser.get_iframe(0) as iframe:
             self.wait_for_editor_reload()
             self.find_and_click_by_css(
                 iframe, 'li[data-behaviours=selectable-asset]')
