@@ -2,6 +2,9 @@ language: python
 python:
   - '2.7'
 env:
+  global:
+    - secure: "CnxjO4RXw7lA1bJ6WBF92V8RmGXgDAF6QQqqto2kUz/spVukfYLcCDgzO7Pm++MuUynxpvzOx5qEMnyEYsU8EUlCta3oqswqnihfPWpydFRJJoccZdB7bv9yfcMEYIxgEvijr8onq8R2s3G0OPwL+uKkhoeFpajvSVdNTXTYiIU="
+    - secure: "Mm4asbA6pqivZ+sHKIHmTiGmk0UXPRhen6Wc1cr6lg9t84on8peDsqvPqBYiPso0bEfqrMjHW3+L0iYcsB/feghPUnUBSAK7KG/ipjDhoII2FrYFUbUm3Kf1Hjd2msYeOxXhjybvNGCGL/QjxCWG/Rf2AnUknVWwuToJAC5rr/I="
   matrix:
     - DRF_VERSION=">=2.3,<2.4" DJANGO_VERSION=">=1.4,<1.5" MODEL_UTILS_VERSION=">2.0"
     - DRF_VERSION=">=2.3,<2.4" DJANGO_VERSION=">=1.5,<1.6" MODEL_UTILS_VERSION="==1.5"
@@ -15,6 +18,8 @@ install:
   - pip install Django$DJANGO_VERSION djangorestframework$DRF_VERSION django-model-utils$MODEL_UTILS_VERSION --use-wheel
   - pip install . --use-mirrors --use-wheel
   - pip install -r requirements.txt --use-mirrors --use-wheel
+before_script:
+  - curl https://gist.github.com/santiycr/5139565/raw/sauce_connect_setup.sh | bash
 script:
   - make travis
 after_success:

@@ -26,11 +26,11 @@ travis:
 
 test-fancypages:
 	py.test --pep8
-	py.test -m integration
+	py.test -m browser
 
 test-oscar-fancypages:
 	USE_OSCAR_SANDBOX=true py.test --pep8 --cov fancypages
-	USE_OSCAR_SANDBOX=true py.test -m integration
+	USE_OSCAR_SANDBOX=true py.test -m browser
 
 test-migration-sqlite:
 	./sandboxes/oscar_fancypages/manage.py syncdb --noinput --migrate --settings=sandbox.settings_migration_sqlite
