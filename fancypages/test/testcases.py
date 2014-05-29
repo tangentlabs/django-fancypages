@@ -29,8 +29,8 @@ SPLINTER_WEBDRIVER = getattr(
     settings, 'SPLINTER_WEBDRIVER',
     os.environ.get('SPLINTER_WEBDRIVER', 'firefox'))
 
-SAUCELABS_USERNAME = os.environ.get('SAUCELABS_USERNAME')
-SAUCELABS_KEY = os.environ.get('SAUCELABS_KEY')
+SAUCE_USERNAME = os.environ.get('SAUCE_USERNAME')
+SAUCE_ACCESS_KEY = os.environ.get('SAUCE_ACCESS_KEY')
 
 User = get_user_model()
 
@@ -112,7 +112,7 @@ class SplinterTestCase(LiveServerTestCase):
 
     def get_remote_browser(self):
         remote_url = "http://{}:{}@localhost:4445/wd/hub".format(
-            SAUCELABS_USERNAME, SAUCELABS_KEY)
+            SAUCE_USERNAME, SAUCE_ACCESS_KEY)
 
         caps = {
             'name': getattr(self, 'name', self.__class__.__name__),
@@ -164,10 +164,10 @@ class SplinterTestCase(LiveServerTestCase):
     def report_test_result(self):
         result = {'passed': sys.exc_info() == (None, None, None)}
         url = 'https://saucelabs.com/rest/v1/{username}/jobs/{job}'.format(
-            username=SAUCELABS_USERNAME, job=self.browser.driver.session_id)
+            username=SAUCE_USERNAME, job=self.browser.driver.session_id)
 
         response = requests.put(url, data=json.dumps(result),
-                                auth=(SAUCELABS_USERNAME, SAUCELABS_KEY))
+                                auth=(SAUCE_USERNAME, SAUCE_ACCESS_KEY))
         return response.status_code == requests.codes.ok
 
     def tearDown(self):
