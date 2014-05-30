@@ -73,16 +73,16 @@ class TestATextBlock(SplinterTestCase):
         super(TestATextBlock, self).setUp()
         self.page = factories.FancyPageFactory()
 
-    @pytest.mark.skipif(True,
-                        reason=("there's an issue with splinter/selenium not "
-                                "putting text into WYSIWYG editor textarea"))
+    @pytest.mark.skipif(
+        True, reason=("there's an issue with splinter/selenium not "
+                      "putting text into the WYSIWYG editor textarea"))
     def test_can_be_added_to_container(self):
         self.goto(self.page.get_absolute_url())
 
-        self.open_editor_panel()
-
+        self.find_and_click_by_css(self.browser, '#editor-handle')
         self.find_and_click_by_css(
             self.browser, "div[class=block-add-control]>a")
+        self.wait_for_editor_reload()
 
         self.find_and_click_by_css(self.browser, "a[href='#content']")
 
@@ -192,7 +192,7 @@ class TestImageBlock(SplinterTestCase):
         self.image = ImageAsset.objects.create(
             name='test image', image=self.image_filename, creator=self.user)
 
-        self.page = factories.FancyPageFactory(
+        self.second_page = factories.FancyPageFactory(
             node__name='Another page', node__slug='another-page')
 
     def test_can_be_added_with_new_image_and_link(self):
@@ -233,7 +233,7 @@ class TestImageBlock(SplinterTestCase):
         # select 'Another page' as the link for the image
         self.find_and_click_by_css(self.browser, '.glyphicon-share')
         self.find_and_click_by_css(
-            self.browser, 'a[href="/{}/"]'.format(self.page.slug))
+            self.browser, 'a[href="/{}/"]'.format(self.second_page.slug))
 
         self.find_and_click_by_css(self.browser, 'button[type=submit]')
         self.wait_for_editor_reload()
@@ -244,7 +244,42 @@ class TestImageBlock(SplinterTestCase):
             self.fail('Image not added to image block')
 
         link_exists = self.browser.is_element_present_by_css(
-            "div.block-wrapper>a[href='/{}/']".format(self.page.slug))
-
+            "div.block-wrapper>a[href='/{}/']".format(self.second_page.slug))
         if not link_exists:
             self.fail('image block is not wrapped in link to other page')
+
+
+class TestTabBlock(SplinterTestCase):
+    is_staff = True
+    is_logged_in = True
+    home_page_url = '/'
+
+    def setUp(self):
+        super(TestTabBlock, self).setUp()
+        self.page = factories.FancyPageFactory()
+
+    def test_tabs_can_be_added_and_removed(self):
+        self.block = factories.TabBlockFactory(
+            container=self.page.containers.all()[0])
+
+        self.goto(self.page.get_absolute_url())
+        self.find_and_click_by_css(self.browser, '#editor-handle')
+
+        self.assertEqual(len(self.browser.find_by_css('.tab-pane')), 1)
+
+        self.find_and_click_by_css(self.browser, '.fp-add-tab')
+        self.wait_for_editor_reload()
+
+        self.assertEqual(len(self.browser.find_by_css('.tab-pane')), 2)
+
+        second_tab = self.browser.find_by_css('.fp-delete-tab')[0]
+        second_tab_id = second_tab['data-block-id']
+        second_tab.click()
+
+        self.wait_for_editor_reload()
+
+        self.assertEqual(len(self.browser.find_by_css('.tab-pane')), 1)
+        tab_removed = self.browser.is_element_not_present_by_css(
+            "[data-block-id='{}']".format(second_tab_id))
+        if not tab_removed:
+            self.fail("deleting the second tab failed")
