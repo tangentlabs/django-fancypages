@@ -184,8 +184,10 @@ class SplinterTestCase(LiveServerTestCase):
         url = self.base_url.path(path)
         return self.browser.visit(url.as_string())
 
-    def wait_for_editor_reload(self):
-        time.sleep(3)
+    def wait_for_editor_reload(self, wait_for=3):
+        if self.use_remote:
+            wait_for += 5
+        time.sleep(wait_for)
 
     def ensure_element(self, element_or_list, index=0):
         """

@@ -233,7 +233,7 @@ class TestImageBlock(SplinterTestCase):
         # select 'Another page' as the link for the image
         self.find_and_click_by_css(self.browser, '.glyphicon-share')
         self.find_and_click_by_css(
-            self.browser, 'a[href="/{}/"]'.format(self.second_page.slug))
+            self.browser, 'a[href*={}]'.format(self.second_page.slug))
 
         self.find_and_click_by_css(self.browser, 'button[type=submit]')
         self.wait_for_editor_reload()
@@ -244,7 +244,7 @@ class TestImageBlock(SplinterTestCase):
             self.fail('Image not added to image block')
 
         link_exists = self.browser.is_element_present_by_css(
-            "div.block-wrapper>a[href='/{}/']".format(self.second_page.slug))
+            "div.block-wrapper>a[href*={}]".format(self.second_page.slug))
         if not link_exists:
             self.fail('image block is not wrapped in link to other page')
 
