@@ -131,7 +131,6 @@ class SplinterTestCase(LiveServerTestCase):
         return Browser(SPLINTER_WEBDRIVER)
 
     def setUp(self):
-        settings.DEBUG = True
         super(SplinterTestCase, self).setUp()
         self.user = None
         self.base_url = URL(self.live_server_url)

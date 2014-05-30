@@ -192,7 +192,10 @@ class TestImageBlock(SplinterTestCase):
         self.image = ImageAsset.objects.create(
             name='test image', image=self.image_filename, creator=self.user)
 
-    def test_can_be_added_with_new_image(self):
+        self.page = factories.FancyPageFactory(
+            node__name='Another page', node__slug='another-page')
+
+    def test_can_be_added_with_new_image_and_link(self):
         self.goto(self.page.get_absolute_url())
 
         self.find_and_click_by_css(self.browser, '#editor-handle')
@@ -227,6 +230,11 @@ class TestImageBlock(SplinterTestCase):
 
         self.wait_for_editor_reload()
 
+        # select 'Another page' as the link for the image
+        self.find_and_click_by_css(self.browser, '.glyphicon-share')
+        self.find_and_click_by_css(
+            self.browser, 'a[href="/{}/"]'.format(self.page.slug))
+
         self.find_and_click_by_css(self.browser, 'button[type=submit]')
         self.wait_for_editor_reload()
 
@@ -234,3 +242,9 @@ class TestImageBlock(SplinterTestCase):
             "img[src$='{}']".format(self.image_filename))
         if not shows_image:
             self.fail('Image not added to image block')
+
+        link_exists = self.browser.is_element_present_by_css(
+            "div.block-wrapper>a[href='/{}/']".format(self.page.slug))
+
+        if not link_exists:
+            self.fail('image block is not wrapped in link to other page')
