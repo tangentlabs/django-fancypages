@@ -165,8 +165,11 @@ class SplinterTestCase(LiveServerTestCase):
         url = 'https://saucelabs.com/rest/v1/{username}/jobs/{job}'.format(
             username=SAUCE_USERNAME, job=self.browser.driver.session_id)
 
-        response = requests.put(url, data=json.dumps(result),
-                                auth=(SAUCE_USERNAME, SAUCE_ACCESS_KEY))
+        try:
+            response = requests.put(url, data=json.dumps(result),
+                                    auth=(SAUCE_USERNAME, SAUCE_ACCESS_KEY))
+        except requests.exceptions.RequestsExceptions:
+            print "Could not set test status in Sauce Labs."
         return response.status_code == requests.codes.ok
 
     def tearDown(self):
