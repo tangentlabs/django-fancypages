@@ -1,6 +1,9 @@
 .PHONY: compile-static tests
 
 STATIC_DIR="fancypages/static/fancypages/"
+ifndef PYTEST_OPTS
+    PYTEST_OPTS="--pep8"
+endif
 
 smaller:
 	uglifyjs fancypages/static/fancypages/libs/wysihtml5/wysihtml5-config.js > fancypages/static/fancypages/libs/wysihtml5/wysihtml5-config.min.js
@@ -25,12 +28,10 @@ travis:
 	${MAKE} test-oscar-fancypages
 
 test-fancypages:
-	py.test --pep8
-	py.test -m browser
+	py.test ${PYTEST_OPTS}
 
 test-oscar-fancypages:
-	USE_OSCAR_SANDBOX=true py.test --pep8 --cov fancypages
-	USE_OSCAR_SANDBOX=true py.test -m browser
+	USE_OSCAR_SANDBOX=true py.test  ${PYTEST_OPTS}
 
 test-migration-sqlite:
 	./sandboxes/oscar_fancypages/manage.py syncdb --noinput --migrate --settings=sandbox.settings_migration_sqlite
