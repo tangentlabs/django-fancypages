@@ -21,8 +21,8 @@ SAUCE_ACCESS_KEY = os.environ.get('SAUCE_ACCESS_KEY')
 
 
 def report_test_result(request):
-    passed = all([request.node.setup_report.failed,
-                  request.node.call_report.failed])
+    passed = all([request.node.setup_report.passed,
+                  request.node.call_report.passed])
 
     result = {'passed': passed}
     url = 'https://saucelabs.com/rest/v1/{username}/jobs/{job}'.format(
