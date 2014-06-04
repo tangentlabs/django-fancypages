@@ -1,5 +1,6 @@
 import os
 import sys
+import pytest
 import fancypages as fp
 
 from django.conf import settings
@@ -114,5 +115,16 @@ def pytest_configure():
             APPEND_SLASH=True,
             SITE_ID=1,
             USE_OSCAR_SANDBOX=USE_OSCAR_SANDBOX,
+            ALLOWED_HOSTS=['*'],
             **ADDITIONAL_SETTINGS
         )
+
+
+@pytest.mark.tryfirst
+def pytest_runtest_makereport(item, call, __multicall__):
+    # execute all other hooks to obtain the report object
+    rep = __multicall__.execute()
+    # set an report attribute for each phase of a call, which can
+    # be "setup", "call", "teardown"
+    setattr(item, "{}_report".format(rep.when), rep)
+    return rep

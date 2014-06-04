@@ -96,3 +96,9 @@ class TabBlockFactory(DjangoModelFactory):
     FACTORY_FOR = get_model('fancypages', 'TabBlock')
 
     container = factory.SubFactory(ContainerFactory)
+
+
+class TwoColumnLayoutBlockFactory(DjangoModelFactory):
+    FACTORY_FOR = get_model('fancypages', 'TwoColumnLayoutBlock')
+
+    container = factory.SubFactory(ContainerFactory)
