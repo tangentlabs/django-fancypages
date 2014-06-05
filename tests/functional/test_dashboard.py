@@ -82,21 +82,18 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         self.assertEquals(fancy_page.description, 'Some description')
 
     def test_can_delete_a_page(self):
-        factories.FancyPageFactory(node__name="A new page")
+        fpage = factories.FancyPageFactory(node__name="A new page")
         self.assertEquals(FancyPage.objects.count(), 1)
-        page = self.get(reverse("fp-dashboard:page-list"))
-        page = page.click("Delete")
-
+        page = self.get(fpage.get_delete_page_url())
         page.forms['page-delete-form'].submit()
         self.assertEquals(FancyPage.objects.count(), 0)
 
     def test_can_cancel_the_delete_of_a_page(self):
-        factories.FancyPageFactory(node__name="A new page")
+        fpage = factories.FancyPageFactory(node__name="A new page")
 
         self.assertEquals(FancyPage.objects.count(), 1)
 
-        page = self.get(reverse("fp-dashboard:page-list"))
-        page = page.click("Delete")
+        page = self.get(fpage.get_delete_page_url())
         page = page.click('cancel')
         self.assertEquals(FancyPage.objects.count(), 1)
         self.assertContains(page, "Create new top-level page")
@@ -112,10 +109,7 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         self.assertEquals(parent.node.numchild, 1)
 
         self.assertEquals(FancyPage.objects.count(), 3)
-        page = self.get(reverse("fp-dashboard:page-list"))
-        page = page.click(
-            href="/dashboard/fancypages/delete/{}/".format(child_page.id))
-
+        page = self.get(child_page.get_delete_page_url())
         delete_page = page.forms['page-delete-form'].submit()
         self.assertRedirects(delete_page, reverse('fp-dashboard:page-list'))
         self.assertEquals(FancyPage.objects.count(), 2)
@@ -127,11 +121,10 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         self.assertEquals(FancyPage.objects.count(), 3)
 
     def test_can_create_child_page(self):
-        parent_page = factories.FancyPageFactory(node__name="A new page")
-        page = self.get(reverse("fp-dashboard:page-list"))
-
         child_page_name = 'Test Page'
-        create_form = page.click("Add child page").form
+        parent_page = factories.FancyPageFactory(node__name="A new page")
+
+        create_form = self.get(parent_page.get_add_child_url()).form
         create_form['name'] = child_page_name
         list_page = create_form.submit()
 
@@ -151,7 +144,6 @@ class TestANewPage(testcases.FancyPagesWebTest):
         self.assertEquals(home_page.slug, 'home')
 
         page = self.get(reverse('fp-dashboard:page-list'))
-        self.assertContains(page, 'Home')
 
         page = page.click('Create new top-level page', index=0)
         new_page_form = page.form

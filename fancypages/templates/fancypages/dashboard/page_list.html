@@ -21,31 +21,63 @@
 {% endblock header %}
 
 {% block dashboard_content %}
-    {% if fancypage_list|length %}
     <form action="." method="post">
         {% csrf_token %}
 
-        {% if fancypage_list|length %}
-            <ol id="pages-sortable" class="fp-page-tree">
-                {% include "fancypages/dashboard/partials/page_list_item.html" with fancypage_list=fancypage_list %}
-            </ol>
-        {% else %}
-            <p>{% trans "No pages found." %}</p>
-        {% endif %}
+        <ol class="fp-page-tree"></ol>
     </form>
-    {% else %}
-        <p>{% trans "No pages found." %}</p>
-    {% endif %}
 {% endblock dashboard_content %}
 
 {% block extrascripts %}
     {{ block.super }}
     {# FIXME: switch to the new jquery-sortable #}
+    {% comment %}
     <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script type="text/javascript" src="{% static "fancypages/libs/jquery.mjs.nestedSortable.js" %}"></script>
+    {% endcomment %}
+    <script id="template-page-node" type="text/template">
+        <li id="page-<%= uuid %>" class="sortable" data-page-id="<%= uuid %>">
+            <div class="row-fluid" >
+                <h5 class="span10">
+
+                    <% if (children.length > 0) { %>
+                        <a href="#" data-toggle="collapse" data-target="#<%= uuid %>-tree" class="collapsed">
+                            <i class="icon-caret-right icon-large"></i>
+                        </a>
+                    <% } %>
+
+                    <a href="#" data-toggle="collapse" data-target="#<%= uuid %>-actions">
+                        <i class="icon-file icon-large"></i>
+                        <%= name %>
+                    </a>
+                </h5>
+
+                <div class="span2">
+                    <% if (isVisible) { %>
+                        <span class="label label-success">{% trans "visible" %}</span>
+                    <% } else { %>
+                    <span class="label label-danger">{% trans "not visible" %}</span>
+                    <% } %>
+                    <span class="label"><%= status %></span>
+                </div>
+            </div>
+
+            <div class="collapse" id="<%= uuid %>-actions">
+                <div class="row-actions">
+                    <a class="btn btn-small" href="<%= url %>">{% trans "View page" %}</a>
+                    <a class="btn btn-small btn-success" href="<%= addChildUrl %>">{% trans "Add child page" %}</a>
+                    <a class="btn btn-small btn-danger" href="<%= deletePageUrl %>">{% trans "Delete" %}</a>
+                    <a class="btn btn-small" href="<%= editPageUrl %>">{% trans "Edit page settings" %}</a>
+                    links to <a href="<%= url %>"><i class="icon-link"></i> <%= url %></a>
+                </div>
+            </div>
+        </li>
+    </script>
 {% endblock %}
 
 {% block onbodyload %}
     {{ block.super }}
-    fancypages.dashboard.pages.init();
+    var pages = new FancypageApp.Dashboard.Models.Pages(),
+        tree = new FancypageApp.Dashboard.Views.PageTree({collection: pages});
+    pages.fetch();
 {% endblock %}
