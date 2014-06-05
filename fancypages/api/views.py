@@ -10,9 +10,10 @@ from rest_framework.authentication import SessionAuthentication
 
 from . import serialisers
 from ..library import get_grouped_content_blocks
+from ..utils import get_page_model, get_node_model
 
-PageNode = get_model('fancypages', 'PageNode')
-FancyPage = get_model('fancypages', 'FancyPage')
+FancyPage = get_page_model()
+PageNode = get_node_model()
 Container = get_model('fancypages', 'Container')
 ContentBlock = get_model('fancypages', 'ContentBlock')
 OrderedContainer = get_model('fancypages', 'OrderedContainer')

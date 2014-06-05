@@ -1,9 +1,11 @@
 from django import template
 from django.db.models import Q, get_model
 
+from ..utils import get_page_model
+
 
 PageGroup = get_model('fancypages', 'PageGroup')
-FancyPage = get_model('fancypages', 'FancyPage')
+FancyPage = get_page_model()
 
 
 register = template.Library()
