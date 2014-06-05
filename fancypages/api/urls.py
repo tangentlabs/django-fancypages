@@ -45,6 +45,7 @@ urlpatterns = patterns(
         views.BlockTypesView.as_view(),
         name='block-type-list'
     ),
+    url(r'^pages$', views.PageList.as_view(), name='page-list'),
     url(
         r'^pages/select-form$',
         views.PageSelectFormView.as_view(),

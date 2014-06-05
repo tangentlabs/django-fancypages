@@ -11,6 +11,7 @@ from rest_framework.authentication import SessionAuthentication
 from . import serialisers
 from ..library import get_grouped_content_blocks
 
+PageNode = get_model('fancypages', 'PageNode')
 FancyPage = get_model('fancypages', 'FancyPage')
 Container = get_model('fancypages', 'Container')
 ContentBlock = get_model('fancypages', 'ContentBlock')
@@ -148,3 +149,16 @@ class PageMoveView(generics.UpdateAPIView):
 
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAdminUser,)
+
+
+class PageList(generics.ListAPIView):
+    model = PageNode
+    lookup_field = 'uuid'
+    serializer_class = serialisers.PageNodeSerializer
+
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAdminUser,)
+
+    def get_queryset(self):
+        qs = super(PageList, self).get_queryset().filter(depth=1)
+        return qs

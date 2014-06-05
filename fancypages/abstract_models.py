@@ -177,6 +177,21 @@ class AbstractFancyPage(models.Model):
             return False
         return True
 
+    @models.permalink
+    def get_edit_page_url(self):
+        """ Get the dashboard URL for updating the page. """
+        return ("fp-dashboard:page-update", (), {'pk': self.pk})
+
+    @models.permalink
+    def get_add_child_url(self):
+        """ Get the dashboard URL for adding a child page. """
+        return ("fp-dashboard:child-page-create", (), {'parent_pk': self.pk})
+
+    @models.permalink
+    def get_delete_page_url(self):
+        """ Get the dashboard URL fo deleting this page. """
+        return ("fp-dashboard:page-delete", (), {'pk': self.pk})
+
     @classmethod
     def _split_kwargs(cls, dct, prefix="node__"):
         prefixed = {}

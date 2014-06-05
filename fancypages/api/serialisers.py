@@ -158,7 +158,7 @@ class PageMoveSerializer(serializers.ModelSerializer):
     new_index = serializers.IntegerField()
     old_index = serializers.IntegerField(required=True)
 
-    def get_page_title(self):
+    def get_page_title(self, obj):
         return self.object.name
 
     def get_visibility(self):
@@ -203,3 +203,51 @@ class PageMoveSerializer(serializers.ModelSerializer):
         model = FancyPage
         fields = ['parent', 'new_index', 'old_index']
         read_only_fields = ['status']
+
+
+class PageNodeSerializer(serializers.ModelSerializer):
+    uuid = serializers.SerializerMethodField('get_page_uuid')
+    url = serializers.CharField(source='get_absolute_url')
+    parent = serializers.SerializerMethodField('get_parent')
+    children = serializers.SerializerMethodField('get_children')
+    isVisible = serializers.SerializerMethodField('get_is_visible')
+    status = serializers.SerializerMethodField('get_status')
+
+    editPageUrl = serializers.SerializerMethodField('get_edit_page_url')
+    addChildUrl = serializers.SerializerMethodField('get_add_child_url')
+    deletePageUrl = serializers.SerializerMethodField('get_delete_page_url')
+
+    def get_page_uuid(self, obj):
+        return obj.page.uuid
+
+    def get_parent(self, obj):
+        parent = obj.get_parent()
+        if not parent:
+            return None
+        return parent.page.uuid
+
+    def get_children(self, obj):
+        children = []
+        for child in obj.get_children():
+            children.append(PageNodeSerializer(child).data)
+        return children
+
+    def get_is_visible(self, obj):
+        return obj.page.is_visible
+
+    def get_status(self, obj):
+        return obj.page.status
+
+    def get_edit_page_url(self, obj):
+        return obj.page.get_edit_page_url()
+
+    def get_add_child_url(self, obj):
+        return obj.page.get_add_child_url()
+
+    def get_delete_page_url(self, obj):
+        return obj.page.get_delete_page_url()
+
+    class Meta:
+        model = PageNode
+        fields = ['uuid', 'name', 'url', 'isVisible', 'status', 'children',
+                  'parent', 'editPageUrl', 'addChildUrl', 'deletePageUrl']
