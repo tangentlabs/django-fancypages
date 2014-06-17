@@ -14,6 +14,14 @@ FancypageApp.module('Dashboard.Models', function (Models, FancypageApp, Backbone
         initialize: function () {
             this.set('children', new Models.Pages(this.get('children')));
         },
+        move: function (data) {
+            return this.save(data, {
+                url: this.url() + '/move'
+            });
+        },
+        url: function () {
+            return FancypageApp.Api.baseUrl + '/page/' + this.id;
+        }
     });
 
     Models.Pages = Backbone.Collection.extend({
