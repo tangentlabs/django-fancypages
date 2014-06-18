@@ -2,10 +2,6 @@
 
 var FancypageApp = new Marionette.Application();
 
-FancypageApp.addRegions({
-    mainRegion: "#main-region"
-});
-
 FancypageApp.on('initialize:after', function () {
 
     var editorPanel = new FancypageApp.Views.EditorPanel();

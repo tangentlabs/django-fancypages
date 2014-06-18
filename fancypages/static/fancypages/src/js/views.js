@@ -95,6 +95,9 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
 
             _.bindAll(this, 'updateBlock');
 
+            this.initializeVideo();
+            this.initializeSlideShow();
+
             this.sortables = $('.sortable').sortable({
                 containerSelector: '.sortable',
                 group: 'sortable-containers',
@@ -128,6 +131,17 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
             _.each($('.block-add-control', this.$el), function (elem) {
                 var view = new Views.BlockSelectionView({el: elem});
                 view.bind('open-selection', modalView.showSelection);
+            });
+        },
+        initializeVideo: function () {
+            $('.block-video').fitVids();
+        },
+        initializeSlideShow: function () {
+            $('.flexslider').flexslider({
+                animation: "slide",
+                pauseOnHover: true,
+                slideshow: true,
+                slideshowSpeed: 2000
             });
         },
         updateBlock: function (type, block) {
@@ -277,6 +291,8 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
             this.initSliders();
             this.initWysiwyg();
             this.initLinkSelector();
+
+            $('.fp-scroll-content').jScrollPane();
 
             _.each($('.fp-asset-input', this.$el), function (elem) { 
                 var model = new FancypageApp.Models.AssetInputModel({
