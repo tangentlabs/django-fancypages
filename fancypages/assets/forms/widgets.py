@@ -43,6 +43,7 @@ class AssetWidget(MultiWidget):
         return tmpl.render(Context({
             'rendered_widgets': rendered_widgets,
             'asset': self.get_asset(*value),
+            'input_name': name,
         }))
 
     def get_widget_id(self, name, idx):

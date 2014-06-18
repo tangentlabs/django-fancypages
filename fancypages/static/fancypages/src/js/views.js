@@ -385,13 +385,24 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
         selectAsset: function () {
             var button = $('a', this.$el);
             this.$el.addClass('editing');
+            this.origin = button.data('input-name');
 
-            this.trigger('select-image-clicked', button.data('heading'), button.data('iframe-src'));
+            this.trigger(
+              'select-image-clicked',
+              button.data('heading'),
+              button.data('iframe-src'),
+              this.origin
+            );
         },
-        setSelectedAsset: function (type, id, url) {
+        setSelectedAsset: function (type, id, url, origin) {
             this.$el.removeClass('editing');
 
-            $("input", this.$el).attr('value', id);
+            if (origin !== this.origin) {
+              return false;
+            }
+
+            $("input[name=" + this.origin + "]", this.$el).attr('value', id);
+            $("input[name=" + this.origin + "_type]", this.$el).attr('value', type);
             $("img", this.$el).attr('src', url);
         }
     });
@@ -468,14 +479,17 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
             _.bindAll(this, 'hideModal');
             _.bindAll(this, 'triggerAssetUpdatedEvent');
 
+            this.origin = null;
             this.$iframe = null;
             this.template = _.template($('#fullscreen-modal-template').html() || '');
             this.iframeTemplate = _.template("<iframe frameborder='0' width='99%' height='360'></iframe>");
 
             this.on("image-asset-updated", this.hideModal);
         },
-        showModal: function (heading, url) {
+        showModal: function (heading, url, inputId) {
             var self = this;
+
+            this.origin = inputId;
 
             this.$el.html(this.template({
                 heading: heading,
@@ -509,7 +523,8 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
                 id = target.data('asset-id'),
                 url = $('img', target).attr('src');
 
-            this.trigger("image-asset-updated", type, id, url);
+            this.trigger("image-asset-updated", type, id, url, this.origin);
+            this.origin = null;
         }
     });
 
