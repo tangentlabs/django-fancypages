@@ -44,13 +44,11 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
             }
         },
         show: function () {
-            console.log("Show editor panel");
             this.handle.show();
             $('body').removeClass('editor-hidden');
             $.cookie('fpEditorOpened', true);
         },
         hide: function () {
-            console.log("Hide editor panel");
             this.handle.hide();
             $('body').addClass('editor-hidden');
             $.cookie('fpEditorOpened', false);
@@ -78,15 +76,12 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
             this.$el.removeClass('block-hover');
         },
         editBlock: function () {
-            console.log("edit", this.model.id);
             this.trigger('update-block', 'edit', this.model);
         },
         moveBlock: function () {
-            console.log("move", this.model.id);
             this.trigger('update-block', 'move', this.model);
         },
         deleteBlock: function () {
-            console.log("delete", this.model.id);
             this.trigger('update-block', 'delete', this.model);
         }
     });
@@ -95,7 +90,6 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
         el: ".editable-page-wrapper",
 
         initialize: function () {
-            console.log("Initialize page container");
 
             var self = this;
 
@@ -202,19 +196,15 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
                     this.deleteBlock(block);
                     break;
                 default:
-                    console.log('received unknown update type for block');
                     break;
             };
         },
         editBlock: function (block) {
-            console.log('EDIT BLOCK:', block);
             this.model.fetch();
         },
         moveBlock: function (block) {
-            console.log('MOVE BLOCK:', block);
         },
         deleteBlock: function (block) {
-            console.log('DELETE BLOCK:', block);
             block.destroy({
                 'success': function () {
                     FancypageApp.Api.reloadPage();
@@ -223,7 +213,6 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
         },
         submitForm: function (ev) {
             ev.preventDefault();
-            console.log("Submitting the form manually");
 
             var form = $('form', this.$el),
                 submitButton = $('button[type=submit]', this.$el),
@@ -244,7 +233,6 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
             block.set('container', form.data('container-id'));
             block.set('uuid', form.data('block-id'));
 
-            console.log('submitting changed model data', block.attributes);
 
             block.save({}, {type: 'PUT'}).complete(function () {
                 submitButton.attr('disabled', false);
@@ -309,7 +297,6 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
             var self = this;
 
             _.each($('[type=range]'), function (elem) {
-                console.log("creating new slider", self.model);
                 var slider = new Views.Slider({
                     el: elem,
                     block: self.model
@@ -320,7 +307,6 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
         initWysiwyg: function () {
             var self = this;
 
-            console.log("INIT: WYSIWYG editors");
             _.each($('.wysihtml5-wrapper', this.$el), function (elem) {
                 new Views.WysiwygEditor({el: elem, block: self.model});
             });
@@ -365,7 +351,6 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
             });
         },
         showSelection: function (container) {
-            console.log('show selection for container:', container, this.$el);
             this.containerId = container;
             this.$el.modal('show');
         }
@@ -382,14 +367,12 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
             this.modal = null;
         },
         selectAsset: function () {
-            console.log('Open up the asset model here');
             var button = $('a', this.$el);
             this.$el.addClass('editing');
 
             this.trigger('select-image-clicked', button.data('heading'), button.data('iframe-src'));
         },
         setSelectedAsset: function (type, id, url) {
-            console.log("setting selected asset", type, id, url);
             this.$el.removeClass('editing');
 
             $("input", this.$el).attr('value', id);

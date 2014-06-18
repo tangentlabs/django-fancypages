@@ -1,21 +1,65 @@
-//Import any variables and mixins needed
+//Sheet used for a FP when not logged in or not editing
 @import "bootstrap/variables.less";
 @import "bootstrap/mixins.less";
 
-//Use fp-btn as default class
-@import "buttons.less";
-@import "labels.less";
-//Fancy page modal fp-modal
-@import "modal.less";
-//Fancy page editor form styles
-@import "forms.less";
-//Use sprite icon as "icon" may conflict with site icon fonts
-@import "glyphs.less";
-//Fancy page widget selector
-@import "tabs.less";
-//For the editor controls and widgets
-@import "editor.less";
-//Link to page tree
-@import "tree.less";
-//Widget area - sorting, hover display, widget modal
-@import "widgets.less";
+//Utilities
+.visible-editor {
+  display:none;
+}
+//Widgets
+.block-wrapper {
+  margin-bottom:@baseLineHeight;
+}
+//Change content layout dependent on container width
+.span1,.span2, .span3, .span4 {
+  .block-wrapper {
+    [class*="span"],
+    .row-fluid [class*="span"],
+    .mod-offer .products li {
+      float: none;
+      display: block;
+      width: 100%;
+      margin-left: 0;
+      .box-sizing(border-box);
+      margin-bottom:@baseLineHeight;
+    }
+  }
+  .es-carousel {
+    .products {
+      overflow:hidden;
+    }
+  }
+}
+
+//TODO: not sure if this is needed
+.fullscreen-modal {
+  position: fixed;
+  top: 5%;
+  right: 5%;
+  bottom: 100%;
+  left: 5%;
+  margin: 0;
+  width: 90%;
+  height: 90%;
+  > .modal-body {
+    overflow:hidden;
+  }
+}
+
+//TODO: flexibility moving large content containers into small ones
+/**** TO ADD IN  LATER ONCE WIDGET NAMES ARE KNOWN ****/
+/*.span4 {
+  .block-wrapper {
+    height:30px;
+    overflow:hidden;
+    &:before {
+      content: "Too large to fit here!";
+      padding:5px;
+      background:#efefef;
+      display:block;
+      text-align:center;
+      text-transform:uppercase;
+      font-size:11px;
+    }
+  }
+}*/
