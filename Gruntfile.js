@@ -18,7 +18,6 @@ module.exports = function(grunt) {
             },
         },
 
-
         cssmin: {
             dist: {
                 files: {
@@ -35,6 +34,9 @@ module.exports = function(grunt) {
 
         uglify: {
             dist: {
+                options: {
+                    sourceMap: true,
+                },
                 files: {
                     "fancypages/static/fancypages/dist/js/libs.min.js": [
                         "fancypages/static/fancypages/src/js/jquery-sortable.js"
