@@ -1,0 +1,34 @@
+{% extends "fancypages/layout.html" %}
+{% load i18n %}
+
+{% block content %}
+
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+<div class="row-fluid">
+    <div class="span4 offset4">
+        <form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="form-horizontal well">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}" />
+
+            <div class="control-group">
+                <label for="{{ form.username.auto_id }}" class="control-label">{{ form.username.label|safe }}:</label>
+                <div class="controls">
+                    {{ form.username }}
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="{{ form.password.auto_id }}" class="control-label">{{ form.password.label|safe }}:</label>
+                <div class="controls">
+                    {{ form.password }}
+                </div>
+            </div>
+
+            <button class="btn btn-block btn-primary" type="submit" value="login">{% trans "Login" %}</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

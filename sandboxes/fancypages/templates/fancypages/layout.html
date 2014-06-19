@@ -25,10 +25,10 @@
             <div class="pull-right">
                 <ul class="nav">
                 {% if not request.user.is_authenticated %}
-                    <li><a href="/admin/login/">{% trans "Login" %}</a></li>
+                    <li><a href="{% url "login" %}?next={{ request.path }}">{% trans "Login" %}</a></li>
                 {% else %}
                     <li><a href="{% url "fp-dashboard:page-list" %}">{% trans "Dashboard" %}</a></li>
-                    <li><a href="/admin/logout/">{% trans "Logout" %}</a></li>
+                    <li><a href="{% url "logout" %}?next={{ request.path }}">{% trans "Logout" %}</a></li>
                 {% endif %}
                 </ul>
             </div>
