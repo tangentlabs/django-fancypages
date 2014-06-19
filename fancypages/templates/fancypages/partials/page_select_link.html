@@ -1,10 +1,6 @@
 {% for page,sub_tree in page_tree %}
-  <li id="page-{{ field_id }}" {% if forloop.last %}class="last"{% endif %} data-page-id="{{ field_id }}">
-      <a data-target="#{{ field_id }}"
-         data-behaviours="update-editor-field"
-         data-src="{{ page.get_absolute_url }}"
-         data-dismiss="modal"
-         href="#">
+  <li {% if forloop.last %}class="last"{% endif %}>
+      <a data-dismiss="modal" href="{{ page.get_absolute_url }}">
          {{ page.name }}
       </a>
       {% if sub_tree %}

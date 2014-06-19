@@ -36,10 +36,16 @@ urlpatterns = patterns(
         name='ordered-container-list'
     ),
     url(
+        r'^ordered-container/(?P<uuid>[{0}]+)$'.format(SHORTUUID_ALPHA),
+        views.OrderedContainerDestroyView.as_view(),
+        name='ordered-container-delete'
+    ),
+    url(
         r'^block-types$',
         views.BlockTypesView.as_view(),
         name='block-type-list'
     ),
+    url(r'^pages$', views.PageList.as_view(), name='page-list'),
     url(
         r'^pages/select-form$',
         views.PageSelectFormView.as_view(),

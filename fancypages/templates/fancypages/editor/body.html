@@ -33,30 +33,24 @@
                     </div>
                 </div>
             </form>
-            {% else %}
-                <p>
-                    {% blocktrans %}
-                        Hover over a widget and click
-                        <big>&quot;<i class="glyphicon-edit glyphicon-white"></i> edit&quot;</big>
-                        to see editable properties.
-                    {% endblocktrans %}
-                </p>
             {% endif %}
         </div>
-        <div id="block_input_wrapper"></div>
+        <div id="block-input-wrapper">
+        {% if not form %}
+            <p>
+                {% blocktrans %}
+                    Hover over a widget and click
+                    <big>&quot;<i class="glyphicon-edit glyphicon-white"></i> edit&quot;</big>
+                    to see editable properties.
+                {% endblocktrans %}
+            </p>
+        {% endif %}
+        </div>
     </div>
 </div>
 <div id='editor-handle'><i class="glyphicon-edit glyphicon-white"></i>edit</div>
 <div class="fp-loading" data-behaviours="loading"></div>
 
-{# the modal used for asset management #}
-<div class="fp-modal hide fullscreen" id="fullscreen-modal" tabindex="-1" role="dialog" aria-labelledby="asset-modal-label" aria-hidden="true">
-    <div class="fp-modal-header">
-        <button type="button" class="fp-close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3></h3>
-    </div>
-    <div class="fp-modal-body"></div>
-</div>
 
 {# modal used for the selection of blocks when adding them to the container #}
 {% render_block_selection %}
@@ -64,8 +58,20 @@
 {# include scripts that are only required in edit mode #}
 {% include "fancypages/editor/partials/cdn_scripts.html" %}
 {% include "fancypages/editor/partials/extrascripts.html" %}
+
+{# the modal used for asset management #}
+<div class="fp-modal hide fullscreen" id="fullscreen-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
+<script id="fullscreen-modal-template" type="text/template">
+    <div class="fp-modal-header">
+        <button type="button" class="fp-close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3><%= heading %></h3>
+    </div>
+    <div class="fp-modal-body"><%= bodyHtml %></div>
+</script>
+
 <script>
     $(document).ready(function(){
-        fancypages.editor.init();
+        FancypageApp.start();
     });
 </script>

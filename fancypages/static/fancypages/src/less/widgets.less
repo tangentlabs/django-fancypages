@@ -1,0 +1,139 @@
+//Utilities
+.visible-editor {
+  display:block;
+}
+//Widgets
+.block {
+  position: relative;
+  border:1px dashed transparent;
+}
+//Widgets Editing / Sortable
+.edit-button {
+  opacity: 0;
+  margin: 5px;
+}
+.block.editing,
+.block.block-hover {
+  border:1px dashed #ccc;
+  > .block-move-delete,
+  > .edit-button {
+    .opacity(100);
+  }
+}
+.block.editing {
+  border-color:#000;
+}
+
+body.dragging, body.dragging * {
+  cursor: move !important;
+}
+.sortable .placeholder { 
+  border: 1px dotted black; 
+  visibility: visible !important; 
+  height: 50px !important;
+  background:#efefef; 
+}
+.dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000;
+}
+
+.block-move {
+  .block-hover {
+    border-color:transparent;
+    > .block-move-delete,
+    > .edit-button {
+      .opacity(0);
+    }
+  }
+  .block, .sortable {
+    border: 1px solid lightblue;
+  }
+  .sortable, .row-fluid [class*="span"] {
+    min-height: 100px;
+  }
+}
+
+.block-move-delete {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  opacity: 0;
+}
+.block-add-control {
+  position: relative;
+  margin-top: 30px;
+  .border-radius(4px);
+  > .btn {
+    padding-left:0;
+    padding-right:0;
+    display:block;
+  }
+  select {
+    float: left;
+    max-width: 70%;
+  }
+  button {
+    margin-left: 5px;
+  }
+}
+//No Assest default
+.no-asset {
+  text-align:center;
+  padding:60px 0;
+  margin:0;
+  // #gradient .vertical(#fff, #efefef);
+  // border:1px solid @grayLighter;
+}
+.no-asset.edit-button {
+  .opacity(100);
+  margin:0;
+}
+
+//Widget Modal Add Content Labels
+.fp-widget-list {
+  margin: 0!important;
+  padding:0!important;
+  .clearfix();
+  > li {
+    display: block!important;
+    list-style: none;
+    float: left!important;
+    margin: 0 10px 20px!important;
+    width: 200px!important;
+  }
+  span {
+    min-height:45px;
+    display:block;
+  }
+  .image_container {
+    background: @white;
+    border: 1px solid #e6e6e6;
+    min-height: 104px;
+    margin-bottom: 10px;
+    padding: 16px;
+    line-height: 104px;
+    width: auto;
+    .border-radius(5px);
+    img {
+      width: 100%;
+      height: 104px;
+      vertical-align: middle;
+    }
+  }
+  .fp-btn {
+    font-size:@baseFontSize - 2;
+  }
+}
+//Loading
+.fp-loading {
+  background:url(/static/fancypages/img/loader.gif) 50% 50% #FAFAFA no-repeat;
+  position:fixed;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  display:none;
+  z-index:1060;
+}

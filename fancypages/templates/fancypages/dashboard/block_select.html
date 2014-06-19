@@ -29,11 +29,12 @@
                         <li>
                         <button data-api-url="{% url "fp-api:block-new" %}"
                                 data-behaviours="create-block"
-                                class="fp-btn" data-block-code="{{ fp_block.0 }}">
+                                class="fp-btn" data-block-code="{{ fp_block.code }}">
                                 <div class="image_container">
-                                    <img src="{% static "fancypages/img/block_icons/" %}{{ fp_block.0 }}.png" class="fp-{{ fp_block.0 }}" alt="{{ fp_block.1 }}" title="{{ fp_block.1 }}">
+                                    <img src="{% static "fancypages/img/block_icons/" %}{{ fp_block.code }}.png"
+                                         class="fp-{{ fp_block.code }}" alt="{{ fp_block.name }}" title="{{ fp_block.name }}">
                                 </div>
-                                {{ fp_block.1 }}
+                                {{ fp_block.name }}
                             </button>
                         </li>
                         {% endfor %}

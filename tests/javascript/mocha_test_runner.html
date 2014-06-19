@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <title>Search Tests</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="./libs/mocha.css" />
+
+    <script src="./libs/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./libs/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="./libs/underscore-min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./libs/backbone-min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./libs/backbone.marionette.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="libs/sinon-1.9.0.js"></script>
+    <script src="libs/mocha.js"></script>
+    <script src="libs/chai.js"></script>
+
+    <script>mocha.setup('tdd')</script>
+    <script>
+      function assert(expr, msg) {
+        if (!expr) throw new Error(msg || 'failed');
+      }
+      var assert = chai.assert;
+      var site = {
+        registerInitFunction: function () {}
+      };
+    </script>
+
+    <script src="../../fancypages/static/fancypages/dist/js/app.js"></script>
+    <script src="../../fancypages/static/fancypages/dist/js/api.js"></script>
+    <script src="./api_tests.js"></script>
+
+    <script>
+      onload = function(){
+        mocha.run();
+      };
+    </script>
+  </head>
+  <body>
+    <div id="mocha"></div>
+  </body>
+</html>

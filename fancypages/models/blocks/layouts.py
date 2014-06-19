@@ -30,10 +30,7 @@ class TabBlock(ContentBlock):
         super(TabBlock, self).save(*args, **kwargs)
         if not self.tabs.count():
             OrderedContainer.objects.create(
-                page_object=self,
-                display_order=0,
-                title=_("New Tab")
-            )
+                page_object=self, display_order=0, title=_("New Tab"))
 
     class Meta:
         app_label = 'fancypages'
@@ -47,9 +44,8 @@ class TwoColumnLayoutBlock(LayoutBlock):
     template_name = "fancypages/blocks/two_column_layout.html"
 
     LEFT_WIDTH_CHOICES = [(x, x) for x in range(1, 12)]
-    left_width = models.PositiveIntegerField(_("Left Width"), max_length=3,
-                                             choices=LEFT_WIDTH_CHOICES,
-                                             default=6)
+    left_width = models.PositiveIntegerField(
+        _("Left Width"), max_length=3, choices=LEFT_WIDTH_CHOICES, default=6)
 
     @property
     def left_span(self):

@@ -5,6 +5,7 @@
 *.sqlite3
 *.sqlite
 *.vagrant
+*.map
 *.coverage
 
 local_settings.py

@@ -1,7 +1,10 @@
 import os
+import sys
 import mock
 import time
+import json
 import pytest
+import requests
 
 from purl import URL
 
@@ -26,8 +29,8 @@ SPLINTER_WEBDRIVER = getattr(
     settings, 'SPLINTER_WEBDRIVER',
     os.environ.get('SPLINTER_WEBDRIVER', 'firefox'))
 
-SAUCELABS_USERNAME = os.environ.get('SAUCELABS_USERNAME')
-SAUCELABS_KEY = os.environ.get('SAUCELABS_KEY')
+SAUCE_USERNAME = os.environ.get('SAUCE_USERNAME')
+SAUCE_ACCESS_KEY = os.environ.get('SAUCE_ACCESS_KEY')
 
 User = get_user_model()
 
@@ -96,7 +99,7 @@ class BlockTestCase(TestCase):
         return renderer.render()
 
 
-@pytest.mark.integration
+@pytest.mark.browser
 class SplinterTestCase(LiveServerTestCase):
     username = 'peter.griffin'
     email = 'peter@griffin.com'
@@ -105,23 +108,37 @@ class SplinterTestCase(LiveServerTestCase):
     is_staff = False
     is_logged_in = True
 
+    use_remote = os.getenv('TRAVIS', False) or os.getenv('USE_REMOTE', False)
+
     def get_remote_browser(self):
         remote_url = "http://{}:{}@localhost:4445/wd/hub".format(
-            SAUCELABS_USERNAME, SAUCELABS_KEY)
-        return Browser(
-            driver_name="remote", url=remote_url, browser='firefox',
-            platform="OSX 10.6", version="25", name="Firefox 25 on OSX 10.6")
+            SAUCE_USERNAME, SAUCE_ACCESS_KEY)
+
+        caps = {
+            'name': getattr(self, 'name', self.__class__.__name__),
+            'browser': 'firefox',
+            'platform': "Linux",
+            'version': "29"}
+
+        if os.getenv('TRAVIS', False):
+            caps['tunnel-identifier'] = os.environ['TRAVIS_JOB_NUMBER']
+            caps['build'] = os.environ['TRAVIS_BUILD_NUMBER']
+            caps['tags'] = [os.environ['TRAVIS_PYTHON_VERSION'], 'CI']
+
+        return Browser(driver_name='remote', url=remote_url, **caps)
 
     def get_local_browser(self):
         return Browser(SPLINTER_WEBDRIVER)
 
     def setUp(self):
-        settings.DEBUG = True
         super(SplinterTestCase, self).setUp()
         self.user = None
         self.base_url = URL(self.live_server_url)
 
-        self.browser = self.get_local_browser()
+        if self.use_remote:
+            self.browser = self.get_remote_browser()
+        else:
+            self.browser = self.get_local_browser()
 
         if self.is_anonymous and not self.is_staff:
             return
@@ -143,17 +160,34 @@ class SplinterTestCase(LiveServerTestCase):
             exists = self.browser.is_text_present('Log out', wait_time=2)
             self.assertTrue(exists)
 
+    def report_test_result(self):
+        result = {'passed': sys.exc_info() == (None, None, None)}
+        url = 'https://saucelabs.com/rest/v1/{username}/jobs/{job}'.format(
+            username=SAUCE_USERNAME, job=self.browser.driver.session_id)
+
+        try:
+            response = requests.put(url, data=json.dumps(result),
+                                    auth=(SAUCE_USERNAME, SAUCE_ACCESS_KEY))
+        except requests.exceptions.RequestsExceptions:
+            print "Could not set test status in Sauce Labs."
+        return response.status_code == requests.codes.ok
+
     def tearDown(self):
         super(SplinterTestCase, self).tearDown()
         if not os.getenv('SPLINTER_DEBUG'):
             self.browser.quit()
 
+        if self.use_remote:
+            self.report_test_result()
+
     def goto(self, path):
         url = self.base_url.path(path)
         return self.browser.visit(url.as_string())
 
-    def wait_for_editor_reload(self):
-        time.sleep(3)
+    def wait_for_editor_reload(self, wait_for=3):
+        if self.use_remote:
+            wait_for += 5
+        time.sleep(wait_for)
 
     def ensure_element(self, element_or_list, index=0):
         """
@@ -172,7 +206,7 @@ class SplinterTestCase(LiveServerTestCase):
         return element_or_list
 
     def find_and_click_by_css(self, browser, selector, wait_time=3):
-        browser.is_element_not_present_by_css(selector, wait_time)
+        browser.is_element_present_by_css(selector, wait_time)
         elem = self.ensure_element(browser.find_by_css(selector))
         return elem.click()
 

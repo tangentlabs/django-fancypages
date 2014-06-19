@@ -4,12 +4,15 @@ import logging
 
 from django.http import Http404
 from django.db.models import get_model
+from django.forms.models import modelform_factory
 from django.utils.translation import ugettext as _
+from django.template.loader import render_to_string
 from django.contrib.contenttypes.models import ContentType
 
 from rest_framework import serializers
 
 from .. import library
+from ..dashboard import forms
 from ..utils import get_page_model, get_node_model
 
 
@@ -54,6 +57,33 @@ class BlockSerializer(serializers.ModelSerializer):
         model = ContentBlock
 
 
+class BlockFormSerializer(serializers.ModelSerializer):
+    template_name = "fancypages/api/block_form.html"
+
+    container = serializers.SlugRelatedField(slug_field='uuid')
+    code = serializers.CharField(required=True)
+    form = serializers.SerializerMethodField('get_model_form')
+
+    def get_form_class(self, obj):
+        model = obj.__class__
+        get_form_class = getattr(model, 'get_form_class')
+        if get_form_class and get_form_class():
+            return modelform_factory(model, form=get_form_class())
+
+        form_class = getattr(
+            forms, "%sForm" % model.__name__, forms.BlockForm)
+        return modelform_factory(model, form=form_class)
+
+    def get_model_form(self, obj):
+        form = self.get_form_class(obj)(instance=obj)
+        context = {'form': form, 'block': obj}
+        return render_to_string(self.template_name, context).encode('utf-8')
+
+    class Meta:
+        model = ContentBlock
+        fields = ('uuid', 'display_order', 'code', 'form', 'container')
+
+
 class BlockCodeSerializer(serializers.Serializer):
     container = serializers.CharField()
     code = serializers.CharField(required=True)
@@ -85,6 +115,7 @@ class BlockMoveSerializer(serializers.ModelSerializer):
 
 class OrderedContainerSerializer(serializers.ModelSerializer):
     block = serializers.RegexField(regex=SHORTUUID_REGEX, source='block_uuid')
+    language_code = serializers.CharField(required=True)
     title = serializers.CharField(required=False, default=_("New Tab"))
 
     def restore_object(self, attrs, instance=None):
@@ -107,6 +138,7 @@ class OrderedContainerSerializer(serializers.ModelSerializer):
             raise Http404("block ID is invalid")
 
         attrs.update({'object_id': block.id, 'content_type': content_type})
+
         instance = super(OrderedContainerSerializer, self).restore_object(
             attrs, instance)
         if instance is not None:
@@ -126,7 +158,7 @@ class PageMoveSerializer(serializers.ModelSerializer):
     new_index = serializers.IntegerField()
     old_index = serializers.IntegerField(required=True)
 
-    def get_page_title(self):
+    def get_page_title(self, obj):
         return self.object.name
 
     def get_visibility(self):
@@ -171,3 +203,51 @@ class PageMoveSerializer(serializers.ModelSerializer):
         model = FancyPage
         fields = ['parent', 'new_index', 'old_index']
         read_only_fields = ['status']
+
+
+class PageNodeSerializer(serializers.ModelSerializer):
+    uuid = serializers.SerializerMethodField('get_page_uuid')
+    url = serializers.CharField(source='get_absolute_url')
+    parent = serializers.SerializerMethodField('get_parent')
+    children = serializers.SerializerMethodField('get_children')
+    isVisible = serializers.SerializerMethodField('get_is_visible')
+    status = serializers.SerializerMethodField('get_status')
+
+    editPageUrl = serializers.SerializerMethodField('get_edit_page_url')
+    addChildUrl = serializers.SerializerMethodField('get_add_child_url')
+    deletePageUrl = serializers.SerializerMethodField('get_delete_page_url')
+
+    def get_page_uuid(self, obj):
+        return obj.page.uuid
+
+    def get_parent(self, obj):
+        parent = obj.get_parent()
+        if not parent:
+            return None
+        return parent.page.uuid
+
+    def get_children(self, obj):
+        children = []
+        for child in obj.get_children():
+            children.append(PageNodeSerializer(child).data)
+        return children
+
+    def get_is_visible(self, obj):
+        return obj.page.is_visible
+
+    def get_status(self, obj):
+        return obj.page.status
+
+    def get_edit_page_url(self, obj):
+        return obj.page.get_edit_page_url()
+
+    def get_add_child_url(self, obj):
+        return obj.page.get_add_child_url()
+
+    def get_delete_page_url(self, obj):
+        return obj.page.get_delete_page_url()
+
+    class Meta:
+        model = PageNode
+        fields = ['uuid', 'name', 'url', 'isVisible', 'status', 'children',
+                  'parent', 'editPageUrl', 'addChildUrl', 'deletePageUrl']

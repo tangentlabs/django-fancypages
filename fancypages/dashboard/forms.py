@@ -133,10 +133,11 @@ class TitleTextBlockForm(BlockForm):
 class TwoColumnLayoutBlockForm(BlockForm):
     left_width = forms.IntegerField(
         widget=forms.TextInput(attrs={
-            'data-min': 1,
+            'min': 1,
             # the max value is restricted to '11' in JS but we need the actual
             # max value there so this is the way to pass it through
-            'data-max': 12,
+            'max': 12,
+            'type': 'range',
         }),
         label=_("Proportion of columns")
     )

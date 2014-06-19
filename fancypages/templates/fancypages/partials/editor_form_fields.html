@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load form_tags %}
 {% load thumbnail %}
 
@@ -23,11 +24,7 @@
         {% endif %}
             {{ field }}
             {% if field.name == 'link' or 'link_url' in field.name %}
-            <a data-behaviours="load-modal"
-               data-target="#fullscreen-modal .fp-modal-body"
-               data-heading="Select a page from the list below"
-               data-href="/api/v2/pages/select-form?field_id={{ field.auto_id }}"
-               class="fp-btn">
+            <a data-behaviours="load-link-selector" data-heading="{% trans "Select a page from the list below" %}" class="fp-btn">
                 <i class="glyphicon-share"></i>
             </a>
             {% endif %}

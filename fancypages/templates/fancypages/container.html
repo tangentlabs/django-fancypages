@@ -2,45 +2,48 @@
 {% load fp_container_tags %}
 {% load url from future %}
 
-<div class="sortable connectedSortable {% if request.fp_edit_mode %}editable-container{% endif %}"
+<div class="sortable sortable-containers {% if request.fp_edit_mode %}editable-container{% endif %}"
      data-container-id="{{ container.uuid }}">
-{% for fp_block,rendered_block in rendered_blocks %}
-    <div id="block-{{ fp_block.uuid }}" class="block {{ container.name }}"
-         data-container-name="{{ container.name }}" data-block-id="{{ fp_block.uuid }}">
 
-        {% if request.fp_edit_mode %}
-            <div class="edit-button fp-btn"><i class="glyphicon-edit"></i></div>
+    {% for fp_block,rendered_block in rendered_blocks %}
+        <div id="block-{{ fp_block.uuid }}" class="block {{ container.name }}"
+            data-block-id="{{ fp_block.uuid }}" data-block-type="{{ fp_block.code }}"
+            lang="{{ fp_block.language_code }}" data-container-name="{{ container.name }}">
 
-            {% if request.fp_debug_enabled %}
-                <div class="edit-button fp-btn">
-                    Block {{ fp_block }} (ID {{ fp_block.uuid }})
-                    | Container {{ container.uuid }}
-                </div>
+            {% if request.fp_edit_mode %}
+                <div class="edit-button fp-btn"><i class="glyphicon-edit"></i></div>
+
+                {% if request.fp_debug_enabled %}
+                <span iv class="block-debug">
+                    <span class="fp-label fp-label-lang">{{ fp_block.language_code }}</span>
+
+                    <span class="fp-label fp-label-block">Block "{{ fp_block.uuid }}"</span>
+                    <span class="fp-label fp-label-container">Ctnr "{{ container.uuid }}"</span>
+                </span>
+                {% endif %}
+
             {% endif %}
 
-        {% endif %}
+            {{ rendered_block }}
 
-        {{ rendered_block }}
-
-        {% if request.fp_edit_mode %}
-        <div class="block-move-delete btn-group">
-            <div class="fp-btn move"><i class="glyphicon-move"></i></div>
-            <div class="fp-btn delete"><i class="glyphicon-trash"></i></div>
+            {% if request.fp_edit_mode %}
+            <div class="block-move-delete btn-group">
+                <div class="fp-btn move"><i class="glyphicon-move"></i></div>
+                <div class="fp-btn delete"><i class="glyphicon-trash"></i></div>
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
-    </div>
-{% endfor %}
+    {% endfor %}
 
+    {% if request.fp_edit_mode %}
+        <div class="block-add-control">
+            <a class="fp-btn fp-btn-block"
+               data-behaviours='show-block-selection'
+               data-target="#block_selection_modal"
+               data-href="{% url "fp-api:block-type-list" %}"
+               data-container-id="{{ container.uuid }}">
+                <i class="glyphicon-plus"></i> {% trans "Add content" %}
+            </a>
+        </div>
+    {% endif %}
 </div>
-
-{% if request.fp_edit_mode %}
-    <div class="block-add-control">
-        <a class="fp-btn fp-btn-block"
-           data-behaviours='show-block-selection'
-           data-target="#block_selection_modal"
-           data-href="{% url "fp-api:block-type-list" %}"
-           data-container-id="{{ container.uuid }}">
-            <i class="glyphicon-plus"></i> {% trans "Add content" %}
-        </a>
-    </div>
-{% endif %}

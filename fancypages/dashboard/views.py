@@ -17,13 +17,8 @@ TabBlock = get_model('fancypages', 'TabBlock')
 OrderedContainer = get_model('fancypages', 'OrderedContainer')
 
 
-class PageListView(generic.ListView):
-    model = FancyPage
-    context_object_name = 'fancypage_list'
+class PageListView(generic.TemplateView):
     template_name = "fancypages/dashboard/page_list.html"
-
-    def get_queryset(self, queryset=None):
-        return self.model.objects.top_level()
 
 
 class PageCreateView(generic.CreateView):

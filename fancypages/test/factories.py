@@ -49,14 +49,17 @@ class PageNodeFactory(DjangoModelFactory):
     FACTORY_FOR = get_node_model()
 
     name = factory.Sequence(lambda n: "Node {}".format(n))
-    depth = 1
 
     @classmethod
     def _generate(cls, create, attrs):
-        if create:
-            node = cls.FACTORY_FOR.add_root(**attrs)
+        if not create:
+            return cls.FACTORY_FOR(**attrs)
+
+        if 'parent' in attrs:
+            parent = attrs.pop('parent')
+            node = parent.node.add_child(**attrs)
         else:
-            node = cls.FACTORY_FOR(**attrs)
+            node = cls.FACTORY_FOR.add_root(**attrs)
         return node
 
 
@@ -94,5 +97,11 @@ class HorizontalSeparatorBlockFactory(DjangoModelFactory):
 
 class TabBlockFactory(DjangoModelFactory):
     FACTORY_FOR = get_model('fancypages', 'TabBlock')
+
+    container = factory.SubFactory(ContainerFactory)
+
+
+class TwoColumnLayoutBlockFactory(DjangoModelFactory):
+    FACTORY_FOR = get_model('fancypages', 'TwoColumnLayoutBlock')
 
     container = factory.SubFactory(ContainerFactory)
