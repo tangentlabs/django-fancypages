@@ -1,6 +1,7 @@
 import os
 import sys
 import pytest
+import django
 import fancypages as fp
 
 from django.conf import settings
@@ -116,6 +117,11 @@ def pytest_configure():
             ALLOWED_HOSTS=['*'],
             **ADDITIONAL_SETTINGS
         )
+
+        # Setup command is only available in Django 1.7+ but is required
+        # to properly initialise the Django app config.
+        if django.VERSION[1] >= 7:
+            django.setup()
 
 
 @pytest.mark.tryfirst
