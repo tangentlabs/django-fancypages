@@ -88,7 +88,7 @@ class AbstractPageNode(MP_Node):
 
 
 class AbstractPageType(models.Model):
-    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+    uuid = ShortUUIDField(verbose_name=_("Unique ID"), db_index=True)
     name = models.CharField(_("Name"), max_length=128)
     slug = models.SlugField(_("Slug"), max_length=128)
     template_name = models.CharField(_("Template name"), max_length=255)
@@ -111,7 +111,7 @@ class AbstractPageGroup(models.Model):
     A page group provides a way to group fancy pages and retrieve only
     pages within a specific group.
     """
-    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+    uuid = ShortUUIDField(verbose_name=_("Unique ID"), db_index=True)
     name = models.CharField(_("Name"), max_length=128)
     slug = models.SlugField(_("Slug"), max_length=128, null=True, blank=True)
 
@@ -129,7 +129,7 @@ class AbstractPageGroup(models.Model):
 
 
 class AbstractFancyPage(models.Model):
-    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+    uuid = ShortUUIDField(verbose_name=_("Unique ID"), db_index=True)
     # this field has to be NULLABLE for backwards compatibility but should
     # never be left blank (hence, blank=False). We might be able to remove this
     # at some point but migrations make it impossible to change without a
@@ -315,7 +315,7 @@ class AbstractFancyPage(models.Model):
 class AbstractContainer(mixins.TemplateNamesModelMixin, models.Model):
     template_name = 'fancypages/container.html'
 
-    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+    uuid = ShortUUIDField(verbose_name=_("Unique ID"), db_index=True)
 
     # this is the name of the variable used in the template tag
     # e.g. {% fancypages-container var-name %}
@@ -399,7 +399,7 @@ class AbstractContentBlock(mixins.TemplateNamesModelMixin, models.Model):
     default_template_names = [
         "fancypages/blocks/{module_name}.html", "blocks/{module_name}.html"]
 
-    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+    uuid = ShortUUIDField(verbose_name=_("Unique ID"), db_index=True)
 
     # we ignore the related names for each content block model
     # to prevent cluttering the container model. Also the look up has

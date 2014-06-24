@@ -7,7 +7,7 @@ from ..compat import AUTH_USER_MODEL
 
 
 class AbstractAsset(models.Model):
-    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+    uuid = ShortUUIDField(verbose_name=_("Unique ID"), db_index=True)
 
     name = models.CharField(_("Name"), max_length=255)
 
