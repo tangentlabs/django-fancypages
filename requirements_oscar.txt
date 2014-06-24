@@ -1,1 +1,4 @@
 django-oscar>=0.6.3
+
+# for Django 1.7 we need to ensure the latest version of sorl-thumbnail
+sorl-thumbnail==11.12.1b

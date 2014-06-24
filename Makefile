@@ -18,15 +18,11 @@ compile-static:
 
 tests: test-fancypages test-oscar-fancypages test-migration-sqlite
 
-travis:
-	${MAKE} test-fancypages
-	pip install -r requirements_oscar.txt
-	${MAKE} test-oscar-fancypages
-
 test-fancypages:
 	py.test ${PYTEST_OPTS}
 
 test-oscar-fancypages:
+	pip install -r requirements_oscar.txt
 	USE_OSCAR_SANDBOX=true py.test  ${PYTEST_OPTS}
 
 test-migration-sqlite:
