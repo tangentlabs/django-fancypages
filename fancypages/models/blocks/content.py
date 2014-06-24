@@ -10,8 +10,6 @@ from ...assets.fields import AssetKey
 from ..mixins import ImageMetadataMixin
 from ...library import register_content_block
 
-ImageAsset = models.get_model('assets', 'ImageAsset')
-
 
 class ContentBlock(abstract_models.AbstractContentBlock):
 
@@ -125,6 +123,8 @@ class CarouselBlock(ContentBlock):
                 query.add(models.Q(id=image_id), models.Q.OR)
         if not query:
             return {}
+
+        ImageAsset = models.get_model('assets', 'ImageAsset')
         for image in ImageAsset.objects.filter(query):
             results[image.id]['image'] = image
         return results
