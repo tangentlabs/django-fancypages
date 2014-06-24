@@ -80,13 +80,11 @@ class TemplateNamesModelMixin(object):
     a template name and a list of default templates will result in a list of
     template names similar to this:
 
-    .. testsetup::
-
-        from django.db import models
-        from fancypages.mixins import TemplateNamesModelMixin
-
     .. doctest::
 
+        >>> from django.db import models
+        >>> from fancypages.mixins import TemplateNamesModelMixin
+        >>>
         >>> class Container(TemplateNamesModelMixin, models.Model):
         ...     template_name = 'container.html'
         ...     default_template_names = ['default_container.html']
