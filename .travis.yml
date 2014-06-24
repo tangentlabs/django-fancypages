@@ -9,14 +9,15 @@ env:
       - secure: "fUdKTZ+nB29tQzKTs5/UnxUc2rm3fkIR31vcm0wFDGhdqMu5K+eZss0qXLrQ7s13JUB8POk8C2juuzJFPiM5yiR1Euhp6RddU6UqLnCaqkV9RH4Y7PjmfpSBgJKi2pOIneRngoOBI0kG6iWjK6f3D7Bb8c94bLbU3ZwGxQLoSkI="
       - PYTEST_OPTS="--pep8 --cov fancypages"
   matrix:
-    - DRF_VERSION=">=2.3,<2.4" DJANGO_VERSION=">=1.4,<1.5" MODEL_UTILS_VERSION=">2.0"
-    - DRF_VERSION=">=2.3,<2.4" DJANGO_VERSION=">=1.5,<1.6" MODEL_UTILS_VERSION="==1.5"
-    - DRF_VERSION=">=2.3,<2.4" DJANGO_VERSION=">=1.6,<1.7" MODEL_UTILS_VERSION=">2.0"
+    - DJANGO="Django>=1.4,<1.5" MODEL_UTILS_VERSION=">2.0"
+    - DJANGO="Django>=1.5,<1.6" MODEL_UTILS_VERSION="==1.5"
+    - DJANGO="Django>=1.6,<1.7" MODEL_UTILS_VERSION=">2.0"
+    - DJANGO="https://github.com/django/django/archive/1.7b4.zip" MODEL_UTILS_VERSION=">2.0"
     # We run the browser tests only once to save a bit of time
-    - DRF_VERSION=">=2.3,<2.4" DJANGO_VERSION=">=1.6,<1.7" MODEL_UTILS_VERSION=">2.0" PYTEST_OPTS="-m browser"
+    - PYTEST_OPTS="-m browser"
 install:
   - pip install wheel setuptools -U
-  - pip install Django$DJANGO_VERSION djangorestframework$DRF_VERSION django-model-utils$MODEL_UTILS_VERSION --use-wheel
+  - pip install $DJANGO django-model-utils$MODEL_UTILS_VERSION --use-wheel
   - pip install . --use-wheel
   - pip install -r requirements.txt --use-wheel
 script:
