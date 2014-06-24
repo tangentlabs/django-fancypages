@@ -31,7 +31,7 @@ setup(
         # DRF 2.3+ so we are restricting the version here
         'djangorestframework>=2.3.10',
         'pillow',
-        'sorl-thumbnail>=11.12',
+        'sorl-thumbnail>=11.12.1b',
     ],
     # See http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
