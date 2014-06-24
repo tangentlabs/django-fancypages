@@ -122,7 +122,6 @@ DJANGO_APPS = [
     'django.contrib.admin',
 
     'debug_toolbar',
-    'django_extensions',
     #'blog',
 ]
 
