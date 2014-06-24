@@ -17,7 +17,7 @@ def get_fancypages_paths(path, use_with_oscar=False):
 
 
 def get_required_apps():
-    return [
+    apps = [
         'django_extensions',
         # used for image thumbnailing
         'sorl.thumbnail',
@@ -27,9 +27,13 @@ def get_required_apps():
         # that makes lookup of nested models easier. This is used
         # for the content block hierarchy.
         'model_utils',
-        # migration handling
-        'south',
     ]
+
+    import django
+    if django.VERSION[1] < 7:
+        apps.append('south')
+
+    return apps
 
 
 def get_fancypages_apps(use_with_oscar=False):
