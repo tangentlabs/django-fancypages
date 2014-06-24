@@ -123,7 +123,7 @@ DJANGO_APPS = [
 
     'debug_toolbar',
     'django_extensions',
-    'blog',
+    #'blog',
 ]
 
 try:
