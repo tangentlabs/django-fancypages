@@ -11,17 +11,16 @@ def register_content_block(klass):
 
     if not klass.code:
         raise ImproperlyConfigured(
-            _("you have to specify a unique code for this content_block")
-        )
-    if not klass.name:
+            "you have to specify a unique code for this content_block")
+
+    if klass.name is None:
         raise ImproperlyConfigured(
-            _("you need to specify a name for this widget")
-        )
+            "you need to specify a name for this widget")
+
     if klass.code in _content_blocks:
-        raise ImproperlyConfigured(
-            _("a content_block with code {0} is already "
-              "registered").format(klass.code)
-        )
+        raise ImproperlyConfigured("a content_block with code {0} is already "
+                                   "registered".format(klass.code))
+
     _content_blocks[klass.code] = klass
     return klass
 

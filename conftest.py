@@ -4,8 +4,6 @@ import pytest
 import fancypages as fp
 
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
-
 from fancypages.test import TEMP_MEDIA_ROOT
 
 USE_OSCAR_SANDBOX = bool(os.getenv('USE_OSCAR_SANDBOX', False))
@@ -38,8 +36,8 @@ def pytest_configure():
     ADDITIONAL_SETTINGS = dict(
         LANGUAGE_CODE='en-gb',
         LANGUAGES=(
-            ('de', _('German')),
-            ('en-gb', _("English")),
+            ('de', 'German'),
+            ('en-gb', "English"),
         ),
         INSTALLED_APPS=[
             'django.contrib.auth',
