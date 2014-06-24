@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
+import json
+
 from django import http
 from django.conf import settings
-from django.utils import simplejson as json
 from django.utils.encoding import force_unicode
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
