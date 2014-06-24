@@ -16,7 +16,6 @@ ImageAsset = get_model('assets', 'ImageAsset')
 Container = get_model('fancypages', 'Container')
 TextBlock = get_model('fancypages', 'TextBlock')
 ImageBlock = get_model('fancypages', 'ImageBlock')
-PageTemplate = get_model('fancypages', 'PageTemplate')
 ContentBlock = get_model('fancypages', 'ContentBlock')
 TitleTextBlock = get_model('fancypages', 'TitleTextBlock')
 
