@@ -41,3 +41,6 @@ def get_fancypages_apps(use_with_oscar=False):
     if use_with_oscar:
         apps += ['fancypages.contrib.oscar_fancypages']
     return apps
+
+
+default_app_config = 'fancypages.apps.FancypagesAppConfig'

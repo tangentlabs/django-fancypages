@@ -23,14 +23,15 @@ env:
     - DJANGO="Django>=1.6,<1.7" MODEL_UTILS_VERSION=">2.0" TARGET='test-oscar-fancypages'
 
     - DJANGO="https://github.com/django/django/archive/1.7b4.zip" MODEL_UTILS_VERSION=">2.0" TARGET='test-fancypages'
-    - DJANGO="https://github.com/django/django/archive/1.7b4.zip" MODEL_UTILS_VERSION=">2.0" TARGET='test-oscar-fancypages'
+    # Run 
+    - DJANGO="https://github.com/django/django/archive/1.7b4.zip" MODEL_UTILS_VERSION=">2.0" TARGET='test-oscar-fancypages' EXTRA_INSTALLS="git+https://github.com/elbaschid/django-oscar.git@dd_support_for_django17#egg=django-oscar-dev"
 
     # We run the browser tests only once to save a bit of time
     - PYTEST_OPTS="-m browser"
 
 install:
   - pip install wheel setuptools -U
-  - pip install $DJANGO django-model-utils$MODEL_UTILS_VERSION --use-wheel
+  - pip install $DJANGO django-model-utils$MODEL_UTILS_VERSION $EXTRA_INSTALLS --use-wheel
   - pip install . --use-wheel
   - pip install -r requirements.txt --use-wheel
 

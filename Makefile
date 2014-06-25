@@ -23,10 +23,7 @@ test-fancypages:
 
 test-oscar-fancypages:
 	pip install -r requirements_oscar.txt
-	USE_OSCAR_SANDBOX=true py.test  ${PYTEST_OPTS}
-
-test-migration-sqlite:
-	./sandboxes/oscar_fancypages/manage.py syncdb --noinput --migrate --settings=sandbox.settings_migration_sqlite
+	DJANGO_CONFIGURATION='OscarTest' py.test  ${PYTEST_OPTS}
 
 docs:
 	${MAKE} -C docs html

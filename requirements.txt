@@ -1,6 +1,9 @@
 # development tools
 django-extensions>=0.9
 
+# simplify configurations
+django-configurations==0.8
+
 # Testing dependencies
 mock==1.0.1
 WebTest==2.0.15
