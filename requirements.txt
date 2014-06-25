@@ -30,3 +30,7 @@ coveralls==0.4.2
 
 # Others
 purl==0.8
+
+# Database connectors
+psycopg2==2.5.3
+MySQL-python==1.2.5

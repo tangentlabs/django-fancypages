@@ -4,6 +4,7 @@ python:
   - '2.7'
 
 addons:
+  postgresql: "9.3"
   sauce_connect: true
 
 env:
@@ -34,6 +35,10 @@ install:
   - pip install $DJANGO django-model-utils$MODEL_UTILS_VERSION $EXTRA_INSTALLS --use-wheel
   - pip install . --use-wheel
   - pip install -r requirements.txt --use-wheel
+
+before_script:
+  - psql -c 'create database fp_sandbox;' -U postgres
+  - mysql -e 'create database fp_sandbox;'
 
 script:
   - make $TARGET
