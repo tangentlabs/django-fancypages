@@ -27,7 +27,7 @@ class OscarFancypagesSandbox(Configuration):
 
     SOUTH_MIGRATION_MODULES = {
         'fancypages': 'fancypages.south_migrations',
-        'fancypages.contrib.oscar_fancypages': 'fancypages.contrib.oscar_fancypages.south_migrations',  # noqa
+        'oscar_fancypages': 'fancypages.contrib.oscar_fancypages.south_migrations',  # noqa
     }
 
     ADMINS = [('Your Name', 'your_email@example.com')]
@@ -274,7 +274,7 @@ class OscarFancypagesSandbox(Configuration):
         if django.VERSION[1] < 7:
             apps.append('south')
 
-        return set(apps)
+        return apps
 
 
 class OscarFancypagesPostgres(OscarFancypagesSandbox):
