@@ -7,6 +7,13 @@ from django.db import models
 
 class Migration(SchemaMigration):
 
+    depends_on = (
+        ('fancypages', '0001_initial'),
+        ('catalogue', '0001_initial'),
+        ('offer', '0001_initial'),
+        ('promotions', '0001_initial'),
+    )
+
     def forwards(self, orm):
         # Adding model 'SingleProductBlock'
         db.create_table(u'oscar_fancypages_singleproductblock', (
