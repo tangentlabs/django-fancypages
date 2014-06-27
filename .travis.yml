@@ -5,12 +5,9 @@ python:
 
 addons:
   postgresql: "9.3"
-  sauce_connect: true
 
 env:
   global:
-      - secure: "IFkU1stTDt34cs+BtuGulzogobPzQvO0MWMHDWT5cY4hWrFzxShZbcGueRQCvbyjrEiY2vQ0VX6KCYxUj9neNz90tbW2P9cCURrielkPRVhHorD8ngOtSeknLyzw0UjcBPwigszkFskoqRLPG7p8sa+RJvA+qEsbPr1Jfs0tEgA="
-      - secure: "fUdKTZ+nB29tQzKTs5/UnxUc2rm3fkIR31vcm0wFDGhdqMu5K+eZss0qXLrQ7s13JUB8POk8C2juuzJFPiM5yiR1Euhp6RddU6UqLnCaqkV9RH4Y7PjmfpSBgJKi2pOIneRngoOBI0kG6iWjK6f3D7Bb8c94bLbU3ZwGxQLoSkI="
       - PYTEST_OPTS="--pep8 --cov fancypages"
 
   matrix:
@@ -33,6 +30,10 @@ env:
 
     # We run the browser tests only once to save a bit of time
     - PYTEST_OPTS="-m browser"
+
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
 
 install:
   - pip install wheel setuptools -U
