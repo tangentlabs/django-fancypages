@@ -6,6 +6,7 @@ from configurations import Configuration, values
 
 
 def get_location(*path):
+    """ Get absolute path for path relative to this file's directory. """
     return os.path.join(os.path.dirname(os.path.realpath(__file__)), *path)
 
 
@@ -44,7 +45,6 @@ class FancypagesSandbox(Configuration):
     STATICFILES_FINDERS = (
         'django.contrib.staticfiles.finders.FileSystemFinder',
         'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-        'compressor.finders.CompressorFinder',
     )
 
     TEMPLATE_DIRS = [get_location('templates')]

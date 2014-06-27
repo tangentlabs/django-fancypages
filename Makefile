@@ -1,4 +1,4 @@
-.PHONY: compile-static tests
+.PHONY: compile-static tests docs
 
 STATIC_DIR="fancypages/static/fancypages/"
 ifndef PYTEST_OPTS

@@ -29,7 +29,7 @@ env:
     #- DJANGO="https://github.com/django/django/archive/1.7b4.zip" MODEL_UTILS_VERSION=">2.0" TARGET='test-oscar-fancypages' EXTRA_INSTALLS="git+https://github.com/elbaschid/django-oscar.git@add_support_for_django17#egg=django-oscar-dev"
 
     # We run the browser tests only once to save a bit of time
-    - PYTEST_OPTS="-m browser"
+    - DJANGO="Django>=1.6,<1.7" MODEL_UTILS_VERSION=">2.0" TARGET='test-fancypages' PYTEST_OPTS="-m browser"
 
 before_install:
   - "export DISPLAY=:99.0"
