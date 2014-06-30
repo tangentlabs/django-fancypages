@@ -8,33 +8,44 @@ FancypageApp.module('Dashboard.Views', function (Views, FancypageApp, Backbone, 
         itemViewContainer: 'ol',
         template: "#template-page-node",
         events: {
-            'hide [id$=-tree]': 'hideChildren',
             'show [id$=-tree]': 'showChildren'
         },
         initialize: function () {
-            this.create
             this.collection = this.model.get('children')
+            // add this event here to ensure that only this model's hide is
+            // triggering this views hideChildren.
+            this.events['hidden [id=' + this.model.id + '-tree]'] = 'hideChildren';
         },
         hideChildren: function (ev) {
-            var anchor = $('[data-target=#' + this.model.id + '-tree]>i');
+            var treeId = $(ev.currentTarget).attr('id'),
+                anchor = $('[data-target=#' + treeId + ']>i');
+
+            if ($(ev.currentTarget).hasClass('in')) {
+                return false;
+            }
+
             anchor.removeClass('icon-caret-down');
             anchor.addClass('icon-caret-right');
         },
         showChildren: function (ev) {
-            var anchor = $('[data-target=#' + this.model.id + '-tree]>i');
+            var treeId = $(ev.currentTarget).attr('id'),
+                anchor = $('[data-target=#' + treeId + ']>i');
+
             anchor.removeClass('icon-caret-right');
             anchor.addClass('icon-caret-down');
         },
+        /**
+         * After we've rendered the new list element representing a page node,
+         * we add the index and page ID to the list node as data attributes.
+         */
         onCompositeModelRendered: function () {
             this.$el.attr('data-index', this.model.collection.indexOf(this.model));
             this.$el.attr('data-page-id', this.model.id);
 
-            if (this.model.get('parent') !== null) {
-                var treeId = this.model.get('parent') + '-tree';
-
-                this.$el.attr('id', treeId);
-                this.$el.addClass('collapse');
-            }
+            // set this nodes UUID as the tree ID for the sub-tree and collapse
+            // it by default. Nothing is done no sub-tree is present.
+            this.$el.children('ol').attr('id', this.model.id + '-tree');
+            this.$el.children('ol').addClass('collapse');
         },
     });
 

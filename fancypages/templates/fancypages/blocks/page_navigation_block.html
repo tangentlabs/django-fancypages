@@ -4,20 +4,15 @@
 {% load fp_sitemap_tags %}
 
 {% block block_content %}
-
-    {% if fp_block.is_relative and fancypage %}
-        {% get_page_tree depth=fp_block.depth relative_to=fancypage as page_tree %}
-    {% else %}
-        {% get_page_tree depth=fp_block.depth as page_tree %}
-    {% endif %}
+    {% get_page_navigation fp_block=fp_block fancypage=fancypage  as nav_tree %}
 
     <div style="padding: 8px 0;">
-        {% if page_tree %}
+        {% if nav_tree %}
         <ul class="nav nav-list">
             <li class="nav-header">
                 {% trans "Browse pages" %}
             </li>
-            {% for page,subtree in page_tree %}
+            {% for page,subtree in nav_tree %}
                 <li>
                     <a href="{{ page.get_absolute_url }}">
                         {{ page.name }}
