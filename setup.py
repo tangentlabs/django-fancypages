@@ -23,7 +23,6 @@ setup(
         'Django>=1.5',
         'South',
         'unidecode',
-        'django-appconf',
         'django-treebeard',
         'django-model-utils',
         'django-shortuuidfield',

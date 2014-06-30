@@ -14,6 +14,7 @@ from shortuuidfield import ShortUUIDField
 from model_utils.managers import InheritanceManager
 
 from . import mixins
+from . import defaults
 from .utils import unicode_slugify as slugify
 from .managers import PageManager, ContainerManager
 from .utils import get_container_names_from_template
@@ -297,7 +298,9 @@ class AbstractFancyPage(models.Model):
         try:
             template_name = self.page_type.template_name
         except AttributeError:
-            template_name = settings.FANCYPAGES_DEFAULT_TEMPLATE
+            template_name = getattr(
+                settings, 'FP_DEFAULT_TEMPLATE',
+                defaults.FP_DEFAULT_TEMPLATE)
 
         cnames = self.containers.filter(
             language_code=language_code).values_list('name')
