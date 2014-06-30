@@ -153,7 +153,7 @@ go through these steps first. After you have completed them, follow the
 
     urlpatterns = patterns('',
         ...
-        url(r'^', include(fancypages.urls)),
+        url(r'^', include('fancypages.urls')),
     )
 
 5. Fancypages requires several default settings to be added. To make sure
