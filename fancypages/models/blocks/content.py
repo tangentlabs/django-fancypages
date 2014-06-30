@@ -1,4 +1,8 @@
+# -*- coding: utf-8- -*-
+from __future__ import absolute_import, unicode_literals
+
 import os
+import logging
 
 from django.db import models
 from django.core.exceptions import ValidationError
@@ -10,9 +14,10 @@ from ...assets.fields import AssetKey
 from ..mixins import ImageMetadataMixin
 from ...library import register_content_block
 
+logger = logging.getLogger('fancypages')
+
 
 class ContentBlock(abstract_models.AbstractContentBlock):
-
     class Meta:
         ordering = ['display_order']
         app_label = 'fancypages'
@@ -64,10 +69,10 @@ class ImageBlock(ImageMetadataMixin, ContentBlock):
 
     def __unicode__(self):
         if self.image_asset:
-            return u"Image '%s'" % os.path.basename(
+            return "Image '%s'" % os.path.basename(
                 self.image_asset.image.path
             )
-        return u"Image #%s" % self.id
+        return "Image #%s" % self.id
 
     class Meta:
         app_label = 'fancypages'
@@ -84,17 +89,16 @@ class ImageAndTextBlock(ImageMetadataMixin, ContentBlock):
         'assets.ImageAsset',
         verbose_name=_("Image asset"),
         related_name="image_text_blocks",
-        blank=True,
-        null=True,
-    )
+        blank=True, null=True)
+
     text = models.TextField(_("Text"), default=_("Your text goes here."))
 
     def __unicode__(self):
         if self.image_asset:
-            return u"Image with text '{0}'".format(
+            return "Image with text '{0}'".format(
                 os.path.basename(self.image_asset.image.path)
             )
-        return u"Image with text #{0}".format(self.id)
+        return "Image with text #{0}".format(self.id)
 
     class Meta:
         app_label = 'fancypages'
@@ -130,7 +134,7 @@ class CarouselBlock(ContentBlock):
         return results
 
     def __unicode__(self):
-        return u"Carousel #%s" % self.id
+        return "Carousel #%s" % self.id
 
     class Meta:
         app_label = 'fancypages'
@@ -143,26 +147,47 @@ class PageNavigationBlock(ContentBlock):
     group = _("Content")
     template_name = "fancypages/blocks/page_navigation_block.html"
 
-    depth = models.PositiveIntegerField(
-        _("Navigation depth"),
-        default=2,
+    ABSOLUTE = 'absolute'
+    RELATIVE_FROM_SIBLINGS = 'relative-siblings'
+    RELATIVE_FROM_CHILDREN = 'relative-children'
+
+    ORIGIN_CHOICES = (
+        (ABSOLUTE, _("Start from top-level pages")),
+        (RELATIVE_FROM_SIBLINGS, _("Start from siblings")),
+        (RELATIVE_FROM_CHILDREN, _("Start from children")),
     )
 
-    is_relative = models.BooleanField(
-        _("Is navigation relative to this page?"),
-        default=False,
-    )
+    depth = models.PositiveIntegerField(_("Navigation depth"), default=2)
+    origin = models.CharField(
+        _("navigation origin"), max_length=50, choices=ORIGIN_CHOICES,
+        default=ABSOLUTE)
 
     def clean(self):
         if self.depth < 1:
             raise ValidationError(
-                _("Navigation depth has to be greater than 0")
-            )
+                _("Navigation depth has to be greater than 0"))
+
+    def get_page_tree(self, fancypage):
+        from ...templatetags.fp_sitemap_tags import get_page_tree
+        relative_to = None
+
+        # if the page object passed in is not defined, we can't do anything
+        # sensible to return the "right" thing. So we just return nothing.
+        if not fancypage:
+            logger.info(
+                'requested page tree without fancypage in block {}'.format(
+                    self.uuid))
+            return []
+
+        if self.origin == self.RELATIVE_FROM_CHILDREN:
+            relative_to = fancypage
+        elif self.origin == self.RELATIVE_FROM_SIBLINGS:
+            relative_to = fancypage.get_parent()
+
+        return get_page_tree(depth=self.depth, relative_to=relative_to)
 
     def __unicode__(self):
-        if self.is_relative:
-            return u'Relative page navigation'
-        return u'Page Navigation'
+        return 'Page navigation from {}'.format(self.origin)
 
     class Meta:
         app_label = 'fancypages'

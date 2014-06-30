@@ -59,3 +59,12 @@ def get_page_tree(group=None, depth=1, relative_to=None):
     build_tree(page_subtree, None, page_buckets, 0)
 
     return page_subtree
+
+
+@register.assignment_tag
+def get_page_navigation(fp_block, fancypage):
+    """
+    Get navigation tree based on the settings define in *fp_block* and being
+    displayed on the *fancypage*.
+    """
+    return fp_block.get_page_tree(fancypage)
