@@ -119,19 +119,25 @@ class FancypagesSandbox(Configuration):
 
 
 class FancypagesPostgres(FancypagesSandbox):
-    DATABASES = {
-        'default': {
+    POSTGRES_PORT = values.Value(5432)
+
+    @property
+    def DATABASES(self):
+        return {'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'fp_sandbox',
             'USER': 'postgres',
             'PASSWORD': '',
             'HOST': 'localhost',
-            'PORT': 5432}}
+            'PORT': self.POSTGRES_PORT}}
 
 
 class FancypagesMysql(FancypagesSandbox):
-    DATABASES = {
-        'default': {
+    MYSQL_PORT = values.Value(3306)
+
+    @property
+    def DATABASES(self):
+        return {'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'fp_sandbox',
             'USER': 'root',

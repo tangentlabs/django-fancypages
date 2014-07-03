@@ -278,22 +278,28 @@ class OscarFancypagesSandbox(Configuration):
 
 
 class OscarFancypagesPostgres(OscarFancypagesSandbox):
-    DATABASES = {
-        'default': {
+    POSTGRES_PORT = values.Value(5432)
+
+    @property
+    def DATABASES(self):
+        return {'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'ofp_sandbox',
             'USER': 'postgres',
             'PASSWORD': '',
             'HOST': 'localhost',
-            'PORT': 5432}}
+            'PORT': self.POSTGRES_PORT}}
 
 
 class OscarFancypagesMysql(OscarFancypagesSandbox):
-    DATABASES = {
-        'default': {
+    MYSQL_PORT = values.Value(3306)
+
+    @property
+    def DATABASES(self):
+        return {'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'ofp_sandbox',
             'USER': 'root',
             'PASSWORD': '',
             'HOST': '127.0.0.1',
-            'PORT': 3306}}
+            'PORT': self.MYSQL_PORT}}
