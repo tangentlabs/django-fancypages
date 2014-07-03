@@ -1,4 +1,6 @@
-from django.utils import simplejson as json
+# -*- coding: utf-8 -*-
+import json
+
 from django.core.urlresolvers import reverse
 
 from fancypages.test import testcases

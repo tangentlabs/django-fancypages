@@ -1,19 +1,6 @@
-===============
-Getting Started
-===============
-
-The core principle of *fancypages* (FP) is to provide the user with a way to
-edit and enhance content without giving them too much control over style and
-layout. The objective is to maintain the overall design of the website.
-
-The project was born out of the need to add content editing capabilities to an
-e-commerce project based on `django-oscar`_.
-
-.. _`django-oscar`: https://github.com/tangentlabs/django-oscar
-
-
+==============
 Basic Concepts
---------------
+==============
 
 Before we get started with the installation and setup of *fancypages* (FP),
 let's take a look a the underlying concepts to understand the components it's
@@ -42,7 +29,9 @@ views in Django itself where ``template_name`` on a ``TemplateView`` can be
 used to specify the path to a template file relative to the template directory.
 
 A simple content block providing editable rich text might look similar to
-this::
+this:
+
+.. code:: python
 
     from fancypages.models.blocks import ContentBlock
     from fancypages.library import register_content_block
@@ -113,56 +102,3 @@ following two examples:
     {% fp_object_container blog-post-container post %}
 
     <div class="content">{{ post.content|safe }}</div>
-
-
-Installation
-------------
-
-You can use *django-fancypages* as standalone app in your Django project or you
-can integrate it with your `django-oscar`_ shop using the included extension
-module. Most of the installation steps are exactly the same for both so let's
-go through these steps first. After you have completed them, follow the 
-
-1. Install via pip into you virtualenv (for now you have to install from
-   the github repo because we haven't released it to PyPI yet)::
-
-    $ pip install git+https://github.com/tangentlabs/django-fancypages.git
-
-2. Add the required apps to your ``INSTALLED_APPS`` by simply using the
-   convenience function ``get_apps`` in the ``fancypages`` module::
-
-    from fancypages import get_required_apps, get_fancypages_apps
-
-    YOUR_OTHER_APPS = [
-        ...
-    ]
-    INSTALLED_APPS = YOUR_OTHER_APPS + get_required_apps() + get_fancypages_apps()
-
-3. Add the editor middleware that provides the editing panel to every
-   fancypage or page that contains an FP container::
-
-    MIDDLEWARE_CLASSES = (
-        ...
-        'fancypages.middleware.EditorMiddleware',
-    )
-
-4. Add the urls for ``django-fancypages`` to your project's main
-   ``urls.py``. Make sure that it is at the end of you definitions
-   otherwise the it will prevent your other URLs from working because it
-   defines a rather generic URL pattern for its pages::
-
-    urlpatterns = patterns('',
-        ...
-        url(r'^', include('fancypages.urls')),
-    )
-
-5. Fancypages requires several default settings to be added. To make sure
-   that you have all the default settings in your settings, you can use
-   the defaults provided by fancypages itself. Add the following in your
-   settings file **before** you overwrite specific settings::
-
-    ...
-
-    from fancypages.defaults import *
-
-    ...

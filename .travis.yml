@@ -1,25 +1,52 @@
 language: python
+
 python:
   - '2.7'
+
 addons:
-  sauce_connect: true
+  postgresql: "9.3"
+
 env:
   global:
-      - secure: "IFkU1stTDt34cs+BtuGulzogobPzQvO0MWMHDWT5cY4hWrFzxShZbcGueRQCvbyjrEiY2vQ0VX6KCYxUj9neNz90tbW2P9cCURrielkPRVhHorD8ngOtSeknLyzw0UjcBPwigszkFskoqRLPG7p8sa+RJvA+qEsbPr1Jfs0tEgA="
-      - secure: "fUdKTZ+nB29tQzKTs5/UnxUc2rm3fkIR31vcm0wFDGhdqMu5K+eZss0qXLrQ7s13JUB8POk8C2juuzJFPiM5yiR1Euhp6RddU6UqLnCaqkV9RH4Y7PjmfpSBgJKi2pOIneRngoOBI0kG6iWjK6f3D7Bb8c94bLbU3ZwGxQLoSkI="
       - PYTEST_OPTS="--pep8 --cov fancypages"
+
   matrix:
-    - DRF_VERSION=">=2.3,<2.4" DJANGO_VERSION=">=1.4,<1.5" MODEL_UTILS_VERSION=">2.0"
-    - DRF_VERSION=">=2.3,<2.4" DJANGO_VERSION=">=1.5,<1.6" MODEL_UTILS_VERSION="==1.5"
-    - DRF_VERSION=">=2.3,<2.4" DJANGO_VERSION=">=1.6,<1.7" MODEL_UTILS_VERSION=">2.0"
+    # Testing against Django 1.4
+    - DJANGO="Django>=1.4,<1.5" MODEL_UTILS_VERSION=">2.0" TARGET='test-fancypages'
+    - DJANGO="Django>=1.4,<1.5" MODEL_UTILS_VERSION=">2.0" TARGET='test-oscar-fancypages'
+
+    # Testing against Django 1.5
+    - DJANGO="Django>=1.5,<1.6" MODEL_UTILS_VERSION="==1.5" TARGET='test-fancypages'
+    - DJANGO="Django>=1.5,<1.6" MODEL_UTILS_VERSION="==1.5" TARGET='test-oscar-fancypages'
+
+    # Testing against Django 1.6
+    - DJANGO="Django>=1.6,<1.7" MODEL_UTILS_VERSION=">2.0" TARGET='test-fancypages'
+    - DJANGO="Django>=1.6,<1.7" MODEL_UTILS_VERSION=">2.0" TARGET='test-oscar-fancypages'
+
+    # Testing against Django 1.7
+    - DJANGO="https://github.com/django/django/archive/1.7b4.zip" MODEL_UTILS_VERSION=">2.0" TARGET='test-fancypages'
+    # FIXME: oscar_fancypages currently doesn't support Django 1.7
+    #- DJANGO="https://github.com/django/django/archive/1.7b4.zip" MODEL_UTILS_VERSION=">2.0" TARGET='test-oscar-fancypages' EXTRA_INSTALLS="git+https://github.com/elbaschid/django-oscar.git@add_support_for_django17#egg=django-oscar-dev"
+
     # We run the browser tests only once to save a bit of time
-    - DRF_VERSION=">=2.3,<2.4" DJANGO_VERSION=">=1.6,<1.7" MODEL_UTILS_VERSION=">2.0" PYTEST_OPTS="-m browser"
+    - DJANGO="Django>=1.6,<1.7" MODEL_UTILS_VERSION=">2.0" TARGET='test-fancypages' PYTEST_OPTS="-m browser"
+
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+
 install:
   - pip install wheel setuptools -U
-  - pip install Django$DJANGO_VERSION djangorestframework$DRF_VERSION django-model-utils$MODEL_UTILS_VERSION --use-wheel
+  - pip install $DJANGO django-model-utils$MODEL_UTILS_VERSION $EXTRA_INSTALLS --use-wheel
   - pip install . --use-wheel
   - pip install -r requirements.txt --use-wheel
+
+before_script:
+  - psql -c 'create database fp_sandbox;' -U postgres
+  - mysql -e 'create database fp_sandbox;'
+
 script:
-  - make travis
+  - make $TARGET
+
 after_success:
   - coveralls

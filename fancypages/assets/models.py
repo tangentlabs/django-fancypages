@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from shortuuidfield import ShortUUIDField
 
@@ -7,7 +7,7 @@ from ..compat import AUTH_USER_MODEL
 
 
 class AbstractAsset(models.Model):
-    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+    uuid = ShortUUIDField(verbose_name=_("Unique ID"), db_index=True)
 
     name = models.CharField(_("Name"), max_length=255)
 

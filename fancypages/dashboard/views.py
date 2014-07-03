@@ -11,7 +11,6 @@ PageNode = get_node_model()
 FancyPage = get_page_model()
 
 ContentBlock = get_model('fancypages', 'ContentBlock')
-Category = get_model('catalogue', 'Category')
 Container = get_model('fancypages', 'Container')
 TabBlock = get_model('fancypages', 'TabBlock')
 OrderedContainer = get_model('fancypages', 'OrderedContainer')

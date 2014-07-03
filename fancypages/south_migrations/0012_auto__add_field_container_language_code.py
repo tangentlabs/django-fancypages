@@ -2,6 +2,7 @@
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
+from django.conf import settings
 from django.db import models
 
 from fancypages.utils import FP_NODE_MODEL
@@ -15,7 +16,7 @@ class Migration(SchemaMigration):
 
         # Adding field 'Container.language_code'
         db.add_column(u'fancypages_container', 'language_code',
-                      self.gf('django.db.models.fields.CharField')(default='en-us', max_length=7),
+                      self.gf('django.db.models.fields.CharField')(default=settings.LANGUAGE_CODE, max_length=7),
                       keep_default=False)
 
         # Adding unique constraint on 'Container', fields ['name', 'content_type', 'object_id', 'language_code']

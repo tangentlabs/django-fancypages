@@ -83,3 +83,20 @@ class TestContainer(testcases.FancyPagesTestCase):
         except exceptions.ValidationError:
             self.fail(
                 'containers with different pages do not have to be unique')
+
+
+def test_child_page_returns_toplevel_parent(db):
+    root = factories.FancyPageFactory()
+    child = factories.FancyPageFactory(node__parent=root)
+
+    assert child.toplevel_parent == root
+
+
+def test_root_page_returns_toplevel_parent(db):
+    root = factories.FancyPageFactory()
+    assert root.toplevel_parent == root
+
+
+def test_page_returns_none_when_an_error_occurs(db):
+    root = factories.FancyPageFactory.build()
+    assert root.toplevel_parent is None

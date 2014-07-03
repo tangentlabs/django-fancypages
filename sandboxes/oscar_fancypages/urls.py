@@ -5,13 +5,9 @@ from django.conf.urls import patterns, include, url
 from oscar.app import Shop
 from oscar.apps.catalogue.app import CatalogueApplication
 
-#from oscar_fancypages.fancypages.views import FancyHomeView
+import fancypages.urls
 from fancypages.views import HomeView
 from fancypages.contrib.oscar_fancypages import views
-
-from fancypages.api import API_BASE_URL
-from fancypages.app import application as fancypages_app
-from fancypages.dashboard.app import application as dashboard_app
 
 
 admin.autodiscover()
@@ -33,9 +29,7 @@ urlpatterns = patterns(
 
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^dashboard/fancypages/', include(dashboard_app.urls)),
-    url(API_BASE_URL, include('fancypages.api.urls', namespace='fp-api')),
-    url(r'^', include(fancypages_app.urls)),
+    url(r'^', include(fancypages.urls)),
 )
 
 

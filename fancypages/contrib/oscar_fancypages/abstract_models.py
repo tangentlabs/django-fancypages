@@ -5,9 +5,6 @@ from django.utils.translation import ugettext_lazy as _
 from ...models import ContentBlock
 
 
-Product = models.get_model('catalogue', 'Product')
-
-
 class AbstractSingleProductBlock(ContentBlock):
     name = _("Single Product")
     code = 'single-product'
@@ -75,6 +72,7 @@ class AbstractOfferBlock(ContentBlock):
 
     @property
     def products(self):
+        Product = models.get_model('catalogue', 'Product')
         product_range = self.offer.condition.range
         if product_range.includes_all_products:
             return Product.browsable.filter(is_discountable=True)

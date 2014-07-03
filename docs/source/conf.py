@@ -22,8 +22,11 @@ sandbox_dir = os.path.realpath(
 
 sys.path = [root_dir, sandbox_dir] + sys.path
 
-os.environ.setdefault(
-    'DJANGO_SETTINGS_MODULE', 'sandboxes.fancypages.sandbox.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
+os.environ.setdefault('DJANGO_CONFIGURATION', 'FancypagesSandbox')
+
+from configurations import importer
+importer.install()
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -274,7 +277,7 @@ def process_docstring(app, what, name, obj, options, lines):
     if inspect.isclass(obj) and issubclass(obj, models.Model):
 
         # Grab the field list from the meta class
-        fields = obj._meta._fields()
+        fields = obj._meta.fields
 
         for field in fields:
             # Decode and strip any html out of the field's help text

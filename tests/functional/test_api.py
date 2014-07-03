@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
+import json
+
 from django.db.models import get_model
-from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 from django.utils.translation import get_language
 

@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
+import json
+
 from django import http
 from django.conf import settings
-from django.utils import simplejson as json
 from django.utils.encoding import force_unicode
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
@@ -78,13 +80,11 @@ class TemplateNamesModelMixin(object):
     a template name and a list of default templates will result in a list of
     template names similar to this:
 
-    .. testsetup::
-
-        from django.db import models
-        from fancypages.mixins import TemplateNamesModelMixin
-
     .. doctest::
 
+        >>> from django.db import models
+        >>> from fancypages.mixins import TemplateNamesModelMixin
+        >>>
         >>> class Container(TemplateNamesModelMixin, models.Model):
         ...     template_name = 'container.html'
         ...     default_template_names = ['default_container.html']

@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 
 from .base import (
     FancyPage,
@@ -25,7 +25,3 @@ from .blocks import (
     VideoBlock,
     TwitterBlock
 )
-
-# this is required here to make sure that the config is loaded when the
-# app is loaded as well
-from ..conf import FancyPagesConf

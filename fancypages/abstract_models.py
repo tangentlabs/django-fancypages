@@ -4,6 +4,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.contrib.contenttypes import generic
 from django.core.exceptions import ValidationError
+from django.utils.functional import cached_property
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import get_language, ugettext_lazy as _
@@ -14,6 +15,7 @@ from shortuuidfield import ShortUUIDField
 from model_utils.managers import InheritanceManager
 
 from . import mixins
+from . import defaults
 from .utils import unicode_slugify as slugify
 from .managers import PageManager, ContainerManager
 from .utils import get_container_names_from_template
@@ -88,7 +90,7 @@ class AbstractPageNode(MP_Node):
 
 
 class AbstractPageType(models.Model):
-    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+    uuid = ShortUUIDField(verbose_name=_("Unique ID"), db_index=True)
     name = models.CharField(_("Name"), max_length=128)
     slug = models.SlugField(_("Slug"), max_length=128)
     template_name = models.CharField(_("Template name"), max_length=255)
@@ -111,7 +113,7 @@ class AbstractPageGroup(models.Model):
     A page group provides a way to group fancy pages and retrieve only
     pages within a specific group.
     """
-    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+    uuid = ShortUUIDField(verbose_name=_("Unique ID"), db_index=True)
     name = models.CharField(_("Name"), max_length=128)
     slug = models.SlugField(_("Slug"), max_length=128, null=True, blank=True)
 
@@ -129,7 +131,7 @@ class AbstractPageGroup(models.Model):
 
 
 class AbstractFancyPage(models.Model):
-    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+    uuid = ShortUUIDField(verbose_name=_("Unique ID"), db_index=True)
     # this field has to be NULLABLE for backwards compatibility but should
     # never be left blank (hence, blank=False). We might be able to remove this
     # at some point but migrations make it impossible to change without a
@@ -176,6 +178,24 @@ class AbstractFancyPage(models.Model):
         if self.date_visible_end and self.date_visible_end < now:
             return False
         return True
+
+    @cached_property
+    def toplevel_parent(self):
+        """
+        Get the top-level parent (root) of the current page. This will return
+        the current page if the page is a top-level page or ``None`` if the
+        no top-level page can be determined (faulty data). The result is cached
+        on first lookup.
+
+        :return: A top-level page object or ``None``.
+        """
+        if self.depth == 1:
+            return self
+        try:
+            page = self.node.get_root().page
+        except (AttributeError, ObjectDoesNotExist):
+            page = None
+        return page
 
     @models.permalink
     def get_edit_page_url(self):
@@ -297,7 +317,9 @@ class AbstractFancyPage(models.Model):
         try:
             template_name = self.page_type.template_name
         except AttributeError:
-            template_name = settings.FANCYPAGES_DEFAULT_TEMPLATE
+            template_name = getattr(
+                settings, 'FP_DEFAULT_TEMPLATE',
+                defaults.FP_DEFAULT_TEMPLATE)
 
         cnames = self.containers.filter(
             language_code=language_code).values_list('name')
@@ -315,7 +337,7 @@ class AbstractFancyPage(models.Model):
 class AbstractContainer(mixins.TemplateNamesModelMixin, models.Model):
     template_name = 'fancypages/container.html'
 
-    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+    uuid = ShortUUIDField(verbose_name=_("Unique ID"), db_index=True)
 
     # this is the name of the variable used in the template tag
     # e.g. {% fancypages-container var-name %}
@@ -399,7 +421,7 @@ class AbstractContentBlock(mixins.TemplateNamesModelMixin, models.Model):
     default_template_names = [
         "fancypages/blocks/{module_name}.html", "blocks/{module_name}.html"]
 
-    uuid = ShortUUIDField(_("Unique ID"), db_index=True)
+    uuid = ShortUUIDField(verbose_name=_("Unique ID"), db_index=True)
 
     # we ignore the related names for each content block model
     # to prevent cluttering the container model. Also the look up has
