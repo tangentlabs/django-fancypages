@@ -1,6 +1,7 @@
 # encoding: utf8
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.db import models, migrations
 import fancypages.mixins
 import shortuuidfield.fields
@@ -63,7 +64,7 @@ class Migration(migrations.Migration):
                 ('uuid', shortuuidfield.fields.ShortUUIDField(db_index=True, verbose_name='Unique ID', max_length=22, editable=False, blank=True)),
                 ('name', models.SlugField(verbose_name='Variable name', blank=True)),
                 ('title', models.CharField(max_length=100, verbose_name='Title', blank=True)),
-                ('language_code', models.CharField(default=b'en-gb', max_length=7, verbose_name='Language')),
+                ('language_code', models.CharField(default=settings.LANGUAGE_CODE, max_length=7, verbose_name='Language')),
                 ('content_type', models.ForeignKey(to='contenttypes.ContentType', to_field='id', null=True)),
                 ('object_id', models.PositiveIntegerField(null=True)),
             ],
