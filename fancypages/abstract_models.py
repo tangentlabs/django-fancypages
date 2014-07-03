@@ -4,6 +4,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.contrib.contenttypes import generic
 from django.core.exceptions import ValidationError
+from django.utils.functional import cached_property
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import get_language, ugettext_lazy as _
@@ -177,6 +178,24 @@ class AbstractFancyPage(models.Model):
         if self.date_visible_end and self.date_visible_end < now:
             return False
         return True
+
+    @cached_property
+    def toplevel_parent(self):
+        """
+        Get the top-level parent (root) of the current page. This will return
+        the current page if the page is a top-level page or ``None`` if the
+        no top-level page can be determined (faulty data). The result is cached
+        on first lookup.
+
+        :return: A top-level page object or ``None``.
+        """
+        if self.depth == 1:
+            return self
+        try:
+            page = self.node.get_root().page
+        except (AttributeError, ObjectDoesNotExist):
+            page = None
+        return page
 
     @models.permalink
     def get_edit_page_url(self):
