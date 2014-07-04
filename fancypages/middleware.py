@@ -39,6 +39,8 @@ class EditorMiddleware(object):
 
     def process_response(self, request, response):
         user = getattr(request, 'user', None)
+        if getattr(response, 'streaming', False):
+            return response
         if not user or not user.is_authenticated():
             return response
         if not user.is_staff:
