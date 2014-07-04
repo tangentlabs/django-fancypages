@@ -31,6 +31,7 @@ Contents:
 
    installation
    concepts 
+   blocks
    recipes
    contributing
    reference
