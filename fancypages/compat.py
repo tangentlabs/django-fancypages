@@ -5,6 +5,12 @@ from django.core.exceptions import ImproperlyConfigured
 _user_model = None
 
 
+try:
+    from django.utils.module_loading import import_string
+except ImportError:
+    from django.utils.module_loading import import_by_path as import_string  # noqa
+
+
 def get_user_model():
     """
     Get the Django user model class in a backwards compatible way to previous

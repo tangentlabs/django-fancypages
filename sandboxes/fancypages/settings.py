@@ -14,6 +14,8 @@ class FancypagesSandbox(Configuration):
     DEBUG = True
     TEMPLATE_DEBUG = DEBUG
 
+    # This is only required for South < 1.0. In version 1.0, South first checks
+    # for a 'south_migrations' directory before falling back to 'migrations'.
     SOUTH_MIGRATION_MODULES = {
         'fancypages': 'fancypages.south_migrations',
     }
@@ -35,6 +37,16 @@ class FancypagesSandbox(Configuration):
         ('de', 'German'),
         ('en', 'English'),
     )
+
+    ########## FANCYPAGES SETTINGS
+    FP_FORM_BLOCK_CHOICES = {
+        'contact-us': {
+            'name': "Contact Us Form",
+            'form': 'contact_us.forms.ContactUsForm',
+            'url': 'http://example.com/black/hole/',
+        }
+    }
+    ########## END FANCYPAGES SETTINGS
 
     MEDIA_URL = '/media/'
     MEDIA_ROOT = get_location('public/media')
@@ -92,7 +104,8 @@ class FancypagesSandbox(Configuration):
         super(FancypagesSandbox, cls).pre_setup()
         from fancypages.defaults import FANCYPAGES_SETTINGS
         for key, value in FANCYPAGES_SETTINGS.iteritems():
-            setattr(cls, key, value)
+            if not hasattr(cls, key):
+                setattr(cls, key, value)
 
     DATABASES = {
         'default': {

@@ -1,0 +1,8 @@
+{% extends "fancypages/block.html" %}
+
+{% block block_content %}
+<form class="form" action="{{ fp_block.url }}" method="POST">
+    {% csrf_token %}
+    {% include "fancypages/partials/form_fields.html" with form=fp_block.get_form %}
+</form>
+{% endblock %}

@@ -13,6 +13,7 @@ from .base import MultiImageLinkMeta
 from ...assets.fields import AssetKey
 from ..mixins import ImageMetadataMixin
 from ...library import register_content_block
+from ...helpers import BlockFormSettings
 
 logger = logging.getLogger('fancypages')
 
@@ -191,3 +192,43 @@ class PageNavigationBlock(ContentBlock):
 
     class Meta:
         app_label = 'fancypages'
+
+
+@register_content_block
+class FormBlock(ContentBlock):
+    name = _("Form")
+    code = 'form'
+    group = _("Content")
+
+    form_settings = BlockFormSettings()
+    form_selection = models.CharField(
+        _("form selection"), max_length=255, blank=True,
+        choices=form_settings.as_choices())
+
+    class Meta:
+        app_label = 'fancypages'
+
+    @property
+    def template_name(self):
+        default = "fancypages/blocks/formblock.html"
+        try:
+            conf = self.form_settings[self.form_selection]
+        except KeyError:
+            return default
+        return conf.get('template_name', default)
+
+    @property
+    def url(self):
+        try:
+            conf = self.form_settings[self.form_selection]
+        except KeyError:
+            return ''
+        return conf.get('url')
+
+    def get_form(self):
+        if self.form_selection:
+            try:
+                conf = self.form_settings[self.form_selection]
+            except KeyError:
+                return
+            return conf['form']()
