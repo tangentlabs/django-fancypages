@@ -56,8 +56,6 @@ class Test(Configuration):
         'fancypages.middleware.EditorMiddleware',
     )
 
-    TEMPLATE_DIRS = [('templates')]
-
     LOGIN_REDIRECT_URL = '/accounts/'
     APPEND_SLASH = True
     SITE_ID = 1
@@ -69,7 +67,8 @@ class Test(Configuration):
         super(Test, cls).pre_setup()
         from fancypages.defaults import FANCYPAGES_SETTINGS
         for key, value in FANCYPAGES_SETTINGS.iteritems():
-            setattr(cls, key, value)
+            if not hasattr(cls, key):
+                setattr(cls, key, value)
 
     @property
     def ROOT_URLCONF(cls):
@@ -86,7 +85,9 @@ class Test(Configuration):
             'django.contrib.messages',
             'django.contrib.staticfiles',
             'django.contrib.admin',
-        ] + fp.get_required_apps() + fp.get_fancypages_apps()
+        ] + fp.get_required_apps() + fp.get_fancypages_apps() + [
+            'contact_us',
+        ]
 
     @property
     def STATICFILES_DIRS(self):
@@ -96,9 +97,14 @@ class Test(Configuration):
     def STATIC_ROOT(self):
         return self.get_sandbox('public')
 
+    @property
+    def TEMPLATE_DIRS(self):
+        return [self.get_sandbox('templates')]
+
     @classmethod
     def get_location(cls, *path):
-        return os.path.join(os.path.dirname(os.path.realpath(__file__)), *path)
+        return os.path.join(
+            os.path.dirname(os.path.realpath(__file__)), "..", *path)
 
     @classmethod
     def get_sandbox(cls, *path):
@@ -139,8 +145,10 @@ class OscarTest(Test):
         super(Test, cls).pre_setup()
         from oscar.defaults import OSCAR_SETTINGS
         for key, value in OSCAR_SETTINGS.iteritems():
-            setattr(cls, key, value)
+            if not hasattr(cls, key):
+                setattr(cls, key, value)
 
         from fancypages.defaults import FANCYPAGES_SETTINGS
         for key, value in FANCYPAGES_SETTINGS.iteritems():
-            setattr(cls, key, value)
+            if not hasattr(cls, key):
+                setattr(cls, key, value)

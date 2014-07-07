@@ -1,23 +1,26 @@
+# -*- coding: utf-8- -*-
+from __future__ import absolute_import, unicode_literals
+import django
+
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 
-import fancypages.urls
 from fancypages import views
 
-#from blog.views import PostDetailView, PostListView
+from contact_us.views import ContactUsView
 
-admin.autodiscover()
+
+# Auto-discovery for the admin is enabled by default in Djang 1.7
+if django.VERSION[:3] < (1, 7):
+    admin.autodiscover()
 
 
 urlpatterns = patterns(
     '',
 
     url(r'^$', views.HomeView.as_view(), name='home'),
-
-    #url(r'^posts/$', PostListView.as_view(), name="post-list"),
-    #url(r'^posts/(?P<slug>[\w-]+)/$', PostDetailView.as_view(),
-    #    name="post-detail"),
+    url(r'^contact-us/$', ContactUsView.as_view(), name='contact-us'),
 
     url(r'^admin/', include(admin.site.urls)),
 
@@ -25,7 +28,7 @@ urlpatterns = patterns(
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout',
         name='logout'),
 
-    url(r'^', include(fancypages.urls)),
+    url(r'^', include('fancypages.urls')),
 )
 
 if settings.DEBUG:

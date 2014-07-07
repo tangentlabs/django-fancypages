@@ -126,8 +126,7 @@ class TitleTextBlockForm(BlockForm):
         exclude = ('container',)
         widgets = {
             'display_order': forms.HiddenInput(),
-            'text': forms.Textarea(attrs={'cols': 80, 'rows': 10}),
-        }
+            'text': forms.Textarea(attrs={'cols': 80, 'rows': 10})}
 
 
 class TwoColumnLayoutBlockForm(BlockForm):
@@ -164,3 +163,13 @@ class TabBlockForm(BlockForm):
             tab.save()
 
         return instance
+
+
+class FormBlockForm(BlockForm):
+    form_selection = forms.ChoiceField(label=_("form selection"))
+
+    def __init__(self, *args, **kwargs):
+        super(FormBlockForm, self).__init__(*args, **kwargs)
+        from fancypages.helpers import BlockFormSettings
+        settings = BlockFormSettings()
+        self.fields['form_selection'].choices = tuple(settings.as_choices())

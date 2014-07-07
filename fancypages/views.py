@@ -1,9 +1,9 @@
+# -*- coding: utf-8- -*-
+from __future__ import absolute_import, unicode_literals
 from django.views.generic import DetailView
 
 from . import mixins
 from .utils import get_page_model
-
-FancyPage = get_page_model()
 
 
 class FancyPageDetailView(mixins.FancyPageMixin, DetailView):
@@ -11,5 +11,7 @@ class FancyPageDetailView(mixins.FancyPageMixin, DetailView):
 
 
 class HomeView(mixins.FancyHomeMixin, DetailView):
-    model = FancyPage
     content_object_name = 'fancypage'
+
+    def get_queryset(self):
+        return get_page_model()._default_manager.all()

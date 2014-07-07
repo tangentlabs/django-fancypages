@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, unicode_literals
+import pytest
 import tempfile
 
 from PIL import Image
@@ -7,8 +10,9 @@ from django.db.models import get_model
 from django.core.urlresolvers import reverse
 
 from fancypages import library
-from fancypages.test import testcases
+from fancypages.compat import import_string
 from fancypages.test import TEMP_IMAGE_DIR
+from fancypages.test import testcases, factories
 
 User = get_model('auth', 'User')
 FancyPage = get_model('fancypages', 'FancyPage')
@@ -18,6 +22,7 @@ TextBlock = get_model('fancypages', 'TextBlock')
 ImageBlock = get_model('fancypages', 'ImageBlock')
 ContentBlock = get_model('fancypages', 'ContentBlock')
 TitleTextBlock = get_model('fancypages', 'TitleTextBlock')
+FormBlock = get_model('fancypages', 'FormBlock')
 
 
 class TestABlock(testcases.FancyPagesWebTest):
@@ -140,3 +145,48 @@ class TestBlockRendering(testcases.FancyPagesWebTest):
             block = block_class.objects.create(container=container)
             self.get(self.page.get_absolute_url())
             block.delete()
+
+
+@pytest.fixture
+def form_block_class(request, settings):
+    """
+    Monkey patch the FormBlock class with custom settings for the form choices.
+    """
+    from fancypages.helpers import BlockFormSettings
+
+    settings.FP_FORM_BLOCK_CHOICES = {
+        'contact-us': {
+            'name': "Contact Us Form",
+            'form': 'contact_us.forms.ContactUsForm',
+            'url': 'contact-us',
+            'template_name': 'contact_us/contact_us_form.html'}}
+
+    old_settings = FormBlock.form_settings
+    FormBlock.form_settings = BlockFormSettings()
+
+    def reset_settings():
+        FormBlock.form_settings = old_settings
+
+    request.addfinalizer(reset_settings)
+    return FormBlock
+
+
+def test_form_block_can_submit_form(webtest, form_block_class):
+    fancypage = factories.FancyPageFactory()
+    form_block = form_block_class.objects.create(
+        form_selection='contact-us', container=fancypage.containers.all()[0])
+
+    assert isinstance(
+        form_block.form, import_string('contact_us.forms.ContactUsForm'))
+
+    page = webtest.get(fancypage.get_absolute_url())
+    assert form_block.url in page
+
+    page.form['name'] = 'Test User'
+    page.form['email'] = 'test@example.com'
+    page.form['message'] = 'Test message'
+    page.form['next'] = fancypage.get_absolute_url()
+    submit_page = page.form.submit().follow()
+
+    assert submit_page.request.path == fancypage.get_absolute_url()
+    assert "Thanks" in submit_page

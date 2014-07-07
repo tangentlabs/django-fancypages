@@ -34,7 +34,7 @@ def webtest_csrf_checks():
 
 
 @pytest.fixture(scope='function')
-def webtest(request, webtest_csrf_checks):
+def webtest(request, webtest_csrf_checks, transactional_db):
     """
     Provide the "app" object from WebTest as a fixture
 

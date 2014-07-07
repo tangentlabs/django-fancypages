@@ -30,7 +30,8 @@ def test_form_class_is_returned_for_valid_module_path_for_form(settings):
 
     from django.forms import Form
     config = BlockFormSettings()
-    assert config['default']['form'] == Form
+    assert config['default']['form'] == 'django.forms.Form'
+    assert config.get_form_class('default') == Form
 
 
 def test_exception_raised_for_invalid_module_path_for_form(settings):
@@ -39,7 +40,8 @@ def test_exception_raised_for_invalid_module_path_for_form(settings):
         'name': 'Django Form',
         'url': 'login'}}
     with pytest.raises(ImproperlyConfigured):
-        BlockFormSettings()
+        form_settings = BlockFormSettings()
+        form_settings.get_form_class('default')
 
 
 @pytest.mark.parametrize('url,expected', [
@@ -53,7 +55,8 @@ def test_passing_valid_url_or_lookup_returns_valid_url(url, expected,
         'url': url}}
 
     config = BlockFormSettings()
-    assert config['default']['url'] == expected
+    assert config['default']['url'] == url
+    assert config.get_url('default') == expected
 
 
 def test_form_settings_can_be_iterated_as_choices(settings):
@@ -62,4 +65,4 @@ def test_form_settings_can_be_iterated_as_choices(settings):
     config.update({'test': {'name': 'Another form'}})
 
     assert tuple(config.as_choices()) == (('default', 'The Default'),
-                                   ('test', 'Another form'))
+                                          ('test', 'Another form'))

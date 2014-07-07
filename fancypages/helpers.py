@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+from copy import copy
 
 from django.conf import settings as settings
 from django.core.exceptions import ImproperlyConfigured
@@ -14,7 +15,10 @@ class BlockFormSettings(dict):
         self._settings = getattr(settings, 'FP_FORM_BLOCK_CHOICES', {})
         self.mandatory_keys = ('form', 'name', 'url')
         self.url_validator = URLValidator()
-        self.load_from_settings()
+
+        for slug, config in self._settings.iteritems():
+            self.validate_keys(config.keys())
+            self[slug] = copy(config)
 
     def validate_keys(self, keys):
         missing_keys = set(self.mandatory_keys) - set(keys)
@@ -61,17 +65,11 @@ class BlockFormSettings(dict):
 
         return url
 
-    def load_from_settings(self):
-        """
-        Get the validated and processed list of choices for the form block.
-        """
-        for slug, config in self._settings.iteritems():
-            self[slug] = {}
-            self.validate_keys(config.keys())
+    def get_form_class(self, name):
+        return self.validate_form(self[name])
 
-            self[slug]['name'] = config.get('name')
-            self[slug]['form'] = self.validate_form(config)
-            self[slug]['url'] = self.validate_url(config)
+    def get_url(self, name):
+        return self.validate_url(self[name])
 
     def as_choices(self):
         for key, config in self.iteritems():

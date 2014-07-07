@@ -43,7 +43,8 @@ class FancypagesSandbox(Configuration):
         'contact-us': {
             'name': "Contact Us Form",
             'form': 'contact_us.forms.ContactUsForm',
-            'url': 'http://example.com/black/hole/',
+            'url': 'contact-us',
+            'template_name': 'contact_us/contact_us_form.html',
         }
     }
     ########## END FANCYPAGES SETTINGS

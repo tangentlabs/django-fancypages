@@ -220,15 +220,17 @@ class FormBlock(ContentBlock):
     @property
     def url(self):
         try:
-            conf = self.form_settings[self.form_selection]
+            url = self.form_settings.get_url(self.form_selection)
         except KeyError:
             return ''
-        return conf.get('url')
+        return url
 
-    def get_form(self):
-        if self.form_selection:
-            try:
-                conf = self.form_settings[self.form_selection]
-            except KeyError:
-                return
-            return conf['form']()
+    @property
+    def form(self):
+        if not self.form_selection:
+            return
+        try:
+            form = self.form_settings.get_form_class(self.form_selection)
+        except KeyError:
+            return
+        return form()

@@ -1,0 +1,37 @@
+{% load i18n %}
+
+<form class="form form-horizontal" action="{{ fp_block.url }}" method="POST">
+    {% csrf_token %}
+    <input type='hidden' name='next' value="{{ request.path }}" />
+
+    {% for field in fp_block.form.hidden_fields %}
+        {{ field }}
+    {% endfor %}
+
+    {% for field in fp_block.form.visible_fields %}  
+    <div class="control-group">
+        {% if field.auto_id %}
+            <label class="control-label {% if field.field.required %}{{ fp_block.form.required_css_class }}{% endif %}" for="{{ field.auto_id }}">{{ field.label }}</label>
+        {% endif %}
+
+        <div class="controls">
+            {{ field }}
+
+            {% for error in field.errors %}
+                <span class="help-block {{ fp_block.form.error_css_class }}">{{ error }}</span>
+            {% endfor %}
+
+            {% if field.help_text %}
+                <p class="help-block">
+                    {{ field.help_text|safe }}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    <div class="control-group">
+        <div class="controls">
+            <button class="btn btn-primary" type="submit">{% trans "Submit" %}</button>
+        </div>
+    </div>
+</form>
