@@ -1,0 +1,8 @@
+{% extends "fancypages/block.html" %}
+{% load i18n %}
+
+{% block block_content %}
+<div class="form-group{% if field.errors %} has-error{% endif %}">
+    {% include "fancypages/blocks/partials/block_form.html" %}
+</div>
+{% endblock %}

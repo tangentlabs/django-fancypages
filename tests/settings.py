@@ -136,11 +136,12 @@ class OscarTest(Test):
             'django.contrib.flatpages',
         ] + fp.get_required_apps() + \
             fp.get_fancypages_apps(use_with_oscar=True) + \
-            get_core_apps()
+            get_core_apps() + ['contact_us']
 
     @classmethod
     def pre_setup(cls):
         super(Test, cls).pre_setup()
+        sys.path.insert(0, cls.get_sandbox('.'))
         from oscar.defaults import OSCAR_SETTINGS
         for key, value in OSCAR_SETTINGS.iteritems():
             if not hasattr(cls, key):

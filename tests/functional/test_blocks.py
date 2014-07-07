@@ -189,4 +189,3 @@ def test_form_block_can_submit_form(webtest, form_block_class):
     submit_page = page.form.submit().follow()
 
     assert submit_page.request.path == fancypage.get_absolute_url()
-    assert "Thanks" in submit_page
