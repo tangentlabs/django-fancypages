@@ -115,13 +115,11 @@ class Test(Configuration):
 class OscarTest(Test):
     SANDBOX_MODULE = 'oscar_fancypages'
 
-    FP_NODE_MODEL = 'catalogue.Category',
-    FP_PAGE_DETAIL_VIEW = 'fancypages.contrib.oscar_fancypages.views.FancyPageDetailView',  # noqa
+    FP_NODE_MODEL = 'catalogue.Category'
+    FP_PAGE_DETAIL_VIEW = 'fancypages.contrib.oscar_fancypages.views.FancyPageDetailView'  # noqa
     HAYSTACK_CONNECTIONS = {
         'default': {
-            'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
-        },
-    }
+            'ENGINE': 'haystack.backends.simple_backend.SimpleEngine'}}
 
     @property
     def INSTALLED_APPS(self):
