@@ -26,7 +26,7 @@ def test_form_class_is_returned_for_valid_module_path_for_form(settings):
     settings.FP_FORM_BLOCK_CHOICES = {'default': {
         'form': 'django.forms.Form',
         'name': 'Django Form',
-        'url': 'login'}}
+        'url': 'admin:index'}}
 
     from django.forms import Form
     config = BlockFormSettings()
@@ -38,7 +38,7 @@ def test_exception_raised_for_invalid_module_path_for_form(settings):
     settings.FP_FORM_BLOCK_CHOICES = {'default': {
         'form': 'invalid.module.Form',
         'name': 'Django Form',
-        'url': 'login'}}
+        'url': 'admin:index'}}
     with pytest.raises(ImproperlyConfigured):
         form_settings = BlockFormSettings()
         form_settings.get_form_class('default')
@@ -46,7 +46,7 @@ def test_exception_raised_for_invalid_module_path_for_form(settings):
 
 @pytest.mark.parametrize('url,expected', [
     ('https://example.com/endpoint/', 'https://example.com/endpoint/'),
-    ('login', '/accounts/login/')])
+    ('admin:index', '/admin/')])
 def test_passing_valid_url_or_lookup_returns_valid_url(url, expected,
                                                        settings):
     settings.FP_FORM_BLOCK_CHOICES = {'default': {
