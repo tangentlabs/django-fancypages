@@ -9172,21 +9172,29 @@ wysihtml5.views.Textarea = wysihtml5.views.View.extend(
         return;
       }
 
-      var commandObj = this.commandMapping[command + ":" + commandValue];
+      var commandObj = this.commandMapping[command + ":" + commandValue],
+          value = null,
+          className = null;
+
+      if (commandValue !== null) {
+          commandValue = commandValue.split(',');
+          value = commandValue[0];
+          className = commandValue[1];
+      }
 
       // Show dialog when available
       if (commandObj && commandObj.dialog && !commandObj.state) {
         commandObj.dialog.show();
       } else {
-        this._execCommand(command, commandValue);
+        this._execCommand(command, value, className);
       }
     },
 
-    _execCommand: function(command, commandValue) {
+    _execCommand: function(command, commandValue, commandClassName) {
       // Make sure that composer is focussed (false => don't move caret to the end)
       this.editor.focus(false);
 
-      this.composer.commands.exec(command, commandValue);
+      this.composer.commands.exec(command, commandValue, commandClassName);
       this._updateLinkStates();
     },
 
@@ -9227,6 +9235,7 @@ wysihtml5.views.Textarea = wysihtml5.views.View.extend(
         var link          = this,
             command       = link.getAttribute("data-wysihtml5-command"),
             commandValue  = link.getAttribute("data-wysihtml5-command-value");
+
         that.execCommand(command, commandValue);
         event.preventDefault();
       });
