@@ -29,7 +29,7 @@ test-fancypages:
 	${MAKE} test-mysql
 
 test-oscar-fancypages:
-	pip install -r requirements_oscar.txt
+	pip install ${PIP_OPTS} -r requirements_oscar.txt
 	DJANGO_CONFIGURATION='OscarTest' py.test ${PYTEST_OPTS}
 	${MAKE} test-ofp-postgres
 	${MAKE} test-ofp-mysql

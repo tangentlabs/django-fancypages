@@ -3,12 +3,17 @@ language: python
 python:
   - '2.7'
 
+cache:
+  directories:
+    - $HOME/.pip-cache
+
 addons:
   postgresql: "9.3"
 
 env:
   global:
       - PYTEST_OPTS="--pep8 --cov fancypages"
+      - PIP_OPTS="--download-cache $HOME/.pip-cache"
 
   matrix:
     # Testing against Django 1.4
@@ -36,10 +41,10 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"
 
 install:
-  - pip install wheel setuptools -U
-  - pip install $DJANGO django-model-utils$MODEL_UTILS_VERSION $EXTRA_INSTALLS --use-wheel
-  - pip install . --use-wheel
-  - pip install -r requirements.txt --use-wheel
+  - pip install $PIP_OPTS wheel setuptools -U
+  - pip install $PIP_OPTS $DJANGO django-model-utils$MODEL_UTILS_VERSION $EXTRA_INSTALLS --use-wheel
+  - pip install $PIP_OPTS . --use-wheel
+  - pip install $PIP_OPTS  -r requirements.txt --use-wheel
 
 before_script:
   - psql -c 'create database fp_sandbox;' -U postgres
