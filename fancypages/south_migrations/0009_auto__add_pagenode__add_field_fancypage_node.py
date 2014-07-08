@@ -4,11 +4,17 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
-from fancypages.utils import FP_NODE_MODEL, FP_PAGE_MODEL
+from fancypages.utils import FP_NODE_MODEL
 from fancypages.compat import AUTH_USER_MODEL, AUTH_USER_MODEL_NAME
+
+NODE_APP_LABEL, NODE_MODEL_NAME = FP_NODE_MODEL.split('.')
 
 
 class Migration(SchemaMigration):
+
+    depends_on = (
+        (NODE_APP_LABEL, '0001_initial'),
+    )
 
     def forwards(self, orm):
         if FP_NODE_MODEL == 'fancypages.PageNode':
