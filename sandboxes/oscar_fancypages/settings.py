@@ -18,7 +18,7 @@ class OscarFancypagesSandbox(Configuration):
     DEBUG = True
     TEMPLATE_DEBUG = DEBUG
 
-    USE_LESS = True
+    USE_LESS = False
 
     DATABASES = {
         'default': {
@@ -250,10 +250,12 @@ class OscarFancypagesSandbox(Configuration):
         super(OscarFancypagesSandbox, cls).pre_setup()
         from fancypages.defaults import FANCYPAGES_SETTINGS
         for key, value in FANCYPAGES_SETTINGS.iteritems():
-            setattr(cls, key, value)
+            if not hasattr(cls, key):
+                setattr(cls, key, value)
         from oscar.defaults import OSCAR_SETTINGS
         for key, value in OSCAR_SETTINGS.iteritems():
-            setattr(cls, key, value)
+            if not hasattr(cls, key):
+                setattr(cls, key, value)
 
     def INSTALLED_APPS(self):
         from oscar import get_core_apps
@@ -266,6 +268,8 @@ class OscarFancypagesSandbox(Configuration):
             'django.contrib.messages',
             'django.contrib.staticfiles',
             'django.contrib.admin',
+            'django.contrib.flatpages',
+
             'compressor',
         ] + fp.get_required_apps() \
           + fp.get_fancypages_apps(use_with_oscar=True) \

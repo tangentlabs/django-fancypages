@@ -33,6 +33,9 @@ urlpatterns = patterns(
     url(r'^$', HomeView.as_view(), name="home"),
     url(r'^contact-us/$', ContactUsView.as_view(), name='contact-us'),
 
+    # i18n URLS need to live outside of i18n_patterns scope of the shop
+    url(r'^i18n/', include('django.conf.urls.i18n')),
+
     url(r'', include(FancyShop().urls)),
 
     url(r'^admin/', include(admin.site.urls)),
