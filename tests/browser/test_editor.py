@@ -166,7 +166,7 @@ class TestATextBlock(SplinterTestCase):
         self.wait_for_editor_reload()
 
         self.assertEqual(
-            factories.TitleTextBlockFactory.FACTORY_FOR.objects.count(), 0)
+            factories.TitleTextBlockFactory._meta.model.objects.count(), 0)
 
     def open_editor_panel(self):
         self.find_and_click_by_css(self.browser, '#editor-handle')

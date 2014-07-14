@@ -28,7 +28,7 @@ def test_get_list_of_pages(webtest, admin_user):
     factories.FancyPageFactory(node__parent=child_1)
     factories.FancyPageFactory(node__parent=top_level_3)
 
-    assert factories.FancyPageFactory.FACTORY_FOR.objects.count() == 6
+    assert factories.FancyPageFactory._meta.model.objects.count() == 6
 
     def get_page_as_json(page):
         children = []

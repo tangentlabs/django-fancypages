@@ -17,7 +17,8 @@ FancyPage = get_page_model()
 
 
 class UserFactory(DjangoModelFactory):
-    FACTORY_FOR = get_user_model()
+    class Meta:
+        model = get_user_model()
 
     username = 'peter.griffin'
     email = 'peter@griffin.com'
@@ -32,7 +33,8 @@ class UserFactory(DjangoModelFactory):
 
 
 class PageTypeFactory(DjangoModelFactory):
-    FACTORY_FOR = get_model('fancypages', 'PageType')
+    class Meta:
+        model = get_model('fancypages', 'PageType')
 
     name = 'Sample page type'
     slug = 'sample-page-type'
@@ -40,68 +42,77 @@ class PageTypeFactory(DjangoModelFactory):
 
 
 class PageGroupFactory(DjangoModelFactory):
-    FACTORY_FOR = get_model('fancypages', 'PageGroup')
+    class Meta:
+        model = get_model('fancypages', 'PageGroup')
 
     name = factory.LazyAttribute(lambda a: PAGE_GROUPS_NAMES.next())
 
 
 class PageNodeFactory(DjangoModelFactory):
-    FACTORY_FOR = get_node_model()
+    class Meta:
+        model = get_node_model()
 
     name = factory.Sequence(lambda n: "Node {}".format(n))
 
     @classmethod
     def _generate(cls, create, attrs):
         if not create:
-            return cls.FACTORY_FOR(**attrs)
+            return cls._meta.model(**attrs)
 
         if 'parent' in attrs:
             parent = attrs.pop('parent')
             node = parent.node.add_child(**attrs)
         else:
-            node = cls.FACTORY_FOR.add_root(**attrs)
+            node = cls._meta.model.add_root(**attrs)
         return node
 
 
 class FancyPageFactory(DjangoModelFactory):
-    FACTORY_FOR = FancyPage
+    class Meta:
+        model = FancyPage
 
     status = FancyPage.PUBLISHED
     node = factory.SubFactory(PageNodeFactory)
 
 
 class ContainerFactory(DjangoModelFactory):
-    FACTORY_FOR = get_model('fancypages', 'Container')
+    class Meta:
+        model = get_model('fancypages', 'Container')
 
     name = factory.Sequence(lambda n: 'test-container {}'.format(n))
     language_code = get_language()
 
 
 class TextBlockFactory(DjangoModelFactory):
-    FACTORY_FOR = get_model('fancypages', 'TextBlock')
+    class Meta:
+        model = get_model('fancypages', 'TextBlock')
 
     text = 'This is a sample text in a text block.'
     container = factory.SubFactory(ContainerFactory)
 
 
 class TitleTextBlockFactory(DjangoModelFactory):
-    FACTORY_FOR = get_model('fancypages', 'TitleTextBlock')
+    class Meta:
+        model = get_model('fancypages', 'TitleTextBlock')
 
     title = 'The title'
     text = 'This is a sample text in a text block.'
 
 
 class HorizontalSeparatorBlockFactory(DjangoModelFactory):
-    FACTORY_FOR = get_model('fancypages', 'HorizontalSeparatorBlock')
+    class Meta:
+        model = get_model('fancypages', 'HorizontalSeparatorBlock')
 
 
 class TabBlockFactory(DjangoModelFactory):
-    FACTORY_FOR = get_model('fancypages', 'TabBlock')
+    class Meta:
+        model = get_model('fancypages', 'TabBlock')
 
     container = factory.SubFactory(ContainerFactory)
 
 
 class TwoColumnLayoutBlockFactory(DjangoModelFactory):
-    FACTORY_FOR = get_model('fancypages', 'TwoColumnLayoutBlock')
+    class Meta:
+        model = get_model('fancypages', 'TwoColumnLayoutBlock')
 
     container = factory.SubFactory(ContainerFactory)
