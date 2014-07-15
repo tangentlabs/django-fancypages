@@ -17,24 +17,24 @@ env:
 
   matrix:
     # Testing against Django 1.4
-    - DJANGO="Django>=1.4,<1.5" MODEL_UTILS_VERSION=">2.0" TARGET='test-fancypages'
+    - DJANGO="Django>=1.4,<1.5" MODEL_UTILS_VERSION=">2.0" TARGET='test-standalone-fancypages'
     - DJANGO="Django>=1.4,<1.5" MODEL_UTILS_VERSION=">2.0" TARGET='test-oscar-fancypages'
 
     # Testing against Django 1.5
-    - DJANGO="Django>=1.5,<1.6" MODEL_UTILS_VERSION="==1.5" TARGET='test-fancypages'
+    - DJANGO="Django>=1.5,<1.6" MODEL_UTILS_VERSION="==1.5" TARGET='test-standalone-fancypages'
     - DJANGO="Django>=1.5,<1.6" MODEL_UTILS_VERSION="==1.5" TARGET='test-oscar-fancypages'
 
     # Testing against Django 1.6
-    - DJANGO="Django>=1.6,<1.7" MODEL_UTILS_VERSION=">2.0" TARGET='test-fancypages'
+    - DJANGO="Django>=1.6,<1.7" MODEL_UTILS_VERSION=">2.0" TARGET='test-standalone-fancypages'
     - DJANGO="Django>=1.6,<1.7" MODEL_UTILS_VERSION=">2.0" TARGET='test-oscar-fancypages'
 
     # Testing against Django 1.7
-    - DJANGO="https://github.com/django/django/archive/1.7c1.zip" MODEL_UTILS_VERSION=">2.0" TARGET='test-fancypages'
+    - DJANGO="https://github.com/django/django/archive/1.7c1.zip" MODEL_UTILS_VERSION=">2.0" TARGET='test-standalone-fancypages'
     # FIXME: oscar_fancypages currently doesn't support Django 1.7
     #- DJANGO="https://github.com/django/django/archive/1.7b4.zip" MODEL_UTILS_VERSION=">2.0" TARGET='test-oscar-fancypages' EXTRA_INSTALLS="git+https://github.com/elbaschid/django-oscar.git@add_support_for_django17#egg=django-oscar-dev"
 
     # We run the browser tests only once to save a bit of time
-    - DJANGO="Django>=1.6,<1.7" MODEL_UTILS_VERSION=">2.0" TARGET='test-fancypages' PYTEST_OPTS="-m browser"
+    - DJANGO="Django>=1.6,<1.7" MODEL_UTILS_VERSION=">2.0" TARGET='test-standalone-fancypages' PYTEST_OPTS="-m browser"
 
 before_install:
   - "export DISPLAY=:99.0"

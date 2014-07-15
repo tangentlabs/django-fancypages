@@ -26,7 +26,7 @@ class Common(Configuration):
     LANGUAGE_CODE = 'en-gb'
     LANGUAGES = (
         ('de', 'German'),
-        ('en', 'English'))
+        ('en-gb', 'English'))
 
     ########## FANCYPAGES SETTINGS
     FP_FORM_BLOCK_CHOICES = {

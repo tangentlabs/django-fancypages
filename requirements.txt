@@ -1,5 +1,6 @@
 # development tools
 django-extensions>=0.9
+South==1.0.0
 
 # simplify configurations
 django-configurations==0.8

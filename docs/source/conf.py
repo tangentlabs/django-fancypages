@@ -11,19 +11,17 @@
 #
 # All configuration values have a default; values that are commented out
 # serve to show the default.
-
 import os
 import sys
 
-root_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), '../..'))
-
-sandbox_dir = os.path.realpath(
-    os.path.join(os.path.dirname(__file__), '../../sandboxes/fancypages'))
+cwd = os.path.dirname(__file__)
+root_dir = os.path.realpath(os.path.join(cwd, '../..'))
+sandbox_dir = os.path.realpath(os.path.join(root_dir, 'sandbox'))
 
 sys.path = [root_dir, sandbox_dir] + sys.path
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
-os.environ.setdefault('DJANGO_CONFIGURATION', 'FancypagesSandbox')
+os.environ.setdefault('DJANGO_CONFIGURATION', 'StandaloneFancypages')
 
 from configurations import importer
 importer.install()
@@ -33,14 +31,15 @@ importer.install()
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
 
-# -- General configuration -----------------------------------------------------
+# -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #needs_sphinx = '1.0'
 
-# Add any Sphinx extension module names here, as strings. They can be extensions
-# coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.coverage']
+# Add any Sphinx extension module names here, as strings. They can be
+# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest',
+              'sphinx.ext.coverage']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -55,8 +54,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'django-fancypages'
-copyright = u'2013, Sebastian Vetter'
+project = 'django-fancypages'
+copyright = '2013, Sebastian Vetter'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -202,8 +201,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'django-fancypages.tex', u'django-fancypages Documentation',
-   u'Sebastian Vetter', 'manual'),
+  ('index', 'django-fancypages.tex', 'django-fancypages Documentation',
+   'Sebastian Vetter', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -232,8 +231,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'django-fancypages', u'django-fancypages Documentation',
-     [u'Sebastian Vetter'], 1)
+    ('index', 'django-fancypages', 'django-fancypages Documentation',
+     ['Sebastian Vetter'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -246,8 +245,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'django-fancypages', u'django-fancypages Documentation',
-   u'Sebastian Vetter', 'django-fancypages', 'One line description of project.',
+    ('index', 'django-fancypages', 'django-fancypages Documentation',
+     'Sebastian Vetter', 'django-fancypages', 'One line description of project.',
    'Miscellaneous'),
 ]
 
@@ -290,14 +289,14 @@ def process_docstring(app, what, name, obj, options, lines):
             if help_text:
                 # Add the model field to the end of the docstring as a param
                 # using the help text as the description
-                lines.append(u':param %s: %s' % (field.attname, help_text))
+                lines.append(':param %s: %s' % (field.attname, help_text))
             else:
                 # Add the model field to the end of the docstring as a param
                 # using the verbose name as the description
-                lines.append(u':param %s: %s' % (field.attname, verbose_name))
+                lines.append(':param %s: %s' % (field.attname, verbose_name))
 
             # Add the field's type to the docstring
-            lines.append(u':type %s: %s' % (field.attname, type(field).__name__))
+            lines.append(':type %s: %s' % (field.attname, type(field).__name__))
 
     # Return the extended docstring
     return lines

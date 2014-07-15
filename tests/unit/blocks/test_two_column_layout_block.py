@@ -1,6 +1,7 @@
-import mock
-
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
 from django.test import TestCase
+from django.test import RequestFactory
 from django.template import RequestContext
 
 from fancypages.models import Container
@@ -14,9 +15,8 @@ class TestTwoColumnLayoutBlock(TestCase):
     def setUp(self):
         super(TestTwoColumnLayoutBlock, self).setUp()
         self.user = factories.UserFactory.build()
-        self.request = mock.Mock()
-        self.request.META = {}
 
+        self.request = RequestFactory().get('/')
         self.request_context = RequestContext(self.request, {})
         self.request_context['user'] = self.user
 

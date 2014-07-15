@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
 import os
 import tempfile
 
@@ -54,6 +56,8 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         page_description = "The old description"
 
         now = timezone.now()
+        current_tz = timezone.get_current_timezone()
+
         fancy_page = factories.FancyPageFactory(
             date_visible_start=now, node__name=page_name,
             node__description=page_description)
@@ -69,8 +73,7 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         self.assertEquals(form['description'].value.strip(), page_description)
         self.assertEquals(
             form['date_visible_start'].value,
-            date(now, 'Y-m-d H:i:s')
-        )
+            date(now.astimezone(current_tz), 'Y-m-d H:i:s'))
 
         form['name'] = 'Another name'
         form['description'] = "Some description"

@@ -36,6 +36,12 @@ class OscarFancypages(common.Common):
     FP_PAGE_DETAIL_VIEW = 'fancypages.contrib.oscar_fancypages.views.FancyPageDetailView'  # noqa
     ########## END FANCYPAGES SETTINGS
 
+    # Required for South < 1.0
+    SOUTH_MIGRATION_MODULES = {
+        'fancypages': 'fancypages.south_migrations',
+        'oscar_fancypages': 'fancypages.contrib.oscar_fancypages.south_migrations',  # noqa
+    }
+
     ########## OSCAR SETTINGS
     OSCAR_ALLOW_ANON_CHECKOUT = True
 

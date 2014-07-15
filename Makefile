@@ -37,22 +37,22 @@ test-oscar-fancypages:
 test-standalone-postgres:
 	- psql -h localhost -p ${DJANGO_POSTGRES_PORT} -U postgres -c "DROP DATABASE fp_sandbox;"
 	psql -h localhost -p ${DJANGO_POSTGRES_PORT} -U postgres -c "CREATE DATABASE fp_sandbox;"
-	DJANGO_CONFIGURATION="StandaloneFancypagesPostgres" SANDBOX="fancypages" ./run-migrations.sh
+	DJANGO_CONFIGURATION="StandaloneFancypagesPostgres" ./run-migrations.sh
 
 test-standalone-mysql:
 	-  mysql -h 127.0.0.1 -P ${DJANGO_MYSQL_PORT} -u root -e 'DROP DATABASE fp_sandbox;'
 	mysql -h 127.0.0.1 -P ${DJANGO_MYSQL_PORT} -u root -e 'CREATE DATABASE fp_sandbox;'
-	DJANGO_CONFIGURATION="StandaloneFancypagesMysql" SANDBOX="fancypages" ./run-migrations.sh
+	DJANGO_CONFIGURATION="StandaloneFancypagesMysql" ./run-migrations.sh
 
 test-oscar-postgres:
 	- psql -h localhost -p ${DJANGO_POSTGRES_PORT} -U postgres -c "DROP DATABASE ofp_sandbox;"
 	psql -h localhost -p ${DJANGO_POSTGRES_PORT} -U postgres -c "CREATE DATABASE ofp_sandbox;"
-	DJANGO_CONFIGURATION="OscarFancypagesPostgres" SANDBOX="oscar_fancypages" ./run-migrations.sh
+	DJANGO_CONFIGURATION="OscarFancypagesPostgres" ./run-migrations.sh
 
 test-oscar-mysql:
 	-  mysql -h 127.0.0.1 -P ${DJANGO_MYSQL_PORT} -u root -e 'DROP DATABASE ofp_sandbox;'
 	mysql -h 127.0.0.1 -P ${DJANGO_MYSQL_PORT} -u root -e 'CREATE DATABASE ofp_sandbox;'
-	DJANGO_CONFIGURATION="OscarFancypagesMysql" SANDBOX="oscar_fancypages" ./run-migrations.sh
+	DJANGO_CONFIGURATION="OscarFancypagesMysql" ./run-migrations.sh
 
 docs:
 	${MAKE} -C docs html

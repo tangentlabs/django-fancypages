@@ -21,7 +21,6 @@ setup(
     include_package_data=True,
     install_requires=[
         'Django>=1.5',
-        'South',
         'unidecode',
         'django-treebeard',
         'django-model-utils',

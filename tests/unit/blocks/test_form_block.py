@@ -60,6 +60,7 @@ def test_passing_valid_url_or_lookup_returns_valid_url(url, expected,
 
 
 def test_form_settings_can_be_iterated_as_choices(settings):
+    settings.FP_FORM_BLOCK_CHOICES = {}
     config = BlockFormSettings()
     config.update({'default': {'name': 'The Default'}})
     config.update({'test': {'name': 'Another form'}})
