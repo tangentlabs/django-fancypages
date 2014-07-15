@@ -1,6 +1,4 @@
 {% extends "fancypages/layout.html" %}
-{% load staticfiles %}
-
 {% block body_class %}fancypages{% endblock %}
 
 {% block content %}
@@ -9,13 +7,10 @@
 
 {% block mainstyles %}
     {{ block.super }}
-    <link rel='stylesheet' type='text/css' href="{% static "fancypages/dist/css/fp-dashboard.min.css" %}" />
+    {% include "fancypages/dashboard/partials/extrastyles.html" %}
 {% endblock %}
 
 {% block extrascripts %}
     {{ block.super }}
-    <script src="{% static "fancypages/dist/libs/wysihtml5/wysihtml5-0.3.0.min.js" %}" type="text/javascript" charset="utf-8"></script>
-
-    <script src="{% static "fancypages/dist/js/libs.min.js" %}" type="text/javascript" charset="utf-8"></script>
-    <script src="{% static "fancypages/dist/js/dashboard.min.js" %}" type="text/javascript" charset="utf-8"></script>
+    {% include "fancypages/dashboard/partials/extrascripts.html" %}
 {% endblock %}

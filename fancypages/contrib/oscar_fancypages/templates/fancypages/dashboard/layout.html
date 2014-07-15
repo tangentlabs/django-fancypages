@@ -1,4 +1,4 @@
-{% extends 'dashboard/layout.html' %}
+{% extends "dashboard/layout.html" %}
 {% load staticfiles %}
 
 {% block body_class %}fancypages{% endblock %}
@@ -6,17 +6,16 @@
 {% block mainstyles %}
     {{ block.super }}
     <link rel='stylesheet' type='text/css' href="{% static "oscar/css/dashboard.css" %}" />
-    <link rel='stylesheet' type='text/css' href="{% static "fancypages/css/page-management.css" %}" />
+    {% include "fancypages/partials/extrastyles.html" %}
+    {% include "fancypages/dashboard/partials/extrastyles.html" %}
+{% endblock %}
+
+{% block cdn_scripts %}
+    {% include "fancypages/partials/cdn_scripts.html" %}
 {% endblock %}
 
 {% block extrascripts %}
     {{ block.super }}
-    <script type="text/javascript" charset="utf-8" src="{% static "fancypages/libs/wysihtml5/advanced.js" %}"></script>
-    <script type="text/javascript" charset="utf-8" src="{% static "fancypages/libs/wysihtml5/wysihtml5-0.3.0.min.js" %}"></script>
-
-    <script type="text/javascript" charset="utf-8" src="{% static "fancypages/libs/elastislide/jquery.elastislide.js" %}"></script>
-    <script type="text/javascript" charset="utf-8" src="{% static "fancypages/libs/jquery.mjs.nestedSortable.js" %}"></script>
-
-    <script src="{% static "fancypages/js/fancypages.js" %}" type="text/javascript" charset="utf-8"></script>
-    <script src="{% static "fancypages/js/dashboard.js" %}" type="text/javascript" charset="utf-8"></script>
+    {% include "fancypages/partials/extrascripts.html" %}
+    {% include "fancypages/dashboard/partials/extrascripts.html" %}
 {% endblock %}

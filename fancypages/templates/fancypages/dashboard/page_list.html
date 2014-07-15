@@ -30,11 +30,6 @@
 
 {% block extrascripts %}
     {{ block.super }}
-    {# FIXME: switch to the new jquery-sortable #}
-    {% comment %}
-    <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-    <script type="text/javascript" src="{% static "fancypages/libs/jquery.mjs.nestedSortable.js" %}"></script>
-    {% endcomment %}
     <script id="template-page-node" type="text/template">
         <div class="row-fluid" >
             <h5 class="span10">
