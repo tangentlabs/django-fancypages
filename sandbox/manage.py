@@ -5,7 +5,7 @@ import sys
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
-    os.environ.setdefault("DJANGO_CONFIGURATION", "FancypagesSandbox")
+    os.environ.setdefault("DJANGO_CONFIGURATION", "StandaloneFancypages")
 
     from configurations.management import execute_from_command_line
 

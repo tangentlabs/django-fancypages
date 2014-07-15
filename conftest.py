@@ -6,7 +6,7 @@ from configurations import importer
 
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tests.settings')
-os.environ.setdefault('DJANGO_CONFIGURATION', 'Test')
+os.environ.setdefault('DJANGO_CONFIGURATION', 'StandaloneTest')
 
 
 def pytest_configure():
