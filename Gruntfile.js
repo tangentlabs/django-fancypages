@@ -44,10 +44,6 @@ module.exports = function(grunt) {
                     "fancypages/static/fancypages/dist/libs/rangeslider/rangeslider.min.js": [
                         "fancypages/static/fancypages/src/libs/rangeslider/rangeslider.min.js"
                     ],
-                    "fancypages/static/fancypages/dist/libs/wysihtml5/wysihtml5-0.3.0.min.js": [
-                        "fancypages/static/fancypages/src/libs/wysihtml5/wysihtml5-config.js",
-                        "fancypages/static/fancypages/src/libs/wysihtml5/wysihtml5-0.3.0.js"
-                    ],
                     "fancypages/static/fancypages/dist/js/fancypages.min.js": [
                         "fancypages/static/fancypages/src/js/app.js",
                         "fancypages/static/fancypages/src/js/api.js",
@@ -69,11 +65,34 @@ module.exports = function(grunt) {
                 },
                 src: ['tests/javascript/**/*.html'],
             },
+        },
+
+        watch: {
+            options: {
+                livereload: true,
+                atBegin: true
+            },
+            javascript: {
+                files: [
+                    'fancypages/static/fancypages/src/js/**/*.js',
+                    'fancypages/templates/**/*.jst',
+                    'fancypages/templates/**/*.html',
+                ],
+                tasks: ['uglify']
+            },
+            styles: {
+                files: [
+                    'fancypages/static/fancypages/src/less/**/*.less',
+                    'fancypages/templates/**/*.html',
+                ],
+                tasks: ['less', 'cssmin']
+            }
         }
     });
 
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-mocha');
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
