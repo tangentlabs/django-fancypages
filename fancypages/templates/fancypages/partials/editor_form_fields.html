@@ -15,8 +15,7 @@
         </label>
 
         {% if field.widget_type == "Textarea" %}
-        <div class="wysihtml5-wrapper">
-            {% include "fancypages/partials/wysihtml5_toolbar.html" %}
+        <div class="rte-wrapper">
         {% elif field.name == 'link' or 'link_url' in field.name %}
         <div class="input-append">
         {% else %}

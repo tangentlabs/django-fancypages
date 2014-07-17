@@ -1,6 +1,103 @@
 FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette, $, _) {
     "use strict"
 
+    /**
+     * Rich text editor view that provides integration with the Froala editor.
+     */
+    Views.FroalaEditor = Marionette.View.extend({
+        editorOptions: {
+            inlineMode: false,
+            buttons: ['bold', 'italic', "createLink", "insertOrderedList", "insertUnorderedList", "html"],
+        },
+        initialize: function (options) {
+            _.bindAll(this, 'updatePreview');
+
+            var self = this,
+                defaults = {
+                    contentChangedCallback: this.updatePreview
+                };
+
+            this.block = options.block;
+            this.textarea = $('textarea', this.$el);
+
+            _.extend(defaults, this.editorOptions);
+            this.textarea.editable(defaults);
+
+            this.editor = $('.froala-element', this.$el);
+        },
+        updatePreview: function (ev) {
+            var fieldName = $(this.textarea).attr('id').replace('id_', ''),
+                previewField = $('#block-' + this.block.id + '-' + fieldName);
+
+            $(previewField).html(this.editor.html());
+        }
+    });
+
+    /**
+     * Rich text editor view that provides integration with the Trumbowyg
+     * editor.
+     */
+    Views.TrumbowygEditor = Marionette.View.extend({
+        editorOptions: {
+            fullscreenable: false,
+            closable: false,
+            btns: ['bold', 'italic',
+                '|', 'link', '|', 'unorderedList', 'orderedList',
+                '|', 'viewHTML']
+        },
+        initialize: function (options) {
+            var self = this; 
+
+            _.bindAll(this, 'updatePreview');
+
+            this.block = options.block;
+            this.textarea = $('textarea', this.$el);
+
+            this.textarea.trumbowyg(this.editorOptions);
+            this.editor = $('.trumbowyg-editor', this.$el);
+
+            this.editor.on('change', this.updatePreview);
+            this.editor.on('keyup', this.updatePreview);
+            $('button', this.$el).on('click', this.updatePreview);
+        },
+        updatePreview: function (ev) {
+            var fieldName = $(this.textarea).attr('id').replace('id_', ''),
+                previewField = $('#block-' + this.block.id + '-' + fieldName);
+
+            $(previewField).html(this.textarea.val());
+        }
+    });
+
+    /**
+     * Initialize the view module with options passed in from the main
+     * app. Options handled by the initializer are:
+     *
+     * editor: 
+     * editorView: A backbone/marionette view object that implements the rich text
+     *      editor. This view will be initialised for every from element that
+     *      is wrapped in 'div.rte-wrapper'. The view needs to handle the
+     *      preview updating of the editor within the view to work correctly.
+     */
+    Views.addInitializer(function (options) {
+        options = options || {};
+        switch (options.editor || 'trumbowyg') {
+            case 'custom':
+                Views.RichTextEditor = options.editorView;
+                break;
+            case 'froala':
+                Views.RichTextEditor = Views.FroalaEditor;
+                break;
+            default:
+            case 'trumbowyg':
+                Views.RichTextEditor = Views.TrumbowygEditor;
+                break;
+        };
+
+        if (!_.isEmpty(options.editorOptions)) {
+            Views.RichTextEditor.editorOptions = options.editorOptions;
+        };
+    });
+
     Views.EditorControls = Backbone.View.extend({
         el: '.fp-editor-controls',
         events: {
@@ -173,8 +270,8 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
         el: '#block-input-wrapper',
         events: {
             'submit': 'submitForm',
-            'change div[data-behaviours~=field-live-update]': 'updateTextElement',
-            'keyup div[data-behaviours~=field-live-update]': 'updateTextElement'
+            'change div[data-behaviours~=field-live-update] input': 'updateTextElement',
+            'keyup div[data-behaviours~=field-live-update] input': 'updateTextElement'
         },
         /**
          * Initialize view the a BlockForm model that can be used to retrieve
@@ -185,7 +282,7 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
             _.bindAll(this, 'render');
             _.bindAll(this, 'updateBlock');
             _.bindAll(this, 'initSliders');
-            _.bindAll(this, 'initWysiwyg');
+            _.bindAll(this, 'initRichTextEditor');
             _.bindAll(this, 'initLinkSelector');
 
             this.model = new FancypageApp.Models.BlockForm({});
@@ -273,7 +370,7 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
                 fieldName = null,
                 previewField = null;
 
-            if (!fieldElem || fieldElem.attr('id', undefined) === 'undefined') {
+            if (!fieldElem || _.isEmpty(fieldElem.attr('id'))) {
                 return false;
             }
 
@@ -289,7 +386,7 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
             this.$el.html(this.model.get('form'));
 
             this.initSliders();
-            this.initWysiwyg();
+            this.initRichTextEditor();
             this.initLinkSelector();
 
             $('.fp-scroll-content').jScrollPane();
@@ -320,11 +417,11 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
                 slider.render();
             });
         },
-        initWysiwyg: function () {
+        initRichTextEditor: function () {
             var self = this;
 
-            _.each($('.wysihtml5-wrapper', this.$el), function (elem) {
-                new Views.WysiwygEditor({el: elem, block: self.model});
+            _.each($('.rte-wrapper', this.$el), function (elem) {
+                new Views.RichTextEditor({el: elem, block: self.model});
             });
         },
         initLinkSelector: function () {
@@ -435,40 +532,6 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
 
             rightColumn[0].className = rightColumn[0].className.replace(/span\d+/g, '');
             rightColumn.addClass('span' + (this.max - value));
-        }
-    });
-
-    Views.WysiwygEditor = Marionette.View.extend({
-        initialize: function (options) {
-            var self = this; 
-
-            _.bindAll(this, 'updatePreview');
-
-            this.block = options.block;
-            this.toolbar = $('.wysihtml5-toolbar', this.$el).get(0);
-            this.textarea = $('textarea', this.$el).get(0);
-
-            this.editor = new wysihtml5.Editor(this.textarea, {
-                toolbar: this.toolbar,
-                parserRules: wysihtml5ParserRules
-            });
-
-            // This is the only way to get the 'keyup' event from the wysihtml5
-            // editor according to https://github.com/jezdez/django_compressor/issues/99
-            this.editor.observe("load", function () {
-                self.editor.composer.element.addEventListener("keyup", self.updatePreview);
-            });
-
-            this.editor.on('change', this.updatePreview);
-            this.editor.on('aftercommand:composer', this.updatePreview);
-        },
-        updatePreview: function () {
-            var fieldName = $(this.editor.textarea.element).attr('id').replace('id_', '');
-
-            var previewField = $('#block-' + this.block.id + '-' + fieldName);
-
-            var content = $(this.editor.composer.element).html();
-            $(previewField).html(content);
         }
     });
 
