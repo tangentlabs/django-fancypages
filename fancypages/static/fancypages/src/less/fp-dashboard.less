@@ -1,5 +1,7 @@
 //Page management tree and the FP page link tree
 @import "tree.less";
+@import "bootstrap/variables.less";
+@import "bootstrap/mixins.less";
 
 //Tree override
 .fp-page-tree {
@@ -19,8 +21,58 @@
   }
 }
 
+// Wrapping the page management
+.fp-page-management-wrapper {
+  background: #f0f0f0;
+  padding:8px 8px 1px;
+  .border-radius(4px);
+}
+
+// The OL list of LI pages
+.fp-page-management {
+  display:block;
+  list-style: none;
+  margin-left:0;
+  ol {
+    list-style: none;
+    padding-bottom:0.1px;
+  }
+  li {
+    display: block;
+  }
+  ol > li, > li {
+    background:#fff;
+    margin-top:4px;
+  }
+  > li:first-child {
+    margin-top:0;
+  }
+  > li ol > li:first-child {
+    margin-bottom:4px;
+  }
+
+}
+
+// Single page wrapper
+.fp-page-wrapper {
+  background:#e6e6e6;
+  padding:8px;
+  // margin-bottom:8px;
+  .border-radius(4px);
+}
+
 .row-actions {
   background:#efefef;
   padding:5px;
   border-top:1px solid darken(#efefef, 10%);
+}
+
+// Placeholder
+.fp-management-placeholder {
+  padding:8px;
+  border:1px dashed #444;
+  margin-bottom:8px;
+  display: block;
+  .border-radius(4px);
+  background:#fff;
 }

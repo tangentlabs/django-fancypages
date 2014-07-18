@@ -45,17 +45,17 @@ FancypageApp.module('Dashboard.Views', function (Views, FancypageApp, Backbone, 
             // set this nodes UUID as the tree ID for the sub-tree and collapse
             // it by default. Nothing is done no sub-tree is present.
             this.$el.children('ol').attr('id', this.model.id + '-tree');
-            this.$el.children('ol').addClass('collapse');
         },
     });
 
     Views.PageTree = Marionette.CollectionView.extend({
-        el: 'ol.fp-page-tree',
+        el: 'ol.fp-page-management',
         itemView: Views.PageNode,
         initialize: function () {
             this.sortable = this.$el.sortable({
-                placeholder: '<li class="placeholder">Insert here!</li>',
+                placeholder: '<li class="fp-management-placeholder">Insert here!</li>',
                 onDrop: this.saveMovedPage,
+                handle: 'i.icon-move',
             });
         },
         saveMovedPage: function ($item, container, _super, event) {

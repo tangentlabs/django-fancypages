@@ -24,45 +24,53 @@
     <form action="." method="post">
         {% csrf_token %}
 
-        <ol class="fp-page-tree"></ol>
+        <div class="fp-page-management-wrapper">
+            <ol class="fp-page-management"></ol>
+        </div>
     </form>
 {% endblock dashboard_content %}
+
 
 {% block extrascripts %}
     {{ block.super }}
     <script id="template-page-node" type="text/template">
-        <div class="row-fluid" >
-            <h5 class="span10">
+        <div class="fp-page-wrapper">
+            <div class="row-fluid" >
+                <div class="span10">
 
-                <% if (children.length > 0) { %>
-                    <a href="#" data-toggle="collapse" data-target="#<%= uuid %>-tree" class="collapsed">
-                        <i class="icon-caret-right icon-large"></i>
+                    <% if (children.length > 0) { %>
+                        <a href="#" data-toggle="collapse" data-target="#<%= uuid %>-tree" class="btn btn-small collapsed">
+                            <i class="icon-caret-right icon-large"></i>
+                        </a>
+                    <% } %>
+
+                    <button class="btn btn-small"><i class="icon-move icon-large"></i></button>
+
+                    <a href="#" data-toggle="collapse" data-target="#<%= uuid %>-actions">
+                        <i class="icon-file icon-large"></i>
+                        <%= name %>
                     </a>
-                <% } %>
 
-                <a href="#" data-toggle="collapse" data-target="#<%= uuid %>-actions">
-                    <i class="icon-file icon-large"></i>
-                    <%= name %>
-                </a>
-            </h5>
+                </div>
 
-            <div class="span2">
-                <% if (isVisible) { %>
-                    <span class="label label-success">{% trans "visible" %}</span>
-                <% } else { %>
-                <span class="label label-danger">{% trans "not visible" %}</span>
-                <% } %>
-                <span class="label"><%= status %></span>
+                <div class="span2">
+                    <% if (isVisible) { %>
+                        <span class="label label-success">{% trans "visible" %}</span>
+                    <% } else { %>
+                    <span class="label label-danger">{% trans "not visible" %}</span>
+                    <% } %>
+                    <span class="label"><%= status %></span>
+                </div>
             </div>
-        </div>
 
-        <div class="collapse" id="<%= uuid %>-actions">
-            <div class="row-actions">
-                <a class="btn btn-small" href="<%= url %>">{% trans "View page" %}</a>
-                <a class="btn btn-small btn-success" href="<%= addChildUrl %>">{% trans "Add child page" %}</a>
-                <a class="btn btn-small btn-danger" href="<%= deletePageUrl %>">{% trans "Delete" %}</a>
-                <a class="btn btn-small" href="<%= editPageUrl %>">{% trans "Edit page settings" %}</a>
-                links to <a href="<%= url %>"><i class="icon-link"></i> <%= url %></a>
+            <div class="collapse" id="<%= uuid %>-actions">
+                <div class="row-actions">
+                    <a class="btn btn-small" href="<%= url %>">{% trans "View page" %}</a>
+                    <a class="btn btn-small btn-success" href="<%= addChildUrl %>">{% trans "Add child page" %}</a>
+                    <a class="btn btn-small btn-danger" href="<%= deletePageUrl %>">{% trans "Delete" %}</a>
+                    <a class="btn btn-small" href="<%= editPageUrl %>">{% trans "Edit page settings" %}</a>
+                    links to <a href="<%= url %>"><i class="icon-link"></i> <%= url %></a>
+                </div>
             </div>
         </div>
         <ol data-parent-id="<%= uuid %>"></ol>
