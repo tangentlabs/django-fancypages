@@ -51,6 +51,9 @@ FancypageApp.module('Dashboard.Views', function (Views, FancypageApp, Backbone, 
     Views.PageTree = Marionette.CollectionView.extend({
         el: 'ol.fp-page-management',
         itemView: Views.PageNode,
+        events: {
+            "shown.bs.collapse .row-actions-position .collapse": "closeActions",
+        },
         initialize: function () {
             this.sortable = this.$el.sortable({
                 placeholder: '<li class="fp-management-placeholder">Insert here!</li>',
@@ -74,6 +77,14 @@ FancypageApp.module('Dashboard.Views', function (Views, FancypageApp, Backbone, 
                 old_index: oldIndex,
             });
             promise.complete(FancypageApp.Api.reloadPage);
+        },
+        // Close other page actions
+        closeActions: function(ev) {
+            $('.row-actions-position .collapse').not($(ev.target)).each(function(){
+                if ($(this).hasClass('in')) {
+                    $(this).collapse('hide');
+                }
+            });
         }
     });
 });

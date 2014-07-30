@@ -3,36 +3,15 @@
 @import "bootstrap/variables.less";
 @import "bootstrap/mixins.less";
 
-//Tree override
-.fp-page-tree {
-  > li {
-    border:1px solid #dddddd;
-    border-top-width:0;
-    cursor:move;
-    &:first-child {
-      border-top-width:1px;
-    }
-  }
-  h5, .btn-toolbar {
-    margin:0;
-  }
-  h5 {
-    margin-top:2px;
-  }
-}
-
-// Wrapping the page management
-.fp-page-management-wrapper {
-  background: #f0f0f0;
-  padding:8px 8px 1px;
-  .border-radius(4px);
-}
-
 // The OL list of LI pages
 .fp-page-management {
   display:block;
   list-style: none;
-  margin-left:0;
+  margin:0;
+  padding:0;
+  // Allow for fixed elements
+  padding-top:170px;
+  background: #fff;
   ol {
     list-style: none;
     padding-bottom:0.1px;
@@ -42,29 +21,46 @@
   }
   ol > li, > li {
     background:#fff;
-    margin-top:4px;
   }
-  > li:first-child {
-    margin-top:0;
-  }
-  > li ol > li:first-child {
-    margin-bottom:4px;
-  }
-
 }
 
 // Single page wrapper
 .fp-page-wrapper {
   background:#e6e6e6;
   padding:8px;
-  // margin-bottom:8px;
+  margin-bottom:8px;
   .border-radius(4px);
+  border-bottom:1px solid darken(#efefef, 10%);
+  text-transform: capitalize;
+  .row-fluid [class*="span"] {
+    min-height: 0;
+  }
+}
+
+// Fixed element in the header the page management
+.fp-fixed-header,
+.row-actions-position {
+  position: fixed;
+  background: #fff;
+  width:100%;
+  left:0;
+}
+.fp-fixed-header .page-header,
+.row-actions {
+  margin:0 20px;
+}
+// Fixed header position
+.fp-fixed-header {
+  top:40px;
+}
+// Fixed page actions position
+.row-actions-position {
+  top:110px;
 }
 
 .row-actions {
-  background:#efefef;
-  padding:5px;
-  border-top:1px solid darken(#efefef, 10%);
+  padding:10px 0;
+  border-bottom:1px solid darken(#efefef, 10%);
 }
 
 // Placeholder
@@ -75,4 +71,9 @@
   display: block;
   .border-radius(4px);
   background:#fff;
+}
+
+// Page status
+.fp-page-status {
+  text-align: right;
 }
