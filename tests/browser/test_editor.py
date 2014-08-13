@@ -219,9 +219,13 @@ class TestImageBlock(SplinterTestCase):
         self.find_and_click_by_css(self.browser, '.edit-button')
         self.wait_for_editor_reload()
 
+        self.browser.is_element_present_by_css('iframe')
+
         self.find_and_click_by_css(
             self.browser, 'a[data-behaviours=load-asset-modal]')
         self.wait_for_editor_reload()
+
+        self.browser.is_element_present_by_css('iframe')
 
         with self.browser.get_iframe(0) as iframe:
             self.wait_for_editor_reload()
