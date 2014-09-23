@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='TitleTextBlock',
             fields=[
-                ('contentblock_ptr', models.OneToOneField(auto_created=True, primary_key=True, to_field='id', serialize=False, to='fancypages.ContentBlock')),
+                ('contentblock_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='fancypages.ContentBlock')),
                 ('title', models.CharField(default=b'Your title goes here.', max_length=100, verbose_name='Title')),
                 ('text', models.TextField(default=b'Your text goes here.', verbose_name='Text')),
             ],

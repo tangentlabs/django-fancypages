@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='PageNavigationBlock',
             fields=[
-                ('contentblock_ptr', models.OneToOneField(auto_created=True, primary_key=True, to_field='id', serialize=False, to='fancypages.ContentBlock')),
+                ('contentblock_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='fancypages.ContentBlock')),
                 ('depth', models.PositiveIntegerField(default=2, verbose_name='Navigation depth')),
                 ('is_relative', models.BooleanField(default=False, verbose_name='Is navigation relative to this page?')),
             ],

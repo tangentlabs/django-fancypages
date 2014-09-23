@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='OrderedContainer',
             fields=[
-                ('container_ptr', models.OneToOneField(auto_created=True, primary_key=True, to_field='id', serialize=False, to='fancypages.Container')),
+                ('container_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='fancypages.Container')),
                 ('display_order', models.PositiveIntegerField()),
             ],
             options={
