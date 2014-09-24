@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
+import django
+
 from django.db import models
 from django.utils.translation import get_language
 
@@ -16,7 +20,7 @@ class PageManager(models.Manager):
         """
         return PageQuerySet(self.model).select_related('node')
 
-    def get_query_set(self):
+    def get_queryset(self):
         """
         The default queryset ordering the pages by the node paths to make sure
         that they are returned in the order they are in the tree.
@@ -25,6 +29,13 @@ class PageManager(models.Manager):
         """
         return self.get_select_related_queryset().order_by('node__path')
 
+    def get_query_set(self):
+        """
+        Method for backwards compatability only. Support for ``get_query_set``
+        will be dropped in Django 1.8.
+        """
+        return self.get_queryset()
+
     def top_level(self):
         """
         Returns only the top level pages based on the depth provided in the
@@ -32,7 +43,7 @@ class PageManager(models.Manager):
 
         :rtype: QuerySet
         """
-        return self.get_query_set().filter(node__depth=1)
+        return self.get_queryset().filter(node__depth=1)
 
     def visible(self, **kwargs):
         return self.get_select_related_queryset().visible(**kwargs)
@@ -43,10 +54,15 @@ class PageManager(models.Manager):
 
 class ContainerManager(models.Manager):
 
+    def get_queryset(self):
+        if django.VERSION[:2] == (1, 5):
+            return super(ContainerManager, self).get_query_set()
+        return super(ContainerManager, self).get_queryset()
+
     def get_language_query_set(self, **kwargs):
         if 'language_code' not in kwargs:
             kwargs['language_code'] = get_language()
-        return self.get_query_set().filter(**kwargs)
+        return self.get_queryset().filter(**kwargs)
 
     def all(self):
         return self.get_language_query_set()
@@ -62,4 +78,4 @@ class ContainerManager(models.Manager):
     def get_or_create(self, **kwargs):
         if 'language_code' not in kwargs:
             kwargs['language_code'] = get_language()
-        return self.get_query_set().get_or_create(**kwargs)
+        return self.get_queryset().get_or_create(**kwargs)
