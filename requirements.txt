@@ -7,20 +7,21 @@ django-configurations==0.8
 
 # Testing dependencies
 mock==1.0.1
-WebTest==2.0.15
+WebTest==2.0.16
 django-webtest==1.7.7
 tox==1.7.2
 factory-boy==2.4.1
 
-pytest==2.6.1
+py==1.4.24
+pytest==2.6.2
 pytest-cache==1.0
-pytest-cov==1.7.0
+pytest-cov==1.8.0
 pytest-django==2.6.2
 pytest-pep8==1.0.6
-pytest-splinter==1.0.3
+pytest-splinter==1.1.1
 
 # Browser testing deps
-selenium==2.42.1
+selenium==2.43.0
 splinter==0.6.0
 
 # Code style and coverage
@@ -33,5 +34,5 @@ coveralls==0.4.2
 purl==1.0
 
 # Database connectors
-psycopg2==2.5.3
+psycopg2==2.5.4
 MySQL-python==1.2.5
