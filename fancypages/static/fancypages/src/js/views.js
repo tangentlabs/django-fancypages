@@ -5,10 +5,11 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
      * Rich text editor view that provides integration with the Froala editor.
      */
     Views.FroalaEditor = Marionette.View.extend({
-        editorOptions: {
+        defaultEditorOptions: {
             inlineMode: false,
             buttons: ['bold', 'italic', "createLink", "insertOrderedList", "insertUnorderedList", "html"],
         },
+        editorOptions: {},
         initialize: function (options) {
             _.bindAll(this, 'updatePreview');
 
@@ -38,15 +39,18 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
      * editor.
      */
     Views.TrumbowygEditor = Marionette.View.extend({
-        editorOptions: {
+        defaultEditorOptions: {
             fullscreenable: false,
             closable: false,
             btns: ['bold', 'italic',
                 '|', 'link', '|', 'unorderedList', 'orderedList',
                 '|', 'viewHTML']
         },
+        editorOptions: {},
+
         initialize: function (options) {
             var self = this; 
+            this.editorOptions = _.defaults(this.editorOptions, this.defaultEditorOptions);
 
             _.bindAll(this, 'updatePreview');
 
@@ -80,21 +84,25 @@ FancypageApp.module('Views', function (Views, FancypageApp, Backbone, Marionette
      */
     Views.addInitializer(function (options) {
         options = options || {};
+        var editorOptions = options.editorOptions || {};
+
         switch (options.editor || 'trumbowyg') {
             case 'custom':
-                Views.RichTextEditor = options.editorView;
+                Views.RichTextEditor = options.editorView.extend({
+                    editorOptions: editorOptions
+                });
                 break;
             case 'froala':
-                Views.RichTextEditor = Views.FroalaEditor;
+                Views.RichTextEditor = Views.FroalaEditor.extend({
+                    editorOptions: editorOptions
+                });
                 break;
             default:
             case 'trumbowyg':
-                Views.RichTextEditor = Views.TrumbowygEditor;
+                Views.RichTextEditor = Views.TrumbowygEditor.extend({
+                    editorOptions: editorOptions
+                });
                 break;
-        };
-
-        if (!_.isEmpty(options.editorOptions)) {
-            Views.RichTextEditor.editorOptions = options.editorOptions;
         };
     });
 

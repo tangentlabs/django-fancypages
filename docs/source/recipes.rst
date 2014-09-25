@@ -124,5 +124,29 @@ for the Fancypages app to ``custom`` and pass you view class as the
 .. _`the Marionette views for Fancypages`: https://github.com/tangentlabs/django-fancypages/blob/master/fancypages/static/fancypages/src/js/views.js
 
 
+Customising Rich Text Editor
+----------------------------
 
+In addition to choose the editor you want to use for rich text editing, you can
+also configure the way the editor behaves by passing editor-specific options
+to the fancypages app when it is initialised in the
+``fancypages/editor/body.html`` template. Simply overwrite the template and
+update the script section at the bottom with something like this::
 
+.. code-block:: javascript
+
+    $(document).ready(function(){
+        FancypageApp.start({
+            editor: 'trumbowyg',
+            editorOptions: {
+                fullscreenable: true
+                btns: [
+                    'viewHTML',
+                    '|', 'formatting',
+                    '|', 'link',
+                    '|', 'insertImage',
+                    '|', 'insertHorizontalRule'
+                ]
+            },
+        });
+    });
