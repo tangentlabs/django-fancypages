@@ -36,3 +36,7 @@ purl==1.0
 # Database connectors
 psycopg2==2.5.4
 MySQL-python==1.2.5
+
+# documentation
+Sphinx>=1.2
+docutils>=0.8.1
