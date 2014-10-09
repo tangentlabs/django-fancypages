@@ -60,8 +60,8 @@
                 <div class="span10">
 
                     <% if (children.length > 0) { %>
-                        <a href="#" data-toggle="collapse" data-target="#<%= uuid %>-tree" class="btn btn-small collapsed">
-                            <i class="icon-caret-right icon-large"></i>
+                        <a href="#" data-toggle="collapse" data-target="#<%= uuid %>-tree" class="fp-children-toggle btn btn-small collapsed">
+                            <i class="icon-minus" data-toggle="collapse" data-target="#<%= uuid %>-tree"></i>
                         </a>
                     <% } %>
 
@@ -84,7 +84,7 @@
             </div>
 
         </div>
-        <ol data-parent-id="<%= uuid %>"></ol>
+        <ol data-parent-id="<%= uuid %>" class="fp-children-group"></ol>
     </script>
 {% endblock %}
 

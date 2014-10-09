@@ -3,6 +3,17 @@
 @import "bootstrap/variables.less";
 @import "bootstrap/mixins.less";
 
+body.dragging, body.dragging * {
+  cursor: move !important;
+}
+
+// Sortable dragged element
+.dragged {
+  position: absolute;
+  .opacity(70);
+  z-index: 2000;
+}
+
 // The OL list of LI pages
 .fp-page-management {
   display:block;
@@ -18,6 +29,22 @@
   }
   li {
     display: block;
+    // Placholder arrow
+    &.placeholder {
+      position: relative;
+      &:before {
+        position: absolute;
+        content: "";
+        width: 0;
+        height: 0;
+        margin-top: -5px;
+        left: -5px;
+        top: -4px;
+        border: 5px solid transparent;
+        border-left-color: red;
+        border-right: none;
+      }
+    }
   }
   ol > li, > li {
     background:#fff;
@@ -55,11 +82,11 @@
 }
 // Fixed header position
 .fp-fixed-header {
-  top:40px;
+  top:0px;
 }
 // Fixed page actions position
 .row-actions-position {
-  top:109px;
+  top:69px;
 }
 
 .fp-page-wrapper,
@@ -75,16 +102,6 @@
   h6 {
     margin:0;
   }
-}
-
-// Placeholder
-.fp-management-placeholder {
-  padding:8px;
-  border:1px dashed #444;
-  margin-bottom:8px;
-  display: block;
-  .border-radius(4px);
-  background:#fff;
 }
 
 // Page links

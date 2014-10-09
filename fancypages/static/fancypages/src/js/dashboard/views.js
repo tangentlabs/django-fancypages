@@ -24,15 +24,15 @@ FancypageApp.module('Dashboard.Views', function (Views, FancypageApp, Backbone, 
                 return false;
             }
 
-            anchor.removeClass('icon-caret-down');
-            anchor.addClass('icon-caret-right');
+            anchor.removeClass('icon-minus');
+            anchor.addClass('icon-plus');
         },
         showChildren: function (ev) {
             var treeId = $(ev.currentTarget).attr('id'),
                 anchor = $('[data-target=#' + treeId + ']>i');
 
-            anchor.removeClass('icon-caret-right');
-            anchor.addClass('icon-caret-down');
+            anchor.removeClass('icon-plus');
+            anchor.addClass('icon-minus');
         },
         /**
          * After we've rendered the new list element representing a page node,
@@ -53,11 +53,11 @@ FancypageApp.module('Dashboard.Views', function (Views, FancypageApp, Backbone, 
         itemView: Views.PageNode,
         events: {
             "show.bs.collapse .row-actions-position .collapse": "pageSelect",
-            "shown.bs.collapse .row-actions-position .collapse": "closeActions"
+            "shown.bs.collapse .row-actions-position .collapse": "closeActions",
+            "click .fp-children-toggle": "toggleChildren"
         },
         initialize: function () {
             this.sortable = this.$el.sortable({
-                placeholder: '<li class="fp-management-placeholder">Insert here!</li>',
                 onDrop: this.saveMovedPage,
                 handle: 'i.icon-move',
             });
@@ -78,6 +78,13 @@ FancypageApp.module('Dashboard.Views', function (Views, FancypageApp, Backbone, 
                 old_index: oldIndex,
             });
             promise.complete(FancypageApp.Api.reloadPage);
+        },
+
+        // Toggle the collapse on child
+        toggleChildren: function(ev) {
+            ev.stopPropagation();
+            var openTarget = $(ev.target).attr('data-target');
+            $(openTarget).collapse('toggle');
         },
         
         // Close other page actions
