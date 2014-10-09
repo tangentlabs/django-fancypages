@@ -301,6 +301,13 @@ def process_docstring(app, what, name, obj, options, lines):
     # Return the extended docstring
     return lines
 
+
 def setup(app):
+    import django
+    from configurations import importer
+
+    importer.install()
+    django.setup()
+
     # Register the docstring processor with sphinx
     app.connect('autodoc-process-docstring', process_docstring)

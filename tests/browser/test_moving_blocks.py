@@ -5,31 +5,11 @@ import pytest
 from selenium.webdriver import ActionChains
 
 from django.db.models import get_model
-from django.core.urlresolvers import reverse
 
 from fancypages.test import factories
+from fancypages.test.fixtures import admin_user  # noqa
 
 FancyPage = get_model('fancypages', 'FancyPage')
-
-
-@pytest.fixture
-def splinter_webdriver():
-    return 'firefox'
-
-
-@pytest.fixture
-def admin_user(request, live_server, browser):
-    username = 'peter.griffin'
-    email = 'peter@griffin.com'
-    password = 'lazyonthecouch'
-
-    user = factories.UserFactory(
-        username=username, email=email, password=password, is_staff=True)
-
-    browser.visit(live_server.url + reverse('admin:index'))
-    browser.fill_form({'username': username, 'password': password})
-    browser.find_by_css("input[type='submit']").first.click()
-    return user
 
 
 @pytest.mark.browser

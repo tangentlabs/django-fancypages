@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
 import os
 import mock
 import time
@@ -102,15 +104,12 @@ class SplinterTestCase(LiveServerTestCase):
     is_staff = False
     is_logged_in = True
 
-    def get_local_browser(self):
-        return Browser(SPLINTER_WEBDRIVER)
-
     def setUp(self):
         super(SplinterTestCase, self).setUp()
         self.user = None
         self.base_url = URL(self.live_server_url)
-
-        self.browser = self.get_local_browser()
+        self.browser = Browser(SPLINTER_WEBDRIVER)
+        self.browser.driver.set_window_size(1280, 1024)
 
         if self.is_anonymous and not self.is_staff:
             return

@@ -1,7 +1,8 @@
 language: python
-
 python:
   - '2.7'
+
+sudo: false
 
 cache:
   directories:
@@ -9,6 +10,7 @@ cache:
 
 addons:
   postgresql: "9.3"
+  firefox: "30.0"
 
 env:
   global:
@@ -29,7 +31,7 @@ env:
     - DJANGO="Django>=1.6,<1.7" MODEL_UTILS_VERSION=">2.0" TARGET='test-oscar-fancypages'
 
     # Testing against Django 1.7
-    - DJANGO="https://github.com/django/django/archive/1.7c1.zip" MODEL_UTILS_VERSION=">2.0" TARGET='test-standalone-fancypages'
+    - DJANGO="Django>=1.7,<1.8" MODEL_UTILS_VERSION=">2.0" TARGET='test-standalone-fancypages'
     # FIXME: oscar_fancypages currently doesn't support Django 1.7
     #- DJANGO="https://github.com/django/django/archive/1.7b4.zip" MODEL_UTILS_VERSION=">2.0" TARGET='test-oscar-fancypages' EXTRA_INSTALLS="git+https://github.com/elbaschid/django-oscar.git@add_support_for_django17#egg=django-oscar-dev"
 
@@ -38,7 +40,7 @@ env:
 
 before_install:
   - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
+  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16"
 
 install:
   - pip install $PIP_OPTS wheel setuptools -U

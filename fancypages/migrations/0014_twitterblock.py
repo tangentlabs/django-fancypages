@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='TwitterBlock',
             fields=[
-                ('contentblock_ptr', models.OneToOneField(auto_created=True, primary_key=True, to_field='id', serialize=False, to='fancypages.ContentBlock')),
+                ('contentblock_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='fancypages.ContentBlock')),
                 ('username', models.CharField(max_length=50, verbose_name='Twitter username')),
                 ('max_tweets', models.PositiveIntegerField(default=5, verbose_name='Maximum tweets')),
             ],

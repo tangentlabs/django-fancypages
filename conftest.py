@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
 import os
 import pytest
 import django
@@ -16,16 +18,6 @@ def pytest_configure():
     # to properly initialise the Django app config.
     if django.VERSION[1] >= 7:
         django.setup()
-
-
-@pytest.mark.tryfirst
-def pytest_runtest_makereport(item, call, __multicall__):
-    # execute all other hooks to obtain the report object
-    rep = __multicall__.execute()
-    # set an report attribute for each phase of a call, which can
-    # be "setup", "call", "teardown"
-    setattr(item, "{}_report".format(rep.when), rep)
-    return rep
 
 
 @pytest.fixture
@@ -51,3 +43,8 @@ def webtest(request, webtest_csrf_checks, transactional_db):
     request.addfinalizer(wtm._unpatch_settings)
 
     return DjangoTestApp()
+
+
+@pytest.fixture
+def splinter_webdriver():
+    return 'firefox'

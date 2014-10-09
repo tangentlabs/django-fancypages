@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('uuid', shortuuidfield.fields.ShortUUIDField(db_index=True, verbose_name='Unique ID', max_length=22, editable=False, blank=True)),
-                ('container', models.ForeignKey(to='fancypages.Container', to_field='id', verbose_name='Container')),
+                ('container', models.ForeignKey(related_name=b'blocks', verbose_name='Container', to='fancypages.Container')),
                 ('display_order', models.PositiveIntegerField()),
             ],
             options={
