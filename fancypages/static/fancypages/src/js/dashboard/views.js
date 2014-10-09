@@ -52,7 +52,8 @@ FancypageApp.module('Dashboard.Views', function (Views, FancypageApp, Backbone, 
         el: 'ol.fp-page-management',
         itemView: Views.PageNode,
         events: {
-            "shown.bs.collapse .row-actions-position .collapse": "closeActions",
+            "show.bs.collapse .row-actions-position .collapse": "pageSelect",
+            "shown.bs.collapse .row-actions-position .collapse": "closeActions"
         },
         initialize: function () {
             this.sortable = this.$el.sortable({
@@ -77,6 +78,15 @@ FancypageApp.module('Dashboard.Views', function (Views, FancypageApp, Backbone, 
                 old_index: oldIndex,
             });
             promise.complete(FancypageApp.Api.reloadPage);
+        },
+        
+        // Close other page actions
+        pageSelect: function(ev) {
+            $('.row-actions-position .collapse').not($(ev.target)).each(function(){
+                if ($(this).hasClass('in')) {
+                    $(this).parent().next().addClass('collapsed');
+                }
+            });
         },
         // Close other page actions
         closeActions: function(ev) {

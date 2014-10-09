@@ -10,7 +10,7 @@
   margin:0;
   padding:0;
   // Allow for fixed elements
-  padding-top:170px;
+  padding-top:140px;
   background: #fff;
   ol {
     list-style: none;
@@ -26,15 +26,19 @@
 
 // Single page wrapper
 .fp-page-wrapper {
-  background:#e6e6e6;
+  background:lighten(@linkColor, 55%);
+  border-bottom:1px solid darken(#efefef, 20%);
+  &.collapsed {
+    border-bottom-color:darken(#efefef, 10%);
+    background:#e6e6e6;
+  }
   padding:8px;
   margin-bottom:8px;
   .border-radius(4px);
-  border-bottom:1px solid darken(#efefef, 10%);
   text-transform: capitalize;
-  .row-fluid [class*="span"] {
-    min-height: 0;
-  }
+}
+.fp-fixed-header .page-header {
+  border-bottom-width: 0;
 }
 
 // Fixed element in the header the page management
@@ -55,12 +59,22 @@
 }
 // Fixed page actions position
 .row-actions-position {
-  top:110px;
+  top:109px;
+}
+
+.fp-page-wrapper,
+.row-actions {
+  .row-fluid [class*="span"] {
+    min-height: 0;
+  }
 }
 
 .row-actions {
   padding:10px 0;
   border-bottom:1px solid darken(#efefef, 10%);
+  h6 {
+    margin:0;
+  }
 }
 
 // Placeholder
@@ -73,7 +87,7 @@
   background:#fff;
 }
 
-// Page status
-.fp-page-status {
-  text-align: right;
+// Page links
+.fp-page-link {
+  display: inline-block;
 }

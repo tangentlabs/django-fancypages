@@ -20,6 +20,14 @@
         <h1>{% trans "Page Management" %}</h1>
     </div>
 </div>
+<div class="row-actions-position">
+    <div class="row-actions">
+        <div class="row-fluid" >
+            <h6 class="span10">Name</h6>
+            <h6 class="span2">Status</h6>
+        </div>
+    </div>
+</div>
 {% endblock header %}
 
 {% block dashboard_content %}
@@ -47,7 +55,7 @@
             </div>
         </div>
         
-        <div class="fp-page-wrapper">
+        <div class="fp-page-wrapper collapsed" data-toggle="collapse" data-target="#<%= uuid %>-actions" >
             <div class="row-fluid" >
                 <div class="span10">
 
@@ -59,7 +67,7 @@
 
                     <button class="btn btn-small"><i class="icon-move icon-large"></i></button>
 
-                    <a href="#<%= uuid %>-actions" data-toggle="collapse">
+                    <a href="<%= editPageUrl %>" class="fp-page-link">
                         <%= name %>
                     </a>
 
