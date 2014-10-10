@@ -24,15 +24,15 @@ FancypageApp.module('Dashboard.Views', function (Views, FancypageApp, Backbone, 
                 return false;
             }
 
-            anchor.removeClass('icon-minus');
-            anchor.addClass('icon-plus');
+            anchor.removeClass('fp-icon-square-minus');
+            anchor.addClass('fp-icon-square-plus');
         },
         showChildren: function (ev) {
             var treeId = $(ev.currentTarget).attr('id'),
                 anchor = $('[data-target=#' + treeId + ']>i');
 
-            anchor.removeClass('icon-plus');
-            anchor.addClass('icon-minus');
+            anchor.removeClass('fp-icon-square-plus');
+            anchor.addClass('fp-icon-square-minus');
         },
         /**
          * After we've rendered the new list element representing a page node,
@@ -59,7 +59,7 @@ FancypageApp.module('Dashboard.Views', function (Views, FancypageApp, Backbone, 
         initialize: function () {
             this.sortable = this.$el.sortable({
                 onDrop: this.saveMovedPage,
-                handle: 'i.icon-move',
+                handle: '.fp-pagemove',
             });
         },
         saveMovedPage: function ($item, container, _super, event) {

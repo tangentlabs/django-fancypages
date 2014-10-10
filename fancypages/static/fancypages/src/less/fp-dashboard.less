@@ -3,16 +3,85 @@
 @import "bootstrap/variables.less";
 @import "bootstrap/mixins.less";
 
-body.dragging, body.dragging * {
-  cursor: move !important;
+
+@fontColor: #555558;
+@iconColor: #9C9EA0;
+@rowColor: #deedf0;
+
+// Icons
+@font-face {
+  font-family: 'fp-iconmoon';
+  src:url('../fonts/icomoon/fp-iconmoon.eot?u1yzz');
+  src:url('../fonts/icomoon/fp-iconmoon.eot?#iefixu1yzz') format('embedded-opentype'),
+    url('../fonts/icomoon/fp-iconmoon.woff?u1yzz') format('woff'),
+    url('../fonts/icomoon/fp-iconmoon.ttf?u1yzz') format('truetype'),
+    url('../fonts/icomoon/fp-iconmoon.svg?u1yzz#fp-iconmoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="fp-icon"], [class*=" fp-icon"] {
+  font-family: 'fp-iconmoon';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.fp-icon-trash:before {
+  content: "\e600";
+}
+.fp-icon-chain:before {
+  content: "\f0c1";
+}
+.fp-icon-square-plus:before {
+  content: "\e044";
+}
+.fp-icon-square-minus:before {
+  content: "\e045";
+}
+.fp-icon-file:before {
+  content: "\e124";
+}
+
+
+// Fonts for the dashboard
+.fancypages {
+  font-family: 'Open Sans', helvetica, arial, sans-serif;
+  h1, h2, h3 {
+    font-weight: normal;
+  }
+  -webkit-font-smoothing: antialiased;
+  color:@fontColor;
+  overflow-x: hidden;
 }
 
 // Sortable dragged element
+body.dragging, body.dragging * {
+  cursor: move !important;
+}
 .dragged {
   position: absolute;
   .opacity(70);
   z-index: 2000;
 }
+.fp-children-group.in.collapse {
+  overflow: visible;
+}
+
+// TODO: Improve indent elements
+.fp-page-management ol > li .fp-page-wrapper { padding-left:20px; margin-left:-20px; }
+.fp-page-management ol > li ol > li .fp-page-wrapper { padding-left:40px; margin-left:-40px; }
+.fp-page-management ol > li ol > li ol > li .fp-page-wrapper { padding-left:60px; margin-left:-60px; }
+.fp-page-management ol > li ol > li ol > li ol > li .fp-page-wrapper { padding-left:80px; margin-left:-80px; }
+.fp-page-management ol > li ol > li ol > li ol > li ol > li .fp-page-wrapper { padding-left:100px; margin-left:-100px; }
+
 
 // The OL list of LI pages
 .fp-page-management {
@@ -21,11 +90,12 @@ body.dragging, body.dragging * {
   margin:0;
   padding:0;
   // Allow for fixed elements
-  padding-top:140px;
-  background: #fff;
+  padding-top:165px;
   ol {
     list-style: none;
-    padding-bottom:0.1px;
+    padding:0;
+    margin:0;
+    margin-left:20px;
   }
   li {
     display: block;
@@ -39,33 +109,36 @@ body.dragging, body.dragging * {
         height: 0;
         margin-top: -5px;
         left: -5px;
-        top: -4px;
-        border: 5px solid transparent;
-        border-left-color: red;
+        top: -2px;
+        border: 7px solid transparent;
+        border-left-color: #3DBF41;
         border-right: none;
+        z-index: 10;
       }
     }
-  }
-  ol > li, > li {
-    background:#fff;
   }
 }
 
 // Single page wrapper
+
 .fp-page-wrapper {
-  background:lighten(@linkColor, 55%);
-  border-bottom:1px solid darken(#efefef, 20%);
-  &.collapsed {
-    border-bottom-color:darken(#efefef, 10%);
-    background:#e6e6e6;
-  }
-  padding:8px;
-  margin-bottom:8px;
-  .border-radius(4px);
+  background:@rowColor;
+  border-bottom:1px solid #D9DBDD;
+  padding:14px 0;
   text-transform: capitalize;
-}
-.fp-fixed-header .page-header {
-  border-bottom-width: 0;
+  position: relative;
+  &.collapsed {
+    background:#fff;
+    &:hover {
+      background:lighten(@rowColor, 5%);
+    }
+  }
+  .btn-link {
+    color:@iconColor;
+    &:hover {
+      text-decoration: none;
+    }
+  }
 }
 
 // Fixed element in the header the page management
@@ -76,17 +149,22 @@ body.dragging, body.dragging * {
   width:100%;
   left:0;
 }
-.fp-fixed-header .page-header,
+.fp-fixed-header,
 .row-actions {
   margin:0 20px;
 }
 // Fixed header position
 .fp-fixed-header {
   top:0px;
+  padding:20px 0;
+  h1 {
+    display:inline-block;
+    font-size: 30px;
+  }
 }
 // Fixed page actions position
 .row-actions-position {
-  top:69px;
+  top:139px;
 }
 
 .fp-page-wrapper,
@@ -97,14 +175,50 @@ body.dragging, body.dragging * {
 }
 
 .row-actions {
+  .clearfix();
   padding:10px 0;
-  border-bottom:1px solid darken(#efefef, 10%);
+  border-bottom:2px solid #D9DBDD;
+  border-top:2px solid #D9DBDD;
   h6 {
     margin:0;
+    padding: 4px 0;
+  }
+  [class*="fp-icon"] {
+    color:@linkColor;
+  }
+  .btn-link {
+    padding: 4px 8px;
+    &:hover {
+      text-decoration: none;
+    }
   }
 }
 
-// Page links
-.fp-page-link {
-  display: inline-block;
+
+// Page link, Move, plus minus
+.fp-editpage-link {
+  color:@fontColor;
+}
+.fp-pagemove,
+.fp-children-toggle {
+  color:@iconColor;
+  &:hover {
+    text-decoration: none;
+  }
+}
+.fp-pagemove {
+  background:transparent;
+  padding:0;
+  border:0;
+  font-size:24px;
+}
+.fp-pagename {
+  width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  float:left;
+  display:block;
+  margin-top:4px;
+  margin-right: 10px;
 }
