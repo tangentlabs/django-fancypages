@@ -20,7 +20,7 @@ html, body {
 }
 
 
-// Icons
+// Page Management Icons
 @font-face {
   font-family: 'fp-iconmoon';
   src:url('../fonts/icomoon/fp-iconmoon.eot?u1yzz');
@@ -96,6 +96,7 @@ html, body {
   z-index: 20;
   padding:0 20px
 }
+// Remove the border on the page management page
 .fancypages-page-manager {
   .fp-header.page-header {
     border-bottom:0;
@@ -109,6 +110,8 @@ html, body {
 .fp-page-management {
   margin-top:@rowActionsHeight + 2;
 }
+
+
 
 
 
@@ -198,7 +201,7 @@ body.dragging, body.dragging * {
     display: block;
   }
 }
-
+// Adds the top border above the fixed actions
 .fp-page-management-form {
   position: relative;
   &:before {

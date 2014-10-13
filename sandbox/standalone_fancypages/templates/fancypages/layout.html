@@ -7,7 +7,7 @@
 {% block extrahead %}
     {{ block.super }}
     <style>
-
+        .row-actions-position { top:143px; }
     </style>
 {% endblock %}
 
@@ -22,7 +22,26 @@
         {% endfor %}
     {% endif %}
 
-   
+    <div class="navbar navbar-static-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <div class="brand">Fancy Sandbox</div>
+            <ul class="nav">
+                <li><a href="/">{% trans "Home" %}</a></li>
+            </ul>
+            <div class="pull-right">
+                <ul class="nav">
+                {% if not request.user.is_authenticated %}
+                    <li><a href="{% url "login" %}?next={{ request.path }}">{% trans "Login" %}</a></li>
+                {% else %}
+                    <li><a href="{% url "fp-dashboard:page-list" %}">{% trans "Dashboard" %}</a></li>
+                    <li><a href="{% url "logout" %}?next={{ request.path }}">{% trans "Logout" %}</a></li>
+                {% endif %}
+                </ul>
+            </div>
+        </div>
+      </div>
+    </div>
 
     {# Main content of page - other layout templates may override this block #}
     {% block content_wrapper %}
