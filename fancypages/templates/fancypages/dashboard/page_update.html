@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block header %}
-<div class="page-header">
+<div class="fp-header page-header">
     <h1>{{ title }}</h1>
 </div>
 {% endblock header %}
@@ -33,16 +33,21 @@
 {% block dashboard_content %}
 <form class="form" action="." method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <div class="well well-blank">
-        <div class="subheader">
-            <h2>Page settings</h2>
-        </div>
-        {{ form }}
+    <div class="subheader">
+        <h3>Page settings</h3>
     </div>
+
+    {% if fancypage.name %}
+    <div class="control-group">
+        <strong>{% trans "Url address" %}:</strong> <a href="{{ fancypage.get_absolute_url }}">{{ fancypage.get_absolute_url }}</a> 
+    </div>
+    {% endif %}   
+
+    {{ form }}
 
     <hr />
 
-    <div class="control-group pull-right">
+    <div class="control-group">
         <div class="controls">
             <button type='submit' class="btn btn-primary btn-large">{% trans "Save" %}</button>
             {% trans "or" %}

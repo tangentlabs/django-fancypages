@@ -8,6 +8,18 @@
 @iconColor: #9C9EA0;
 @rowColor: #deedf0;
 
+// Height for the fixed elements
+@pageTitleHeight: 100px;
+@rowActionsHeight: 50px;
+
+
+
+html, body {
+    width:100%;
+    height:100%;
+}
+
+
 // Icons
 @font-face {
   font-family: 'fp-iconmoon';
@@ -51,6 +63,10 @@
 }
 
 
+
+
+
+
 // Fonts for the dashboard
 .fancypages {
   font-family: 'Open Sans', helvetica, arial, sans-serif;
@@ -59,8 +75,70 @@
   }
   -webkit-font-smoothing: antialiased;
   color:@fontColor;
-  overflow-x: hidden;
 }
+.fancypages-page-manager {
+  overflow: hidden;
+  box-sizing: border-box;
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+}
+
+
+
+
+
+// Fixed element in the header the page management
+.fp-fixed-header,
+.row-actions-position {
+  position: fixed;
+  background: #fff;
+  width:100%;
+  left:0;
+  z-index: 20;
+  padding:0 20px
+}
+// Fixed header position
+.fp-fixed-header {
+  top:0px;
+}
+// Fixed page actions position
+.row-actions-position {
+  top:@pageTitleHeight;
+}
+.fp-page-management {
+  padding-top:@pageTitleHeight + @rowActionsHeight;
+}
+
+
+
+// New header
+.fp-header.page-header {
+  border-bottom:2px solid #D9DBDD;
+  height:@pageTitleHeight;
+  position: relative;
+  padding:0;
+  margin:0;
+  margin-bottom:40px;
+  &:before {
+    content: " ";
+    display: inline-block;
+    height: 100%;
+    width: 0.1%;
+    vertical-align: middle;
+  }
+  h1 {
+    font-size: 30px;
+    margin:0;
+  }
+  h1, a {
+    display:inline-block;
+    vertical-align: middle;
+  }
+}
+
+
+
 
 // Sortable dragged element
 body.dragging, body.dragging * {
@@ -74,32 +152,11 @@ body.dragging, body.dragging * {
 .fp-children-group.in.collapse {
   overflow: visible;
 }
-
-// TODO: Improve indent elements
-.fp-page-management ol > li .fp-page-wrapper { padding-left:20px; margin-left:-20px; }
-.fp-page-management ol > li ol > li .fp-page-wrapper { padding-left:40px; margin-left:-40px; }
-.fp-page-management ol > li ol > li ol > li .fp-page-wrapper { padding-left:60px; margin-left:-60px; }
-.fp-page-management ol > li ol > li ol > li ol > li .fp-page-wrapper { padding-left:80px; margin-left:-80px; }
-.fp-page-management ol > li ol > li ol > li ol > li ol > li .fp-page-wrapper { padding-left:100px; margin-left:-100px; }
-
-
-// The OL list of LI pages
+// Placholder arrow
 .fp-page-management {
-  display:block;
-  list-style: none;
-  margin:0;
-  padding:0;
-  // Allow for fixed elements
-  padding-top:165px;
-  ol {
-    list-style: none;
-    padding:0;
-    margin:0;
-    margin-left:20px;
-  }
+  height:400px;
+  overflow-y: auto;
   li {
-    display: block;
-    // Placholder arrow
     &.placeholder {
       position: relative;
       &:before {
@@ -108,7 +165,7 @@ body.dragging, body.dragging * {
         width: 0;
         height: 0;
         margin-top: -5px;
-        left: -5px;
+        left: 0;
         top: -2px;
         border: 7px solid transparent;
         border-left-color: #3DBF41;
@@ -119,8 +176,44 @@ body.dragging, body.dragging * {
   }
 }
 
-// Single page wrapper
 
+
+
+
+
+// The OL list of LI pages
+.fp-page-management {
+  display:block;
+  list-style: none;
+  margin:0;
+  padding-left:0;
+  ol {
+    list-style: none;
+    padding:0;
+    margin:0;
+    margin-left:20px;
+  }
+  li {
+    display: block;
+  }
+}
+
+
+
+
+
+// TODO: Improve indent elements
+.fp-page-management ol > li .fp-page-wrapper { padding-left:20px; margin-left:-20px; }
+.fp-page-management ol > li ol > li .fp-page-wrapper { padding-left:40px; margin-left:-40px; }
+.fp-page-management ol > li ol > li ol > li .fp-page-wrapper { padding-left:60px; margin-left:-60px; }
+.fp-page-management ol > li ol > li ol > li ol > li .fp-page-wrapper { padding-left:80px; margin-left:-80px; }
+.fp-page-management ol > li ol > li ol > li ol > li ol > li .fp-page-wrapper { padding-left:100px; margin-left:-100px; }
+
+
+
+
+
+// page row
 .fp-page-wrapper {
   background:@rowColor;
   border-bottom:1px solid #D9DBDD;
@@ -130,6 +223,7 @@ body.dragging, body.dragging * {
   &.collapsed {
     background:#fff;
     &:hover {
+      cursor:pointer;
       background:lighten(@rowColor, 5%);
     }
   }
@@ -141,59 +235,12 @@ body.dragging, body.dragging * {
   }
 }
 
-// Fixed element in the header the page management
-.fp-fixed-header,
-.row-actions-position {
-  position: fixed;
-  background: #fff;
-  width:100%;
-  left:0;
-}
-.fp-fixed-header,
-.row-actions {
-  margin:0 20px;
-}
-// Fixed header position
-.fp-fixed-header {
-  top:0px;
-  padding:20px 0;
-  h1 {
-    display:inline-block;
-    font-size: 30px;
-  }
-}
-// Fixed page actions position
-.row-actions-position {
-  top:139px;
-}
-
 .fp-page-wrapper,
 .row-actions {
   .row-fluid [class*="span"] {
     min-height: 0;
   }
 }
-
-.row-actions {
-  .clearfix();
-  padding:10px 0;
-  border-bottom:2px solid #D9DBDD;
-  border-top:2px solid #D9DBDD;
-  h6 {
-    margin:0;
-    padding: 4px 0;
-  }
-  [class*="fp-icon"] {
-    color:@linkColor;
-  }
-  .btn-link {
-    padding: 4px 8px;
-    &:hover {
-      text-decoration: none;
-    }
-  }
-}
-
 
 // Page link, Move, plus minus
 .fp-editpage-link {
@@ -211,6 +258,11 @@ body.dragging, body.dragging * {
   padding:0;
   border:0;
   font-size:24px;
+  &:hover {
+    cursor: move;
+    cursor: -webkit-grab; 
+    cursor: -moz-grab;
+  }
 }
 .fp-pagename {
   width: 300px;
@@ -222,3 +274,32 @@ body.dragging, body.dragging * {
   margin-top:4px;
   margin-right: 10px;
 }
+
+
+
+
+
+
+
+// Page actions
+.row-actions {
+  .clearfix();
+  padding:10px 0;
+  border-bottom:2px solid #D9DBDD;
+  height: @rowActionsHeight;
+  h6 {
+    margin:0;
+    padding: 4px 0;
+  }
+  [class*="fp-icon"] {
+    color:@linkColor;
+  }
+  .btn-link {
+    padding: 4px 8px;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+

@@ -3,6 +3,8 @@
 {% load staticfiles %}
 {% load url from future %}
 
+{% block body_class %}{{ block.super }} fancypages-page-manager{% endblock %}
+
 {% block breadcrumbs %}
 <ul class="breadcrumb">
     <li>
@@ -15,8 +17,10 @@
 
 {% block header %}
 <div class="fp-fixed-header">
-    <h1>{% trans "Page Management" %}</h1>
-    <a href="{% url "fp-dashboard:page-create" %}" class="btn btn-link"><i class="fp-icon-square-plus"></i> {% trans "Add New Page" %}</a>
+    <div class="fp-header page-header">
+        <h1>{% trans "Page Management" %}</h1>
+        <a href="{% url "fp-dashboard:page-create" %}" class="btn btn-link"><i class="fp-icon-square-plus"></i> {% trans "Add New Page" %}</a>
+    </div>
 </div>
 <div class="row-actions-position">
     <div class="row-actions">

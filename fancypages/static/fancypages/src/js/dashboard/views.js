@@ -61,6 +61,12 @@ FancypageApp.module('Dashboard.Views', function (Views, FancypageApp, Backbone, 
                 onDrop: this.saveMovedPage,
                 handle: '.fp-pagemove',
             });
+
+            // Set height of sortable container
+            $(window).resize(function() {
+                $('.fp-page-management').height($(window).height() - 220);
+            });
+            $(window).trigger('resize');
         },
         saveMovedPage: function ($item, container, _super, event) {
             _super($item, container);
