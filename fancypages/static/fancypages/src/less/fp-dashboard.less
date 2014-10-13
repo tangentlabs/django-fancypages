@@ -89,25 +89,25 @@ html, body {
 
 
 // Fixed element in the header the page management
-.fp-fixed-header,
 .row-actions-position {
   position: fixed;
-  background: #fff;
   width:100%;
   left:0;
   z-index: 20;
   padding:0 20px
 }
-// Fixed header position
-.fp-fixed-header {
-  top:0px;
+.fancypages-page-manager {
+  .fp-header.page-header {
+    border-bottom:0;
+  }
 }
 // Fixed page actions position
 .row-actions-position {
-  top:@pageTitleHeight;
+  top:@pageTitleHeight + 2;
+  background: #fff;
 }
 .fp-page-management {
-  padding-top:@pageTitleHeight + @rowActionsHeight;
+  margin-top:@rowActionsHeight + 2;
 }
 
 
@@ -185,8 +185,9 @@ body.dragging, body.dragging * {
 .fp-page-management {
   display:block;
   list-style: none;
-  margin:0;
+  margin-left:0;
   padding-left:0;
+  border-top:2px solid #D9DBDD;
   ol {
     list-style: none;
     padding:0;
@@ -195,6 +196,19 @@ body.dragging, body.dragging * {
   }
   li {
     display: block;
+  }
+}
+
+.fp-page-management-form {
+  position: relative;
+  &:before {
+    content: "";
+    position: absolute;
+    top:-(@rowActionsHeight + 2);
+    background:#D9DBDD;
+    height:2px;
+    width:100%;
+    z-index: 10;
   }
 }
 
@@ -285,8 +299,7 @@ body.dragging, body.dragging * {
 .row-actions {
   .clearfix();
   padding:10px 0;
-  border-bottom:2px solid #D9DBDD;
-  height: @rowActionsHeight;
+  // height: @rowActionsHeight;
   h6 {
     margin:0;
     padding: 4px 0;

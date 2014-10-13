@@ -7,11 +7,7 @@
 {% block extrahead %}
     {{ block.super }}
     <style>
-        body { margin-top: 40px; }
-        #editor-panel { margin-top: 40px !important; }
-        .fp-fixed-header { top:40px; }
-        .row-actions-position { top:140px; }
-        .fp-page-management { padding-top:160px; }
+
     </style>
 {% endblock %}
 
@@ -26,26 +22,7 @@
         {% endfor %}
     {% endif %}
 
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container-fluid">
-          <div class="brand">Fancy Sandbox</div>
-            <ul class="nav">
-                <li><a href="/">{% trans "Home" %}</a></li>
-            </ul>
-            <div class="pull-right">
-                <ul class="nav">
-                {% if not request.user.is_authenticated %}
-                    <li><a href="{% url "login" %}?next={{ request.path }}">{% trans "Login" %}</a></li>
-                {% else %}
-                    <li><a href="{% url "fp-dashboard:page-list" %}">{% trans "Dashboard" %}</a></li>
-                    <li><a href="{% url "logout" %}?next={{ request.path }}">{% trans "Logout" %}</a></li>
-                {% endif %}
-                </ul>
-            </div>
-        </div>
-      </div>
-    </div>
+   
 
     {# Main content of page - other layout templates may override this block #}
     {% block content_wrapper %}
