@@ -3,6 +3,8 @@
 {% load staticfiles %}
 {% load url from future %}
 
+{% block body_class %}{{ block.super }} fancypages-page-manager{% endblock %}
+
 {% block breadcrumbs %}
 <ul class="breadcrumb">
     <li>
@@ -14,58 +16,76 @@
 {% endblock %}
 
 {% block header %}
-<div class="page-header">
-    <a href="{% url "fp-dashboard:page-create" %}" class="btn btn-primary btn-large pull-right">{% trans "Create new top-level page" %}</a>
+<div class="fp-header page-header">
     <h1>{% trans "Page Management" %}</h1>
+    <a href="{% url "fp-dashboard:page-create" %}" class="btn btn-link"><i class="fp-icon-square-plus"></i> {% trans "Add New Page" %}</a>
+</div>
+<div class="row-actions-position">
+    <div class="row-actions">
+        <div class="row-fluid" >
+            <h6 class="span10">Name</h6>
+            <h6 class="span2">Status</h6>
+        </div>
+    </div>
 </div>
 {% endblock header %}
 
 {% block dashboard_content %}
-    <form action="." method="post">
+    <form action="." method="post" class="fp-page-management-form">
         {% csrf_token %}
 
-        <ol class="fp-page-tree"></ol>
+        <ol class="fp-page-management"></ol>
     </form>
 {% endblock dashboard_content %}
+
 
 {% block extrascripts %}
     {{ block.super }}
     <script id="template-page-node" type="text/template">
-        <div class="row-fluid" >
-            <h5 class="span10">
+        
+        <div class="row-actions-position">
+            <div class="collapse" id="<%= uuid %>-actions">
+                <div class="row-actions">
+                    <span class="fp-pagename"><%= name %></span>
+                    <a href="<%= editPageUrl %>" class="btn btn-link"><i class="fp-icon-file"></i> {% trans "Settings" %}</a>
+                    <a href="<%= addChildUrl %>" class="btn btn-link"><i class="fp-icon-square-plus"></i> {% trans "Add sub page" %}</a>
+                    <a href="<%= url %>" class="btn btn-link"><i class="fp-icon-chain"></i> {% trans "View" %}</a>
+                    <a href="<%= deletePageUrl %>" class="btn btn-link"><i class="fp-icon-trash"></i> {% trans "Delete" %}</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="fp-page-wrapper collapsed" data-toggle="collapse" data-target="#<%= uuid %>-actions" >
+            <div class="row-fluid" >
+                <div class="span10 fp-page-details">
 
-                <% if (children.length > 0) { %>
-                    <a href="#" data-toggle="collapse" data-target="#<%= uuid %>-tree" class="collapsed">
-                        <i class="icon-caret-right icon-large"></i>
+                    <% if (children.length > 0) { %>
+                        <a href="#" data-toggle="collapse" data-target="#<%= uuid %>-tree" class="fp-children-toggle collapsed">
+                            <i class="fp-icon-square-minus" data-toggle="collapse" data-target="#<%= uuid %>-tree"></i>
+                        </a>
+                    <% } %>
+
+                    <button class="fp-pagemove"><i class="fp-icon-file"></i></button>
+
+                    
+                    <a href="<%= editPageUrl %>" class="fp-editpage-link">
+                        <%= name %>
                     </a>
-                <% } %>
 
-                <a href="#" data-toggle="collapse" data-target="#<%= uuid %>-actions">
-                    <i class="icon-file icon-large"></i>
-                    <%= name %>
-                </a>
-            </h5>
+                </div>
 
-            <div class="span2">
-                <% if (isVisible) { %>
-                    <span class="label label-success">{% trans "visible" %}</span>
-                <% } else { %>
-                <span class="label label-danger">{% trans "not visible" %}</span>
-                <% } %>
-                <span class="label"><%= status %></span>
+                <div class="span2 fp-page-status">
+                    <% if (isVisible) { %>
+                        <span class="label label-success">{% trans "visible" %}</span>
+                    <% } else { %>
+                    <span class="label label-important">{% trans "not visible" %}</span>
+                    <% } %>
+                    <span class="label"><%= status %></span>
+                </div>
             </div>
-        </div>
 
-        <div class="collapse" id="<%= uuid %>-actions">
-            <div class="row-actions">
-                <a class="btn btn-small" href="<%= url %>">{% trans "View page" %}</a>
-                <a class="btn btn-small btn-success" href="<%= addChildUrl %>">{% trans "Add child page" %}</a>
-                <a class="btn btn-small btn-danger" href="<%= deletePageUrl %>">{% trans "Delete" %}</a>
-                <a class="btn btn-small" href="<%= editPageUrl %>">{% trans "Edit page settings" %}</a>
-                links to <a href="<%= url %>"><i class="icon-link"></i> <%= url %></a>
-            </div>
         </div>
-        <ol data-parent-id="<%= uuid %>"></ol>
+        <ol data-parent-id="<%= uuid %>" class="fp-children-group"></ol>
     </script>
 {% endblock %}
 

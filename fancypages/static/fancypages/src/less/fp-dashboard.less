@@ -1,26 +1,321 @@
 //Page management tree and the FP page link tree
 @import "tree.less";
+@import "bootstrap/variables.less";
+@import "bootstrap/mixins.less";
 
-//Tree override
-.fp-page-tree {
-  > li {
-    border:1px solid #dddddd;
-    border-top-width:0;
-    cursor:move;
-    &:first-child {
-      border-top-width:1px;
-    }
+
+@fontColor: #555558;
+@iconColor: #9C9EA0;
+@rowColor: #deedf0;
+
+// Height for the fixed elements
+@pageTitleHeight: 100px;
+@rowActionsHeight: 50px;
+
+
+
+html, body {
+    width:100%;
+    height:100%;
+}
+
+
+// Page Management Icons
+@font-face {
+  font-family: 'fp-iconmoon';
+  src:url('../fonts/icomoon/fp-iconmoon.eot?u1yzz');
+  src:url('../fonts/icomoon/fp-iconmoon.eot?#iefixu1yzz') format('embedded-opentype'),
+    url('../fonts/icomoon/fp-iconmoon.woff?u1yzz') format('woff'),
+    url('../fonts/icomoon/fp-iconmoon.ttf?u1yzz') format('truetype'),
+    url('../fonts/icomoon/fp-iconmoon.svg?u1yzz#fp-iconmoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="fp-icon"], [class*=" fp-icon"] {
+  font-family: 'fp-iconmoon';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.fp-icon-trash:before {
+  content: "\e600";
+}
+.fp-icon-chain:before {
+  content: "\f0c1";
+}
+.fp-icon-square-plus:before {
+  content: "\e044";
+}
+.fp-icon-square-minus:before {
+  content: "\e045";
+}
+.fp-icon-file:before {
+  content: "\e124";
+}
+
+
+
+
+
+
+// Fonts for the dashboard
+.fancypages {
+  font-family: 'Open Sans', helvetica, arial, sans-serif;
+  h1, h2, h3 {
+    font-weight: normal;
   }
-  h5, .btn-toolbar {
+  -webkit-font-smoothing: antialiased;
+  color:@fontColor;
+}
+.fancypages-page-manager {
+  overflow: hidden;
+  box-sizing: border-box;
+  *, *:before, *:after {
+    box-sizing: inherit;
+  }
+}
+
+
+
+
+
+// Fixed element in the header the page management
+.row-actions-position {
+  position: fixed;
+  width:100%;
+  left:0;
+  z-index: 20;
+  padding:0 20px
+}
+// Remove the border on the page management page
+.fancypages-page-manager {
+  .fp-header.page-header {
+    border-bottom:0;
+  }
+}
+// Fixed page actions position
+.row-actions-position {
+  top:@pageTitleHeight + 2;
+  background: #fff;
+}
+.fp-page-management {
+  margin-top:@rowActionsHeight + 2;
+}
+
+
+
+
+
+// New header
+.fp-header.page-header {
+  border-bottom:2px solid #D9DBDD;
+  height:@pageTitleHeight;
+  position: relative;
+  padding:0;
+  margin:0;
+  margin-bottom:40px;
+  &:before {
+    content: " ";
+    display: inline-block;
+    height: 100%;
+    width: 0.1%;
+    vertical-align: middle;
+  }
+  h1 {
+    font-size: 30px;
     margin:0;
   }
-  h5 {
-    margin-top:2px;
+  h1, a {
+    display:inline-block;
+    vertical-align: middle;
   }
 }
 
-.row-actions {
-  background:#efefef;
-  padding:5px;
-  border-top:1px solid darken(#efefef, 10%);
+
+
+
+// Sortable dragged element
+body.dragging, body.dragging * {
+  cursor: move !important;
 }
+.dragged {
+  position: absolute;
+  .opacity(70);
+  z-index: 2000;
+}
+.fp-children-group.in.collapse {
+  overflow: visible;
+}
+// Placholder arrow
+.fp-page-management {
+  height:400px;
+  overflow-y: auto;
+  li {
+    &.placeholder {
+      position: relative;
+      &:before {
+        position: absolute;
+        content: "";
+        width: 0;
+        height: 0;
+        margin-top: -5px;
+        left: 0;
+        top: -2px;
+        border: 7px solid transparent;
+        border-left-color: #3DBF41;
+        border-right: none;
+        z-index: 10;
+      }
+    }
+  }
+}
+
+
+
+
+
+
+// The OL list of LI pages
+.fp-page-management {
+  display:block;
+  list-style: none;
+  margin-left:0;
+  padding-left:0;
+  border-top:2px solid #D9DBDD;
+  ol {
+    list-style: none;
+    padding:0;
+    margin:0;
+    margin-left:20px;
+  }
+  li {
+    display: block;
+  }
+}
+// Adds the top border above the fixed actions
+.fp-page-management-form {
+  position: relative;
+  &:before {
+    content: "";
+    position: absolute;
+    top:-(@rowActionsHeight + 2);
+    background:#D9DBDD;
+    height:2px;
+    width:100%;
+    z-index: 10;
+  }
+}
+
+
+
+
+
+// TODO: Improve indent elements
+.fp-page-management ol > li .fp-page-wrapper { padding-left:20px; margin-left:-20px; }
+.fp-page-management ol > li ol > li .fp-page-wrapper { padding-left:40px; margin-left:-40px; }
+.fp-page-management ol > li ol > li ol > li .fp-page-wrapper { padding-left:60px; margin-left:-60px; }
+.fp-page-management ol > li ol > li ol > li ol > li .fp-page-wrapper { padding-left:80px; margin-left:-80px; }
+.fp-page-management ol > li ol > li ol > li ol > li ol > li .fp-page-wrapper { padding-left:100px; margin-left:-100px; }
+
+
+
+
+
+// page row
+.fp-page-wrapper {
+  background:@rowColor;
+  border-bottom:1px solid #D9DBDD;
+  padding:14px 0;
+  text-transform: capitalize;
+  position: relative;
+  &.collapsed {
+    background:#fff;
+    &:hover {
+      cursor:pointer;
+      background:lighten(@rowColor, 5%);
+    }
+  }
+  .btn-link {
+    color:@iconColor;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.fp-page-wrapper,
+.row-actions {
+  .row-fluid [class*="span"] {
+    min-height: 0;
+  }
+}
+
+// Page link, Move, plus minus
+.fp-editpage-link {
+  color:@fontColor;
+}
+.fp-pagemove,
+.fp-children-toggle {
+  color:@iconColor;
+  &:hover {
+    text-decoration: none;
+  }
+}
+.fp-pagemove {
+  background:transparent;
+  padding:0;
+  border:0;
+  font-size:24px;
+  &:hover {
+    cursor: move;
+    cursor: -webkit-grab; 
+    cursor: -moz-grab;
+  }
+}
+.fp-pagename {
+  width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  float:left;
+  display:block;
+  margin-top:4px;
+  margin-right: 10px;
+}
+
+
+
+
+
+
+
+// Page actions
+.row-actions {
+  .clearfix();
+  padding:10px 0;
+  // height: @rowActionsHeight;
+  h6 {
+    margin:0;
+    padding: 4px 0;
+  }
+  [class*="fp-icon"] {
+    color:@linkColor;
+  }
+  .btn-link {
+    padding: 4px 8px;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+

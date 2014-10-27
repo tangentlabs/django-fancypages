@@ -7,8 +7,7 @@
 {% block extrahead %}
     {{ block.super }}
     <style>
-        body { margin-top: 30px; }
-        #editor-panel { margin-top: 30px !important; }
+        .row-actions-position { top:143px; }
     </style>
 {% endblock %}
 
@@ -23,7 +22,7 @@
         {% endfor %}
     {% endif %}
 
-    <div class="navbar navbar-fixed-top">
+    <div class="navbar navbar-static-top">
       <div class="navbar-inner">
         <div class="container-fluid">
           <div class="brand">Fancy Sandbox</div>

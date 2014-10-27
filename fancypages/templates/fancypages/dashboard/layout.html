@@ -1,6 +1,12 @@
 {% extends "fancypages/layout.html" %}
 {% block body_class %}fancypages{% endblock %}
 
+{% block extrahead %}
+    {{ block.super }}
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+{% endblock %}
+
+
 {% block content %}
     {% block dashboard_content %}{% endblock %}
 {% endblock %}

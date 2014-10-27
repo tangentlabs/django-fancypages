@@ -24,15 +24,15 @@ FancypageApp.module('Dashboard.Views', function (Views, FancypageApp, Backbone, 
                 return false;
             }
 
-            anchor.removeClass('icon-caret-down');
-            anchor.addClass('icon-caret-right');
+            anchor.removeClass('fp-icon-square-minus');
+            anchor.addClass('fp-icon-square-plus');
         },
         showChildren: function (ev) {
             var treeId = $(ev.currentTarget).attr('id'),
                 anchor = $('[data-target=#' + treeId + ']>i');
 
-            anchor.removeClass('icon-caret-right');
-            anchor.addClass('icon-caret-down');
+            anchor.removeClass('fp-icon-square-plus');
+            anchor.addClass('fp-icon-square-minus');
         },
         /**
          * After we've rendered the new list element representing a page node,
@@ -45,18 +45,28 @@ FancypageApp.module('Dashboard.Views', function (Views, FancypageApp, Backbone, 
             // set this nodes UUID as the tree ID for the sub-tree and collapse
             // it by default. Nothing is done no sub-tree is present.
             this.$el.children('ol').attr('id', this.model.id + '-tree');
-            this.$el.children('ol').addClass('collapse');
         },
     });
 
     Views.PageTree = Marionette.CollectionView.extend({
-        el: 'ol.fp-page-tree',
+        el: 'ol.fp-page-management',
         itemView: Views.PageNode,
+        events: {
+            "show.bs.collapse .row-actions-position .collapse": "pageSelect",
+            "shown.bs.collapse .row-actions-position .collapse": "closeActions",
+            "click .fp-children-toggle": "toggleChildren"
+        },
         initialize: function () {
             this.sortable = this.$el.sortable({
-                placeholder: '<li class="placeholder">Insert here!</li>',
                 onDrop: this.saveMovedPage,
+                handle: '.fp-pagemove',
             });
+
+            // Set height of sortable container
+            $(window).resize(function() {
+                $('.fp-page-management').height($(window).height() - 220);
+            });
+            $(window).trigger('resize');
         },
         saveMovedPage: function ($item, container, _super, event) {
             _super($item, container);
@@ -74,6 +84,30 @@ FancypageApp.module('Dashboard.Views', function (Views, FancypageApp, Backbone, 
                 old_index: oldIndex,
             });
             promise.complete(FancypageApp.Api.reloadPage);
+        },
+
+        // Toggle the collapse on child
+        toggleChildren: function(ev) {
+            ev.stopPropagation();
+            var openTarget = $(ev.target).attr('data-target');
+            $(openTarget).collapse('toggle');
+        },
+        
+        // Close other page actions
+        pageSelect: function(ev) {
+            $('.row-actions-position .collapse').not($(ev.target)).each(function(){
+                if ($(this).hasClass('in')) {
+                    $(this).parent().next().addClass('collapsed');
+                }
+            });
+        },
+        // Close other page actions
+        closeActions: function(ev) {
+            $('.row-actions-position .collapse').not($(ev.target)).each(function(){
+                if ($(this).hasClass('in')) {
+                    $(this).collapse('hide');
+                }
+            });
         }
     });
 });
