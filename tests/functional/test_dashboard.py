@@ -30,7 +30,7 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
 
     def test_can_create_a_new_toplevel_page(self):
         page = self.get(reverse('fp-dashboard:page-list'))
-        page = page.click("Create new top-level page", index=0)
+        page = page.click("Add New Page", index=0)
 
         self.assertContains(page, "Create new page")
 
@@ -99,7 +99,7 @@ class TestAStaffMember(testcases.FancyPagesWebTest):
         page = self.get(fpage.get_delete_page_url())
         page = page.click('cancel')
         self.assertEquals(FancyPage.objects.count(), 1)
-        self.assertContains(page, "Create new top-level page")
+        self.assertContains(page, "Add New Page")
         self.assertContains(page, "Page Management")
 
     def test_can_delete_a_child_page(self):
@@ -148,7 +148,7 @@ class TestANewPage(testcases.FancyPagesWebTest):
 
         page = self.get(reverse('fp-dashboard:page-list'))
 
-        page = page.click('Create new top-level page', index=0)
+        page = page.click('Add New Page', index=0)
         new_page_form = page.form
         new_page_form['name'] = page_title
         page = new_page_form.submit()
